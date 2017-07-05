@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/buttonBMsgNeg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="-"
+        android:textSize="20dp"
+        android:background="@drawable/material_button"
+        android:layout_alignParentTop="true"
+        android:textColor="#ffffff"
+        android:layout_toLeftOf="@+id/buttonBMsgPos"
+        android:layout_toStartOf="@+id/buttonBMsgPos" />
+
+    <Button
+        android:id="@+id/buttonBMsgPos"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/b_msg_per_day"
+        android:layout_toStartOf="@+id/b_msg_per_day"
+        android:background="@drawable/material_button"
+        android:textColor="#ffffff"
+        android:text="+"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/b_msg_per_day"
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="right"
+        android:background="@drawable/material_button_blue"
+        android:foregroundGravity="right"
+        android:gravity="right|center_vertical"
+        android:inputType="number"
+        android:paddingRight="25dp"
+        android:textColor="#ffffff"
+        android:textSize="20dp" />
+</RelativeLayout>

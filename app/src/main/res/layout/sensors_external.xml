@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_frame"
+    android:layout_width="match_parent"
+    android:padding="15dp"
+    android:background="#ffffff"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:elevation="1dp"
+        app:srcCompat="@drawable/proactiveone" />
+
+    <HorizontalScrollView
+        android:id="@+id/sensor_list"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:foregroundGravity="center_horizontal"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="85dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/material_button"
+                android:text="Sensor 1"
+                android:textColor="#ffffff"
+                android:onClick="sensor1"/>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="85dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/material_button"
+                android:text="Sensor 2"
+                android:textColor="#ffffff"
+                android:onClick="sensor2"/>
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="85dp"
+                android:layout_height="35dp"
+                android:textColor="#ffffff"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/material_button"
+                android:text="Sensor 3"
+                android:onClick="sensor3"/>
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="85dp"
+                android:layout_height="35dp"
+                android:textColor="#ffffff"
+                android:background="@drawable/material_button"
+                android:text="Sensor 4"
+                android:onClick="sensor4"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/sensor_list"
+        android:layout_above="@+id/button">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/config_layout"
+                android:onClick="configuration">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView1"
+                    android:textColor="#474747"
+                    android:text="Sensor Configuration"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/config_expansion"
+                    android:layout_below="@+id/textView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/alarm_recog_layout"
+                android:layout_below="@+id/config_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="alarmRecog">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView2"
+                    android:textColor="#474747"
+                    android:text="Alarm Recognition Time"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/alarm_recog_expansion"
+                    android:layout_below="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/values_layout"
+                android:layout_below="@+id/alarm_recog_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="values">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView3"
+                    android:textColor="#474747"
+                    android:text="Sensor Values"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/values_expansion"
+                    android:layout_below="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/calibration_layout"
+                android:layout_below="@+id/values_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="calibration">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView4"
+                    android:textColor="#474747"
+                    android:text="Sensor Calibration"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/calibration_expansion"
+                    android:layout_below="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/multiplier_layout"
+                android:layout_below="@+id/calibration_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="multiplier">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView5"
+                    android:textColor="#474747"
+                    android:text="Sensor Multiplier"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/multiplier_expansion"
+                    android:layout_below="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/alarm_limits_layout"
+                android:layout_below="@+id/calibration_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="alarmLimits">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView6"
+                    android:text="Alarm Limits"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/alarm_limits_expansion"
+                    android:layout_below="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:background="@drawable/material_button"
+        android:foregroundGravity="center_horizontal"
+        android:onClick="restore"
+        android:textColor="#ffffff"
+        android:text="Restore Defaults" />
+
+</RelativeLayout>

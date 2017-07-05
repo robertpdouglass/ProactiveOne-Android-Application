@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_frame"
+    android:layout_width="match_parent"
+    android:padding="15dp"
+    android:background="#ffffff"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:elevation="1dp"
+        android:layout_marginBottom="15dp"
+        app:srcCompat="@drawable/proactiveone" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button"
+        android:layout_below="@+id/imageView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/data_a1_layout"
+                android:onClick="dataA1">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView1"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data A1 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:drawable/arrow_down_float"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentEnd="true" />
+
+                <LinearLayout
+                    android:id="@+id/data_a1_expansion"
+                    android:layout_below="@+id/textView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_a2_layout"
+                android:layout_below="@+id/data_a1_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataA2">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView2"
+                    android:textColor="#474747"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data A2 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:drawable/arrow_down_float"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+
+                <LinearLayout
+                    android:id="@+id/data_a2_expansion"
+                    android:layout_below="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_a3_layout"
+                android:layout_below="@+id/datat_a2_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataA3">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView3"
+                    android:textColor="#474747"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data A3 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/data_a3_expansion"
+                    android:layout_below="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_a4_layout"
+                android:layout_below="@+id/data_a3_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataA4">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView4"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data A4 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/data_a4_expansion"
+                    android:layout_below="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_a5_layout"
+                android:layout_below="@+id/data_a4_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataA5">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView5"
+                    android:textColor="#474747"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data A5 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/data_a5_expansion"
+                    android:layout_below="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_b6_layout"
+                android:layout_below="@+id/data_a5_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataB6">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#474747"
+                    android:textSize="20dp"
+                    android:id="@+id/textView6"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data B6 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/data_b6_expansion"
+                    android:layout_below="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_b7_layout"
+                android:layout_below="@+id/data_b6_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataB7">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#474747"
+                    android:textSize="20dp"
+                    android:id="@+id/textView7"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data B7 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/data_b7_expansion"
+                    android:layout_below="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_b8_layout"
+                android:layout_below="@+id/data_b7_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataB8">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView8"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data B8 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/data_b8_expansion"
+                    android:layout_below="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_b9_layout"
+                android:layout_below="@+id/data_b8_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataB9">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView9"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data B9 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/data_b9_expansion"
+                    android:layout_below="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_b10_layout"
+                android:layout_below="@+id/data_b9_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataB10">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView10"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data B10 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/data_b10_expansion"
+                    android:layout_below="@+id/textView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_b11_layout"
+                android:layout_below="@+id/data_b10_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataB11">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView11"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data B11 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/data_b11_expansion"
+                    android:layout_below="@+id/textView11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/data_b12_layout"
+                android:layout_below="@+id/data_b11_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="dataB12">
+
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView12"
+                    android:layout_marginBottom="10dp"
+                    android:text="Data B12 Source Selection"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/data_b12_expansion"
+                    android:layout_below="@+id/textView12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/material_button"
+        android:foregroundGravity="center_horizontal"
+        android:onClick="restore"
+        android:text="Restore Defaults" />
+
+</RelativeLayout>

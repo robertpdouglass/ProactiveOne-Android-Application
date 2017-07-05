@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_frame"
+    android:layout_width="match_parent"
+    android:padding="15dp"
+    android:background="#ffffff"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:elevation="1dp"
+        app:srcCompat="@drawable/proactiveone" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/button3"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/material_button"
+        android:elevation="1dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="15dp"
+        android:onClick="external"
+        android:text="External Hardwired"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/button4"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/material_button"
+        android:elevation="1dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="15dp"
+        android:onClick="i2c"
+        android:text="External I2C"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/material_button"
+        android:elevation="1dp"
+        android:textSize="15dp"
+        android:onClick="internal"
+        android:layout_marginBottom="15dp"
+        android:text="Internal"
+        android:textColor="#ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
