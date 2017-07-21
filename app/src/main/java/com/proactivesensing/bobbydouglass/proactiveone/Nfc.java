@@ -86,12 +86,14 @@ public class Nfc extends AppCompatActivity {
     }
 
     public void save() {
-        /*if(Home.Screen == 0) {
-            for (int i = 0; i < 10; i++) {
-                if (Configure_Options.changes_bool[i])
-                    new Modbus(getApplicationContext(), Configure_Options.addresses[i], Configure_Options.changes[i]);
+        if(Home.Screen == 1) {
+            for (int i = 0; i < Sensors_External.SensorCount; i++) {
+                for(int j = 0; j < Sensors_External.SensorChanges; j++) {
+                    if (Sensors_External.changes_bool[i][j])
+                        new Modbus(getApplicationContext(), Sensors_External.addresses[i][j], Sensors_External.changes[i][j]);
+                }
             }
-        }
+        } /*
         else if(Configure.selected == 1) {
             for (int i = 0; i < 52; i++) {
                 if (Configure_Sensors.changes_bool[i]) {
@@ -101,10 +103,16 @@ public class Nfc extends AppCompatActivity {
         }
         else if(Configure.selected == 2) {
 
-        }
-        else {
-            Log.e("ERROR", "INVALID SELECTED SCREEN INDEX");
         } */
+        else if(Home.Screen == 5) {
+            for(int i = 0; i < Advanced_Data.Size; i++) {
+                if(Advanced_Data.changes_bool[i])
+                    new Modbus(getApplicationContext(), Advanced_Data.addresses[i], Advanced_Data.changes[i]);
+            }
+        }
+        /*else {
+            Log.e("ERROR", "INVALID SELECTED SCREEN INDEX");
+        }*/
     }
 
     @Override
@@ -199,9 +207,11 @@ public class Nfc extends AppCompatActivity {
         ArrayList<NdefRecord> ndef = new ArrayList<NdefRecord>();
 
         if(Home.Screen == 1) {
-            for(int i = 0; i < Sensors_External.Size; i++) {
-                if(Sensors_External.changes_bool[i])
-                    ndef.add(createRecord(Sensors_External.addresses[i], Sensors_External.changes[i]));
+            for(int i = 0; i < Sensors_External.SensorCount; i++) {
+                for(int j = 0; j < Sensors_External.SensorChanges; j++) {
+                    if (Sensors_External.changes_bool[i][j])
+                        ndef.add(createRecord(Sensors_External.addresses[i][j], Sensors_External.changes[i][j]));
+                }
             }
         }
         /*else if(Home.Screen == 2) {
@@ -226,6 +236,11 @@ public class Nfc extends AppCompatActivity {
             for(int i = 0; i < Advanced_Data.Size; i++) {
                 if(Advanced_Data.changes_bool[i])
                     ndef.add(createRecord(Advanced_Data.addresses[i], Advanced_Data.changes[i]));
+            }
+        }
+        else if(Home.Screen == -1) {
+            for(int i = 0; i < Modbus.Size; i++) {
+                ndef.add(createRecord(Modbus.address[i], Modbus.values[i]));
             }
         }
         else {

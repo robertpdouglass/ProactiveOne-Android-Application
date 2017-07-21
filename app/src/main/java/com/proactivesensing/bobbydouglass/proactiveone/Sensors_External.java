@@ -1,3 +1,7 @@
+/* ************************************************************************************** */
+/* ***** NEED TO CHECK THAT THE LISTENERS FOLLOW THE CURRENT SELECTED SENSOR NUMBER ***** */
+/* ************************************************************************************** */
+
 package com.proactivesensing.bobbydouglass.proactiveone;
 
 import android.animation.LayoutTransition;
@@ -11,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,29 +24,40 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Sensors_External extends AppCompatActivity {
 
-    LinearLayout[] layoutToAdd = new LinearLayout[6];
-    View[] viewToInflate = new View[6];
-    boolean[] clicked = new boolean[6];
+    public static final int Size =                  56;
+    public static final int SensorChanges =         14;
+    public static final int SensorCount =           4;
+    public static final int ViewSize =              6;
 
-    public static int[] changes = new int[56];
-    public static boolean[] changes_bool = new boolean[56];
-    public static int[] addresses =    {1100,   1101,   1102,   1103,   1104,   1105,   1106,   1107,
-                                        1108,   1109,   1110,   1111,   1112,   1113,   1114,   1115,
-                                        1116,   1117,   1118,   1119,   1120,   1121,   1122,   1123,
-                                        1124,   1125,   1126,   1127,   1128,   1129,   1130,   1131,
-                                        1132,   1133,   1134,   1135,   1136,   1137,   1138,   1139,
-                                        1140,   1141,   1142,   1143,   1144,   1145,   1146,   1147,
-                                        1148,   1149,   1150,   1151,   1152,   1153,   1154,   1155};
+    public static LinearLayout[] layoutToAdd =      new LinearLayout[ViewSize];
+    public static View[] viewToInflate =            new View[ViewSize];
+    public static boolean[] clicked =              {false,  false,  false,  false,  false,  false};
+    public static int[][] changes =                 new int[SensorCount][SensorChanges];
+    public static boolean[][] changes_bool =      {{false,  false,  false,  false,  false,  false,  false,  false,
+                                                    false,  false,  false,  false,  false,  false},{false,  false,
+                                                    false,  false,  false,  false,  false,  false,  false,  false,
+                                                    false,  false,  false,  false},{false,  false,  false,  false,
+                                                    false,  false,  false,  false,  false,  false,  false,  false,
+                                                    false,  false},{false,  false,  false,  false,  false,  false,
+                                                    false,  false,  false,  false,  false,  false,  false,  false}};
+    public static int[][] addresses =             {{1100,   1101,   1102,   1103,   1104,   1105,   1106,   1107,
+                                                    1108,   1109,   1110,   1111,   1112,   1113}, {1114,   1115,
+                                                    1116,   1117,   1118,   1119,   1120,   1121,   1122,   1123,
+                                                    1124,   1125,   1126,   1127}, {1128,   1129,   1130,   1131,
+                                                    1132,   1133,   1134,   1135,   1136,   1137,   1138,   1139,
+                                                    1140,   1141}, {1142,   1143,   1144,   1145,   1146,   1147,
+                                                    1148,   1149,   1150,   1151,   1152,   1153,   1154,   1155}};
+    public static int config_low[] = new int[SensorCount];
+    public static int config_high[] = new int[SensorCount];
 
-    public static final int Size = 56;
-
+    boolean[][] loadedSpinner =                   {{false,  false,  false},{false,  false,  false},{false,  false,
+                                                    false},{false,  false,  false}};
     boolean changes_made = false;
-    int config_low = 0;
-    int config_high = 0;
-    int sensorNum;
+    int sensorNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +70,7 @@ public class Sensors_External extends AppCompatActivity {
         layoutToAdd[3] = (LinearLayout) findViewById(R.id.calibration_expansion);
         layoutToAdd[4] = (LinearLayout) findViewById(R.id.multiplier_expansion);
         layoutToAdd[5] = (LinearLayout) findViewById(R.id.alarm_limits_expansion);
-        LayoutTransition transition = new LayoutTransition();
 
-        for(int i = 0; i < 6; i++) {
-            layoutToAdd[i].setLayoutTransition(transition);
-            clicked[i] = true;
-        }
-
-        for(int i = 0; i < 52; i++) {
-            changes[i] = new Modbus(getApplicationContext(), addresses[i]).getValue();
-            changes_bool[i] = false;
-        }
-
-        sensorNum = 0;
         sensorSelection();
     }
 
@@ -113,11 +117,11 @@ public class Sensors_External extends AppCompatActivity {
     }
 
     public void restore(View view) {
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are You Sure You Want To Restore Default Values?  This Will Overwrite All Values.");
         builder.setPositiveButton("Restore", restoreDialog);
         builder.setNegativeButton("Cancel", restoreDialog);
-        builder.show();*/
+        builder.show();
     }
 
     DialogInterface.OnClickListener restoreDialog = new DialogInterface.OnClickListener() {
@@ -125,12 +129,10 @@ public class Sensors_External extends AppCompatActivity {
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
+                    toast();
+                    Home.Screen = -1;
                     new Modbus(getApplicationContext(), true);
-                    /* ********************************************************** */
-                    /* ********************************************************** */
-                    /* ***** ADD LENGTHY CODE TO SET TEXT OF OPENED OPTIONS ***** */
-                    /* ********************************************************** */
-                    /* ********************************************************** */
+                    startNfc();
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
@@ -138,6 +140,10 @@ public class Sensors_External extends AppCompatActivity {
             }
         }
     };
+
+    public void toast() {
+        Toast.makeText(this, "Please Wait...", Toast.LENGTH_SHORT).show();
+    }
 
     public void sensorSelection() {
         Button sensor0 = (Button) findViewById(R.id.button1);
@@ -170,27 +176,16 @@ public class Sensors_External extends AppCompatActivity {
         }
 
         for(int i = 0; i < 3; i++) {
-            if (Build.VERSION.SDK_INT >= 22) {
+            if (Build.VERSION.SDK_INT >= 22)
                 offSensors[i].setBackground(getDrawable(R.drawable.material_button));
-            }
-            else {
+            else
                 offSensors[i].setBackground(getResources().getDrawable(R.drawable.material_button));
-            }
         }
 
-        if (Build.VERSION.SDK_INT >= 22) {
+        if (Build.VERSION.SDK_INT >= 22)
             selectedSensor.setBackground(getDrawable(R.drawable.material_button_blue));
-        }
-        else {
+        else
             selectedSensor.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-        }
-
-        if(!clicked[2]) {
-            TextView lowText = (TextView) findViewById(R.id.low_range_text);
-            TextView highText = (TextView) findViewById(R.id.high_range_text);
-            lowText.setText("Low Range For Sensor " + (sensorNum + 1));
-            highText.setText("High Range For Sensor " + (sensorNum + 1));
-        }
     }
 
     public void sensor1(View view) {
@@ -213,215 +208,308 @@ public class Sensors_External extends AppCompatActivity {
         sensorSelection();
     }
 
-    public int combineBytes(int low, int high) {
-        return ((low & 0x00ff) << 8) | ((high & 0x00ff));
-    }
-
-    public int getHighInt(int combined) {
-        return (combined & 0x00ff);
-    }
-
-    public int getLowInt(int combined) {
-        return ((combined >> 8) & 0x00ff);
-    }
-
     public void configuration(View view) {
-        if(clicked[0]) {
-            clicked[0] = false;
+        final int i = 0, j = 0;
+        if(!clicked[i]) {
+            clicked[i] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[0] = inflater.inflate(R.layout.x_config_child, null);
-            layoutToAdd[0].addView(viewToInflate[0]);
+            viewToInflate[i] = inflater.inflate(R.layout.z_xsen_01_config_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
-            config_low = getLowInt(changes[0 + (sensorNum * 14)]);
-            config_high = getHighInt(changes[0 + (sensorNum * 14)]);
-
-            Spinner dropdown_low = (Spinner) findViewById(R.id.config_low_spinner);
+            Spinner dropdown_low = (Spinner) findViewById(R.id.xsen_config_spinner);
             String[] items_low = new String[]{"Disabled", "Normally Open", "Normally Closed", "Pulse", "Resistive", "4-20mA", "Voltage"};
             ArrayAdapter<String> adapter_low = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items_low);
             dropdown_low.setAdapter(adapter_low);
-            dropdown_low.setOnItemSelectedListener(onSpinnerLow);
-            dropdown_low.setSelection(config_low);
+            dropdown_low.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if(loadedSpinner[sensorNum][0]) {
+                        config_low[sensorNum] = position;
+                        changes[sensorNum][j] = ((config_low[sensorNum] & 0x00ff) << 8) | ((config_high[sensorNum] & 0x00ff));
+                        changes_made = true;
+                        changes_bool[sensorNum][j] = true;
+                    }
+                    else {
+                        loadedSpinner[sensorNum][0] = true;
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+            dropdown_low.setSelection(config_low[sensorNum]);
 
-            Spinner dropdown_high = (Spinner) findViewById(R.id.config_high_spinner);
+            Spinner dropdown_high = (Spinner) findViewById(R.id.xsen_power_spinner);
             String[] items_high = new String[]{"None", "3V3 #1", "3V3 #2", "15V"};
             ArrayAdapter<String> adapter_high = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items_high);
             dropdown_high.setAdapter(adapter_high);
-            dropdown_high.setOnItemSelectedListener(onSpinnerHigh);
-            dropdown_high.setSelection(config_high);
+            dropdown_high.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if(loadedSpinner[sensorNum][1]) {
+                        config_high[sensorNum] = position;
+                        changes[sensorNum][j] = ((config_low[sensorNum] & 0x00ff) << 8) | ((config_high[sensorNum] & 0x00ff));
+                        changes_made = true;
+                        changes_bool[sensorNum][j] = true;
+                    }
+                    else {
+                        loadedSpinner[sensorNum][1] = true;
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+            dropdown_high.setSelection(config_high[sensorNum]);
         }
         else {
-            clicked[0] = true;
-            layoutToAdd[0].removeView(viewToInflate[0]);
+            clicked[i] = false;
+            layoutToAdd[i].removeView(viewToInflate[i]);
         }
     }
 
-    AdapterView.OnItemSelectedListener onSpinnerLow = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            config_low = position;
-            changes[0 + (sensorNum * 14)] = combineBytes(config_low, config_high);
-            changes_made = true;
-            changes_bool[0 + (sensorNum * 14)] = true;
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
-    AdapterView.OnItemSelectedListener onSpinnerHigh = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            config_high = position;
-            changes[0 + (sensorNum * 14)] = combineBytes(config_low, config_high);
-            changes_made = true;
-            changes_bool[0 + (sensorNum * 14)] = true;
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
     public void alarmRecog(View view) {
-        if(clicked[1]) {
-            clicked[1] = false;
+        final int i = 1, j = 1;
+        if(!clicked[i]) {
+            clicked[i] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[1] = inflater.inflate(R.layout.x_alarm_recog_child, null);
-            layoutToAdd[1].addView(viewToInflate[1]);
+            viewToInflate[i] = inflater.inflate(R.layout.z_xsen_02_recog_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
-            EditText recog = (EditText) findViewById(R.id.alarm_recog);
-            recog.setText("" + changes[1 + (sensorNum * 14)]);
+            final EditText recog = (EditText) findViewById(R.id.xsen_recog_edittext);
+            recog.setText("" + changes[sensorNum][j]);
             recog.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {}
-
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[1 + (sensorNum * 14)] = Integer.parseInt(s.toString());
+                        changes[sensorNum][j] = Integer.parseInt(s.toString());
                         changes_made = true;
-                        changes_bool[1 + (sensorNum * 14)] = true;
+                        changes_bool[sensorNum][j] = true;
                     }
                 }
             });
+
+            final Button[] button =    {(Button) findViewById(R.id.xsen_recog_neg),
+                                        (Button) findViewById(R.id.xsen_recog_pos)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
+                button[j].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+
+                                changes_made = true;
+                                changes_bool[sensorNum][j] = true;
+                                if(k == 0)
+                                    changes[sensorNum][j]--;
+                                else
+                                    changes[sensorNum][j]++;
+                                recog.setText("" + changes[sensorNum][i]);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
+                    }
+                });
+            }
         }
         else {
-            clicked[1] = true;
-            layoutToAdd[1].removeView(viewToInflate[1]);
+            clicked[i] = true;
+            layoutToAdd[i].removeView(viewToInflate[i]);
         }
     }
 
     public void values(View view) {
-        if(clicked[2]) {
-            clicked[2] = false;
+        final int i = 2, j = 2;
+        if(!clicked[i]) {
+            clicked[i] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[2] = inflater.inflate(R.layout.x_values_child, null);
+            viewToInflate[i] = inflater.inflate(R.layout.z_xsen_03_values_child, null);
             layoutToAdd[2].addView(viewToInflate[2]);
 
-            TextView lowText = (TextView) findViewById(R.id.low_range_text);
-            TextView highText = (TextView) findViewById(R.id.high_range_text);
-            lowText.setText("Low Range For Sensor " + (sensorNum + 1));
-            highText.setText("High Range For Sensor " + (sensorNum + 1));
-
-            EditText low = (EditText) findViewById(R.id.analog_range_low);
-            EditText high = (EditText) findViewById(R.id.analog_range_high);
-            low.setText("" + changes[2 + (sensorNum * 13)]);
-            high.setText("" + changes[3 + (sensorNum * 13)]);
-            low.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[2 + (sensorNum * 14)] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes_bool[2 + (sensorNum * 14)] = true;
+            final EditText[] values =  {(EditText) findViewById(R.id.xsen_analog_low_edittext),
+                                        (EditText) findViewById(R.id.xsen_analog_high_edittext)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
+                values[k].setText("" + changes[sensorNum][j]);
+                values[k].addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() != 0) {
+                            changes[sensorNum][j + k] = Integer.parseInt(s.toString());
+                            changes_made = true;
+                            changes_bool[sensorNum][j + k] = true;
+                        }
                     }
-                }
-            });
-            high.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
+                });
+            }
 
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
+            final Button[] button =    {(Button) findViewById(R.id.xsen_analog_low_neg),
+                                        (Button) findViewById(R.id.xsen_analog_low_pos),
+                                        (Button) findViewById(R.id.xsen_analog_high_neg),
+                                        (Button) findViewById(R.id.xsen_analog_high_pos)};
+            for(int l = 0; l < 4; l++) {
+                final int k = l;
+                button[k].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[3 + (sensorNum * 14)] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes_bool[3 + (sensorNum * 14)] = true;
+                                changes_made = true;
+                                changes_bool[sensorNum][j + (((k + 2) / 2) - 1)] = true;
+                                if (k == 0 || k == 2)
+                                    changes[sensorNum][j + (((k + 2) / 2) - 1)]--;
+                                else
+                                    changes[sensorNum][j + (((k + 2) / 2) - 1)]++;
+                                values[(((k + 2) / 2) - 1)].setText("" + changes[sensorNum][j + (((k + 2) / 2) - 1)]);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
                     }
-                }
-            });
+                });
+            }
         }
         else {
-            clicked[2] = true;
-            layoutToAdd[2].removeView(viewToInflate[2]);
+            clicked[i] = false;
+            layoutToAdd[i].removeView(viewToInflate[i]);
         }
     }
 
     public void calibration(View view) {
-        if(clicked[3]) {
-            clicked[3] = false;
+        final int i = 3, j = 4;
+        if(!clicked[i]) {
+            clicked[i] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[3] = inflater.inflate(R.layout.x_calibration_child, null);
-            layoutToAdd[3].addView(viewToInflate[3]);
+            viewToInflate[i] = inflater.inflate(R.layout.z_xsen_04_cal_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
-            EditText cal = (EditText) findViewById(R.id.calibration);
-            cal.setText("" + changes[4 + (sensorNum * 13)]);
+            final EditText cal = (EditText) findViewById(R.id.xsen_cal_edittext);
+            cal.setText("" + changes[sensorNum][j]);
             cal.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {}
-
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[4 + (sensorNum * 14)] = Integer.parseInt(s.toString());
+                        changes[sensorNum][j] = Integer.parseInt(s.toString());
                         changes_made = true;
-                        changes_bool[4 + (sensorNum * 14)] = true;
+                        changes_bool[sensorNum][j] = true;
                     }
                 }
             });
+
+            final Button[] button =    {(Button) findViewById(R.id.xsen_cal_neg),
+                                        (Button) findViewById(R.id.xsen_cal_pos)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
+                button[k].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+
+                                changes_made = true;
+                                changes_bool[sensorNum][j] = true;
+                                if (k == 0)
+                                    changes[sensorNum][j]--;
+                                else
+                                    changes[sensorNum][j]++;
+                                cal.setText("" + changes[sensorNum][j]);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
+                    }
+                });
+            }
         }
         else {
-            clicked[3] = true;
-            layoutToAdd[3].removeView(viewToInflate[3]);
+            clicked[i] = false;
+            layoutToAdd[i].removeView(viewToInflate[i]);
         }
     }
 
     public void multiplier(View view) {
-        if(clicked[4]) {
-            clicked[4] = false;
+        final int i = 4, j = 5;
+        if(!clicked[i]) {
+            clicked[i] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[4] = inflater.inflate(R.layout.x_multiplier_child, null);
-            layoutToAdd[4].addView(viewToInflate[4]);
+            viewToInflate[i] = inflater.inflate(R.layout.z_xsen_05_multi_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.multiplier_spinner);
+            Spinner dropdown = (Spinner) findViewById(R.id.xsen_multi_spinner);
             String[] items = new String[]{"1x", "2x", "10x", "100x"};
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
             dropdown.setAdapter(adapter);
-            dropdown.setOnItemSelectedListener(onSpinnerMult);
+            dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if(loadedSpinner[sensorNum][2]) {
+                        switch (position) {
+                            case 0:
+                                changes[sensorNum][j] = 1;
+                                break;
+                            case 1:
+                                changes[sensorNum][j] = 2;
+                                break;
+                            case 2:
+                                changes[sensorNum][j] = 10;
+                                break;
+                            case 3:
+                                changes[sensorNum][j] = 100;
+                                break;
+                        }
+                        changes[sensorNum][j] = position;
+                        changes_made = true;
+                        changes_bool[sensorNum][j] = true;
+                    }
+                    else {
+                        loadedSpinner[sensorNum][2] = true;
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
             int selection = 0;
-            switch(changes[5 + (sensorNum * 14)]) {
+            switch(changes[sensorNum][j]) {
                 case 1:
                     selection = 0;
                     break;
@@ -438,202 +526,97 @@ public class Sensors_External extends AppCompatActivity {
             dropdown.setSelection(selection);
         }
         else {
-            clicked[4] = true;
-            layoutToAdd[4].removeView(viewToInflate[4]);
+            clicked[i] = false;
+            layoutToAdd[i].removeView(viewToInflate[i]);
         }
     }
 
-    AdapterView.OnItemSelectedListener onSpinnerMult = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            switch(position) {
-                case 0:
-                    changes[5 + (sensorNum * 14)] = 1;
-                    break;
-                case 1:
-                    changes[5 + (sensorNum * 14)] = 2;
-                    break;
-                case 2:
-                    changes[5 + (sensorNum * 14)] = 10;
-                    break;
-                case 3:
-                    changes[5 + (sensorNum * 14)] = 100;
-                    break;
-            }
-            changes[5 + (sensorNum * 14)] = position;
-            changes_made = true;
-            changes_bool[5 + (sensorNum * 14)] = true;
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
     public void alarmLimits(View view) {
-        if(clicked[5]) {
-            clicked[5] = false;
+        final int i = 5, j = 6;
+        if(!clicked[i]) {
+            clicked[i] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[5] = inflater.inflate(R.layout.x_alarm_limits_child, null);
-            layoutToAdd[5].addView(viewToInflate[5]);
+            viewToInflate[i] = inflater.inflate(R.layout.z_xsen_06_limits_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
-            EditText low1 = (EditText) findViewById(R.id.low_limit_1);
-            EditText high1 = (EditText) findViewById(R.id.high_limit_1);
-            EditText low2 = (EditText) findViewById(R.id.low_limit_2);
-            EditText high2 = (EditText) findViewById(R.id.high_limit_2);
-            EditText low3 = (EditText) findViewById(R.id.low_limit_3);
-            EditText high3 = (EditText) findViewById(R.id.high_limit_3);
-            EditText low4 = (EditText) findViewById(R.id.low_limit_4);
-            EditText high4 = (EditText) findViewById(R.id.high_limit_4);
-            low1.setText("" + changes[6 + (sensorNum * 14)]);
-            high1.setText("" + changes[7 + (sensorNum * 14)]);
-            low2.setText("" + changes[8 + (sensorNum * 14)]);
-            high2.setText("" + changes[9 + (sensorNum * 14)]);
-            low3.setText("" + changes[10 + (sensorNum * 14)]);
-            high3.setText("" + changes[11 + (sensorNum * 14)]);
-            low4.setText("" + changes[12 + (sensorNum * 14)]);
-            high4.setText("" + changes[13 + (sensorNum * 14)]);
-            low1.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[6 + (sensorNum * 14)] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes_bool[6 + (sensorNum * 14)] = true;
+            final EditText[] limits =  {(EditText) findViewById(R.id.xsen_low_1_edittext),
+                                        (EditText) findViewById(R.id.xsen_high_1_edittext),
+                                        (EditText) findViewById(R.id.xsen_low_2_edittext),
+                                        (EditText) findViewById(R.id.xsen_high_2_edittext),
+                                        (EditText) findViewById(R.id.xsen_low_3_edittext),
+                                        (EditText) findViewById(R.id.xsen_high_3_edittext),
+                                        (EditText) findViewById(R.id.xsen_low_4_edittext),
+                                        (EditText) findViewById(R.id.xsen_high_4_edittext)};
+            for(int k = 0, l = j; k < 8; k++, l++) {
+                final int h = l;
+                limits[k].setText("" + changes[sensorNum][h]);
+                limits[k].addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() != 0) {
+                            changes[sensorNum][h] = Integer.parseInt(s.toString());
+                            changes_made = true;
+                            changes_bool[sensorNum][h] = true;
+                        }
                     }
-                }
-            });
-            high1.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
+                });
+            }
 
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
+            final Button[] button =    {(Button) findViewById(R.id.xsen_low_1_neg),
+                                        (Button) findViewById(R.id.xsen_low_1_pos),
+                                        (Button) findViewById(R.id.xsen_high_1_neg),
+                                        (Button) findViewById(R.id.xsen_high_1_pos),
+                                        (Button) findViewById(R.id.xsen_low_2_neg),
+                                        (Button) findViewById(R.id.xsen_low_2_pos),
+                                        (Button) findViewById(R.id.xsen_high_2_neg),
+                                        (Button) findViewById(R.id.xsen_high_2_pos),
+                                        (Button) findViewById(R.id.xsen_low_3_neg),
+                                        (Button) findViewById(R.id.xsen_low_3_pos),
+                                        (Button) findViewById(R.id.xsen_high_3_neg),
+                                        (Button) findViewById(R.id.xsen_high_3_pos),
+                                        (Button) findViewById(R.id.xsen_low_4_neg),
+                                        (Button) findViewById(R.id.xsen_low_4_pos),
+                                        (Button) findViewById(R.id.xsen_high_4_neg),
+                                        (Button) findViewById(R.id.xsen_high_4_pos)};
+            for(int l = 0; l < 16; l++) {
+                final int k = l;
+                button[k].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[7 + (sensorNum * 14)] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes_bool[7 + (sensorNum * 14)] = true;
+                                changes_made = true;
+                                changes_bool[sensorNum][j + (((k + 2) / 2) - 1)] = true;
+                                if (((k + 2) % 2) == 0)
+                                    changes[sensorNum][j + (((k + 2) / 2) - 1)]--;
+                                else
+                                    changes[sensorNum][j + (((k + 2) / 2) - 1)]++;
+                                limits[(((k + 2) / 2) - 1)].setText("" + changes[sensorNum][j + (((k + 2) / 2) - 1)]);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
                     }
-                }
-            });
-            low2.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[8 + (sensorNum * 14)] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes_bool[8 + (sensorNum * 14)] = true;
-                    }
-                }
-            });
-            high2.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[9 + (sensorNum * 14)] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes_bool[9 + (sensorNum * 14)] = true;
-                    }
-                }
-            });
-            low3.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[10 + (sensorNum * 14)] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes_bool[10 + (sensorNum * 14)] = true;
-                    }
-                }
-            });
-            high3.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[11 + (sensorNum * 14)] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes_bool[11 + (sensorNum * 14)] = true;
-                    }
-                }
-            });
-            low4.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[12 + (sensorNum * 14)] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes_bool[12 + (sensorNum * 14)] = true;
-                    }
-                }
-            });
-            high4.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[13 + (sensorNum * 14)] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes_bool[13 + (sensorNum * 14)] = true;
-                    }
-                }
-            });
+                });
+            }
         }
         else {
-            clicked[5] = true;
-            layoutToAdd[5].removeView(viewToInflate[5]);
+            clicked[i] = false;
+            layoutToAdd[i].removeView(viewToInflate[i]);
         }
     }
 }

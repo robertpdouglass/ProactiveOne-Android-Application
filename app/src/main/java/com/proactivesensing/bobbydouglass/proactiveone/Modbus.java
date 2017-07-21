@@ -169,9 +169,9 @@ public class Modbus extends SQLiteOpenHelper {
     static final int data_b12_source =                  zero;       // 1511
     /* **************** 012 ***** Modbus 1500 ***** 012 **************** */
 
-    final int AMOUNT = 137;
+    public static final int Size =  137;
 
-    int[] address =                {1001,   1002,   1003,   1004,   1005,   1006,   1007,   1009,   1010,   1011,   1012,   1013,
+    public static int[] address =  {1001,   1002,   1003,   1004,   1005,   1006,   1007,   1009,   1010,   1011,   1012,   1013,
                                     1014,   1020,   1021,   1100,   1101,   1102,   1103,   1104,   1105,   1106,   1107,   1108,
                                     1109,   1110,   1111,   1112,   1113,   1114,   1115,   1116,   1117,   1118,   1119,   1120,
                                     1121,   1122,   1123,   1124,   1125,   1126,   1127,   1128,   1129,   1130,   1131,   1132,
@@ -243,7 +243,6 @@ public class Modbus extends SQLiteOpenHelper {
         sql = getWritableDatabase();
         context = c;
         if(firstTime) {
-            sql.execSQL(SQL_DELETE_ENTRIES);
             constructSQLiteTable();
             insertValues();
             readValues();
@@ -251,6 +250,16 @@ public class Modbus extends SQLiteOpenHelper {
         else {
             readValues();
         }
+    }
+
+    public Modbus(Context c, boolean restore, boolean other) {
+        super(c, DATABASE_NAME, null, DATABASE_VERSION);
+        sql = getWritableDatabase();
+        context = c;
+        sql.execSQL(SQL_DELETE_ENTRIES);
+        constructSQLiteTable();
+        insertValues();
+        readValues();
     }
 
     public Modbus(Context c, int add, int val) {
@@ -293,15 +302,15 @@ public class Modbus extends SQLiteOpenHelper {
 
     public void constructSQLiteTable() {
         String str = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(id INTEGER PRIMARY KEY,";
-        for(int i = 0; i < AMOUNT - 1; i++)
+        for(int i = 0; i < Size - 1; i++)
             str = str + BASE_NAME + Integer.toString(address[i]) + " INTEGER,";
-        str = str + BASE_NAME + Integer.toString(address[AMOUNT - 1]) + " INTEGER)";
+        str = str + BASE_NAME + Integer.toString(address[Size - 1]) + " INTEGER)";
         sql.execSQL(str);
     }
 
     public void insertValues() {
         ContentValues cv = new ContentValues();
-        for(int i = 0; i < AMOUNT; i++)
+        for(int i = 0; i < Size; i++)
             cv.put(BASE_NAME + address[i], values[i]);
         sql.insert(TABLE_NAME, null, cv);
     }
@@ -310,7 +319,7 @@ public class Modbus extends SQLiteOpenHelper {
         String str = "SELECT * FROM " + TABLE_NAME;
         Cursor c = sql.rawQuery(str, null);
         c.moveToFirst();
-        for(int i = 0; i < AMOUNT; i++)
+        for(int i = 0; i < Size; i++)
             values[i] = c.getInt(1 + i);
         c.close();
     }
@@ -336,7 +345,7 @@ public class Modbus extends SQLiteOpenHelper {
     }
 
     public boolean addressExists(int add) {
-        for(int i = 0; i < AMOUNT; i++) {
+        for(int i = 0; i < Size; i++) {
             if(address[i] == add) {
                 m_address = add;
                 m_index = i;

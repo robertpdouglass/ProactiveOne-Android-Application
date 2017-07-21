@@ -18,69 +18,78 @@
         android:elevation="1dp"
         app:srcCompat="@drawable/proactiveone" />
 
-    <HorizontalScrollView
-        android:id="@+id/sensor_list"
+    <GridLayout
+        android:id="@+id/button_layout"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:layout_below="@id/imageView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:foregroundGravity="center_horizontal"
-        android:scrollbars="none">
+        android:rowCount="1"
+        android:columnCount="4"
+        android:foregroundGravity="center_horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_height="0dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/material_button"
+            android:text="Sensor 1"
+            android:elevation="2dp"
+            android:textSize="15dp"
+            android:textColor="#ffffff"
+            android:onClick="sensor1"/>
 
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="85dp"
-                android:layout_height="35dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/material_button"
-                android:text="Sensor 1"
-                android:textColor="#ffffff"
-                android:onClick="sensor1"/>
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_height="0dp"
+            android:layout_marginRight="10dp"
+            android:elevation="2dp"
+            android:textSize="15dp"
+            android:background="@drawable/material_button"
+            android:text="Sensor 2"
+            android:textColor="#ffffff"
+            android:onClick="sensor2"/>
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="85dp"
-                android:layout_height="35dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/material_button"
-                android:text="Sensor 2"
-                android:textColor="#ffffff"
-                android:onClick="sensor2"/>
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_height="0dp"
+            android:layout_marginRight="10dp"
+            android:elevation="2dp"
+            android:textSize="15dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/material_button"
+            android:text="Sensor 3"
+            android:onClick="sensor3"/>
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="85dp"
-                android:layout_height="35dp"
-                android:textColor="#ffffff"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/material_button"
-                android:text="Sensor 3"
-                android:onClick="sensor3"/>
-
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="85dp"
-                android:layout_height="35dp"
-                android:textColor="#ffffff"
-                android:background="@drawable/material_button"
-                android:text="Sensor 4"
-                android:onClick="sensor4"/>
-
-        </LinearLayout>
-    </HorizontalScrollView>
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_height="0dp"
+            android:textColor="#ffffff"
+            android:elevation="2dp"
+            android:textSize="15dp"
+            android:background="@drawable/material_button"
+            android:text="Sensor 4"
+            android:onClick="sensor4"/>
+    </GridLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="15dp"
-        android:layout_below="@+id/sensor_list"
+        android:layout_below="@+id/button_layout"
         android:layout_above="@+id/button">
 
         <LinearLayout
@@ -309,10 +318,12 @@
     <Button
         android:id="@+id/button"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="15dp"
+        android:elevation="2dp"
+        android:textSize="15dp"
         android:background="@drawable/material_button"
         android:foregroundGravity="center_horizontal"
         android:onClick="restore"

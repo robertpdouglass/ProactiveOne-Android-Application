@@ -22,40 +22,42 @@ import android.widget.Toast;
 
 public class Advanced_Data extends AppCompatActivity {
 
-    LinearLayout[] layoutToAdd =   {(LinearLayout) findViewById(R.id.data_a1_expansion),    (LinearLayout) findViewById(R.id.data_a2_expansion),
-                                    (LinearLayout) findViewById(R.id.data_a3_expansion),    (LinearLayout) findViewById(R.id.data_a4_expansion),
-                                    (LinearLayout) findViewById(R.id.data_a5_expansion),    (LinearLayout) findViewById(R.id.data_b6_expansion),
-                                    (LinearLayout) findViewById(R.id.data_b7_expansion),    (LinearLayout) findViewById(R.id.data_b8_expansion),
-                                    (LinearLayout) findViewById(R.id.data_b9_expansion),    (LinearLayout) findViewById(R.id.data_b10_expansion),
-                                    (LinearLayout) findViewById(R.id.data_b11_expansion),   (LinearLayout) findViewById(R.id.data_b12_expansion)};
-    View[] viewToInflate = new View[12];
-    boolean[] clicked = new boolean[12];
-    boolean changes_made = false;
+    public static final int Size =              12;
 
-    public static int[] changes = new int[12];
-    public static boolean[] changes_bool = new boolean[12];
-    public static int[] addresses = {1500, 1501, 1502, 1503, 1504, 1505, 1506, 1507, 1508, 1509, 1510, 1511};
-
-    int[] changes_low = new int[12];
-    int[] changes_high = new int[12];
-
-    public static final int Size = 12;
-
-    String[] items = {"Disable", "External Sensor", "Internal Sensor", "Low Limit", "High Limit", "I2C"};
+    static LinearLayout[] layoutToAdd =         new LinearLayout[Size];
+    View[] viewToInflate =                      new View[Size];
+    boolean changes_made =                      false;
+    boolean[] loadedSpinner =                  {false,  false,  false,  false,  false,  false,
+                                                false,  false,  false,  false,  false,  false};
+    public static int[] changes =               new int[Size];
+    public static boolean[] clicked =          {false,  false,  false,  false,  false,  false,
+                                                false,  false,  false,  false,  false,  false};
+    public static boolean[] changes_bool =     {false,  false,  false,  false,  false,  false,
+                                                false,  false,  false,  false,  false,  false};
+    public static int[] addresses =            {1500,   1501,   1502,   1503,   1504,   1505,
+                                                1506,   1507,   1508,   1509,   1510,   1511};
+    public static int[] changes_low =           new int[Size];
+    public static int[] changes_high =          new int[Size];
+    String[] items =                           {"Disable",          "External Sensor",  "Internal Sensor",
+                                                "Low Limit",        "High Limit",       "I2C"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.advanced_data);
 
-        LayoutTransition transition = new LayoutTransition();
-
-        for(int i = 0; i < 12; i++) {
-            layoutToAdd[i].setLayoutTransition(transition);
-            clicked[i] = true;
-            changes[i] = new Modbus(getApplicationContext(), addresses[i]).getValue();
-            changes_bool[i] = false;
-        }
+        layoutToAdd[0] =      (LinearLayout) findViewById(R.id.data_a1_expansion);
+        layoutToAdd[1] =      (LinearLayout) findViewById(R.id.data_a2_expansion);
+        layoutToAdd[2] =      (LinearLayout) findViewById(R.id.data_a3_expansion);
+        layoutToAdd[3] =      (LinearLayout) findViewById(R.id.data_a4_expansion);
+        layoutToAdd[4] =      (LinearLayout) findViewById(R.id.data_a5_expansion);
+        layoutToAdd[5] =      (LinearLayout) findViewById(R.id.data_b6_expansion);
+        layoutToAdd[6] =      (LinearLayout) findViewById(R.id.data_b7_expansion);
+        layoutToAdd[7] =      (LinearLayout) findViewById(R.id.data_b8_expansion);
+        layoutToAdd[8] =      (LinearLayout) findViewById(R.id.data_b9_expansion);
+        layoutToAdd[9] =      (LinearLayout) findViewById(R.id.data_b10_expansion);
+        layoutToAdd[10] =     (LinearLayout) findViewById(R.id.data_b11_expansion);
+        layoutToAdd[11] =     (LinearLayout) findViewById(R.id.data_b12_expansion);
     }
 
     public void onBackPressed() {
@@ -101,11 +103,11 @@ public class Advanced_Data extends AppCompatActivity {
     }
 
     public void restore(View view) {
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are You Sure You Want To Restore Default Values?  This Will Overwrite All Values.");
         builder.setPositiveButton("Restore", restoreDialog);
         builder.setNegativeButton("Cancel", restoreDialog);
-        builder.show();*/
+        builder.show();
     }
 
     DialogInterface.OnClickListener restoreDialog = new DialogInterface.OnClickListener() {
@@ -113,12 +115,10 @@ public class Advanced_Data extends AppCompatActivity {
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
-                    new Modbus(getApplicationContext(), true);
-                    /* *********************************************************** */
-                    /* *********************************************************** */
-                    /* ***** ADD LENGTHY CODE TO SET OPENED SELECTED OPTIONS ***** */
-                    /* *********************************************************** */
-                    /* *********************************************************** */
+                    toast();
+                    Home.Screen = -1;
+                    new Modbus(getApplicationContext(), true, true);
+                    startNfc();
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
@@ -127,16 +127,8 @@ public class Advanced_Data extends AppCompatActivity {
         }
     };
 
-    public int combineBytes(int low, int high) {
-        return ((low & 0x00ff) << 8) | ((high & 0x00ff));
-    }
-
-    public int getHighInt(int combined) {
-        return (combined & 0x00ff);
-    }
-
-    public int getLowInt(int combined) {
-        return ((combined >> 8) & 0x00ff);
+    public void toast() {
+        Toast.makeText(this, "Please Wait...", Toast.LENGTH_SHORT).show();
     }
 
     public void indexToast() {
@@ -144,365 +136,318 @@ public class Advanced_Data extends AppCompatActivity {
     }
 
     public void dataA1(View view) {
-        int index = 0;
-        if(clicked[index]) {
-            clicked[index] = false;
+        final int index = 0;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_a1_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_a01_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.a1_type);
-            EditText e = (EditText) findViewById(R.id.a1_index);
-            Button b1 = (Button) findViewById(R.id.a1_pos);
-            Button b2 = (Button) findViewById(R.id.a1_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_a1_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_a1_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_a1_neg),
+                                    (Button) findViewById(R.id.data_a1_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataA2(View view) {
-        int index = 1;
-        if(clicked[index]) {
-            clicked[index] = false;
+        final int index = 1;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_a2_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_a02_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.a2_type);
-            EditText e = (EditText) findViewById(R.id.a2_index);
-            Button b1 = (Button) findViewById(R.id.a2_pos);
-            Button b2 = (Button) findViewById(R.id.a2_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_a2_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_a2_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_a2_neg),
+                                    (Button) findViewById(R.id.data_a2_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataA3(View view) {
-        int index = 2;
-        if(clicked[index]) {
-            clicked[index] = false;
+        final int index = 2;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_a3_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_a03_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.a3_type);
-            EditText e = (EditText) findViewById(R.id.a3_index);
-            Button b1 = (Button) findViewById(R.id.a3_pos);
-            Button b2 = (Button) findViewById(R.id.a3_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_a3_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_a3_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_a3_neg),
+                                    (Button) findViewById(R.id.data_a3_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataA4(View view) {
-        int index = 3;
-        if(clicked[index]) {
-            clicked[index] = false;
+        final int index = 3;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_a4_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_a04_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.a4_type);
-            EditText e = (EditText) findViewById(R.id.a4_index);
-            Button b1 = (Button) findViewById(R.id.a4_pos);
-            Button b2 = (Button) findViewById(R.id.a4_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_a4_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_a4_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_a4_neg),
+                                    (Button) findViewById(R.id.data_a4_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataA5(View view) {
-        int index = 4;
-        if(clicked[index]) {
-            clicked[index] = false;
+        final int index = 4;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_a5_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_a05_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.a5_type);
-            EditText e = (EditText) findViewById(R.id.a5_index);
-            Button b1 = (Button) findViewById(R.id.a5_pos);
-            Button b2 = (Button) findViewById(R.id.a5_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_a5_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_a5_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_a5_neg),
+                                    (Button) findViewById(R.id.data_a5_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataB6(View view) {
-        int index = 5;
-        if(clicked[index]) {
-            clicked[index] = false;
+        final int index = 5;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_b6_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_b06_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.b6_type);
-            EditText e = (EditText) findViewById(R.id.b6_index);
-            Button b1 = (Button) findViewById(R.id.b6_pos);
-            Button b2 = (Button) findViewById(R.id.b6_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_b6_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_b6_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_b6_neg),
+                                    (Button) findViewById(R.id.data_b6_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataB7(View view) {
-        int index = 6;
-        if(clicked[index]) {
-            clicked[index] = false;
+        final int index = 6;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_b7_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_b07_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.b7_type);
-            EditText e = (EditText) findViewById(R.id.b7_index);
-            Button b1 = (Button) findViewById(R.id.b7_pos);
-            Button b2 = (Button) findViewById(R.id.b7_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_b7_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_b7_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_b7_neg),
+                                    (Button) findViewById(R.id.data_b7_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataB8(View view) {
-        int index = 7;
-        if(clicked[index]) {
-            clicked[index] = false;
+        final int index = 7;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_b8_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_b08_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.b8_type);
-            EditText e = (EditText) findViewById(R.id.b8_index);
-            Button b1 = (Button) findViewById(R.id.b8_pos);
-            Button b2 = (Button) findViewById(R.id.b8_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_b8_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_b8_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_b8_neg),
+                                    (Button) findViewById(R.id.data_b8_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataB9(View view) {
-        int index = 8;
-        if(clicked[index]) {
-            clicked[index] = false;
+        final int index = 8;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_b9_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_b09_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.b9_type);
-            EditText e = (EditText) findViewById(R.id.b9_index);
-            Button b1 = (Button) findViewById(R.id.b9_pos);
-            Button b2 = (Button) findViewById(R.id.b9_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_b9_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_b9_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_b9_neg),
+                                    (Button) findViewById(R.id.data_b9_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataB10(View view) {
-        int index = 9;
-        if(clicked[index]) {
-            clicked[index] = false;
+        final int index = 9;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_b10_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_b10_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.b10_type);
-            EditText e = (EditText) findViewById(R.id.b10_index);
-            Button b1 = (Button) findViewById(R.id.b10_pos);
-            Button b2 = (Button) findViewById(R.id.b10_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_b10_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_b10_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_b10_neg),
+                                    (Button) findViewById(R.id.data_b10_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataB11(View view) {
-        int index = 10;
-        if(clicked[index]) {
-            clicked[index] = false;
-
+        final int index = 10;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_b11_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_b11_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.b11_type);
-            EditText e = (EditText) findViewById(R.id.b11_index);
-            Button b1 = (Button) findViewById(R.id.b11_pos);
-            Button b2 = (Button) findViewById(R.id.b11_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_b11_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_b11_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_b11_neg),
+                                    (Button) findViewById(R.id.data_b11_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
     public void dataB12(View view) {
-        int index = 11;
-        if(clicked[index]) {
-            clicked[index] = false;
-
+        final int index = 11;
+        if(!clicked[index]) {
+            clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.y_data_b12_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_b12_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner dropdown = (Spinner) findViewById(R.id.b12_type);
-            EditText e = (EditText) findViewById(R.id.b12_index);
-            Button b1 = (Button) findViewById(R.id.b12_pos);
-            Button b2 = (Button) findViewById(R.id.b12_neg);
-
-            display(index, e, dropdown, b1, b2);
+            Spinner spinner =       (Spinner) findViewById(R.id.data_b12_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_b12_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_b12_neg),
+                                    (Button) findViewById(R.id.data_b12_pos)};
+            display(index, spinner, e, button);
         }
         else {
-            clicked[index] = true;
+            clicked[index] = false;
             layoutToAdd[index].removeView(viewToInflate[index]);
         }
     }
 
-    public void display(final int index, final EditText e, final Spinner dropdown, final Button b1, final Button b2) {
-        AdapterView.OnItemSelectedListener onSpinner = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                changes_made = true;
-                changes_bool[index] = true;
-                changes_high[index] = position;
-                changes[index] = combineBytes(changes_low[index], changes_high[index]);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        };
-
+    public void display(final int i, final Spinner dropdown, final EditText editText, final Button[] button) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
         dropdown.setAdapter(adapter);
-        dropdown.setOnItemSelectedListener(onSpinner);
-        dropdown.setSelection(getHighInt(changes[index]));
-
-        e.setText("" + getLowInt(changes[index]));
-        e.addTextChangedListener(new TextWatcher() {
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void afterTextChanged(Editable s) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(loadedSpinner[i]) {
+                    changes_made = true;
+                    changes_bool[i] = true;
+                    changes_high[i] = position;
+                    changes[i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
+                }
+                else {
+                    loadedSpinner[i] = true;
+                }
             }
-
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+        dropdown.setSelection(changes_high[i]);
 
+        editText.setText("" + changes_low[i]);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0) {
                     changes_made = true;
-                    changes_bool[0] = true;
-                    changes[index] = combineBytes(Integer.parseInt(s.toString()), changes_high[index]);
+                    changes_bool[i] = true;
+                    changes_low[i] = Integer.parseInt(s.toString());
+                    changes[i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
                 }
             }
         });
 
-        b1.setOnTouchListener(new Button.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (Build.VERSION.SDK_INT >= 22)
-                            b1.setBackground(getDrawable(R.drawable.material_button_blue));
-                        else
-                            b1.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                        if (changes_low[index] < 255) {
-                            changes_made = true;
-                            changes_bool[index] = true;
-                            changes_low[index]++;
-                            changes[index] = combineBytes(changes_low[index], changes_high[index]);
-                            e.setText("" + getLowInt(changes[index]));
-                        } else {
+        for(int j = 0; j < 2; j++) {
+            final int k = j;
+            button[j].setOnTouchListener(new Button.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
                             if (Build.VERSION.SDK_INT >= 22)
-                                b1.setBackground(getDrawable(R.drawable.material_button));
+                                button[k].setBackground(getDrawable(R.drawable.material_button_blue));
                             else
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            indexToast();
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (Build.VERSION.SDK_INT >= 22)
-                            b1.setBackground(getDrawable(R.drawable.material_button));
-                        else
-                            b1.setBackground(getResources().getDrawable(R.drawable.material_button));
-                        break;
-                }
-                return false;
-            }
-        });
+                                button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
-        b2.setOnTouchListener(new Button.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (Build.VERSION.SDK_INT >= 22)
-                            b2.setBackground(getDrawable(R.drawable.material_button_blue));
-                        else
-                            b2.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                        if (changes_low[index] > 0) {
-                            changes_made = true;
-                            changes_bool[index] = true;
-                            changes_low[index]--;
-                            changes[index] = combineBytes(changes_low[index], changes_high[index]);
-                            e.setText("" + getLowInt(changes[index]));
-                        } else {
-                            if (Build.VERSION.SDK_INT >= 22)
-                                b2.setBackground(getDrawable(R.drawable.material_button));
+                            if (changes_low[i] < 255) {
+                                changes_made = true;
+                                changes_bool[i] = true;
+                                if(k == 0)
+                                    changes_low[i]--;
+                                else
+                                    changes_low[i]++;
+                                changes[i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
+                                editText.setText("" + changes_low[i]);
+                            }
                             else
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            indexToast();
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (Build.VERSION.SDK_INT >= 22)
-                            b2.setBackground(getDrawable(R.drawable.material_button));
-                        else
-                            b2.setBackground(getResources().getDrawable(R.drawable.material_button));
-                        break;
+                                indexToast();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            if (Build.VERSION.SDK_INT >= 22)
+                                button[k].setBackground(getDrawable(R.drawable.material_button));
+                            else
+                                button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                            break;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
+        }
     }
 }

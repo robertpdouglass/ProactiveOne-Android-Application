@@ -18,54 +18,50 @@
         android:elevation="1dp"
         app:srcCompat="@drawable/proactiveone" />
 
-    <HorizontalScrollView
+    <GridLayout
         android:id="@+id/sensor_list"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:layout_below="@id/imageView"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:foregroundGravity="center_horizontal"
-        android:scrollbars="none">
+        android:rowCount="1"
+        android:columnCount="2">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <Button
+            android:id="@+id/temp_button"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_height="0dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/material_button"
+            android:text="Temperature"
+            android:textColor="#ffffff"
+            android:onClick="temperature"/>
 
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="85dp"
-                android:layout_height="35dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/material_button"
-                android:text="Temperature"
-                android:textColor="#ffffff"
-                android:onClick="sensor1"/>
+        <Button
+            android:id="@+id/accel_button"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_height="0dp"
+            android:background="@drawable/material_button"
+            android:text="Accelerometer"
+            android:textColor="#ffffff"
+            android:onClick="accelerometer"/>
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="85dp"
-                android:layout_height="35dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/material_button"
-                android:text="Accelerometer"
-                android:textColor="#ffffff"
-                android:onClick="sensor2"/>
-
-        </LinearLayout>
-    </HorizontalScrollView>
+    </GridLayout>
 
     <ScrollView
+        android:id="@+id/sensors_internal_main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
+        android:layout_above="@+id/button"
         android:layout_below="@+id/sensor_list"
-        android:layout_above="@+id/button">
+        android:layout_marginTop="15dp">
 
         <LinearLayout
-            android:id="@+id/temp_main_layout"
+            android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:animateLayoutChanges="true"
@@ -76,17 +72,17 @@
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/option1_layout"
+                android:id="@+id/int_option1_layout"
                 android:onClick="option1">
 
                 <TextView
-                    android:layout_width="250dp"
+                    android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:textSize="20dp"
-                    android:id="@+id/textView1"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/int_textView1"
                     android:textColor="#474747"
-                    android:text="SET TEXT"
-                    android:layout_marginBottom="10dp"/>
+                    android:text="SET TEXT" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -97,8 +93,8 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/option1_expansion"
-                    android:layout_below="@+id/textView1"
+                    android:id="@+id/int_option1_expansion"
+                    android:layout_below="@+id/int_textView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -107,8 +103,8 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/option2_layout"
-                android:layout_below="@+id/option1_layout"
+                android:id="@+id/int_option2_layout"
+                android:layout_below="@+id/int_option1_layout"
                 android:layout_width="match_parent"
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
@@ -116,13 +112,13 @@
                 android:onClick="option2">
 
                 <TextView
-                    android:layout_width="250dp"
+                    android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:textSize="20dp"
-                    android:id="@+id/textView2"
+                    android:id="@+id/int_textView2"
+                    android:layout_marginBottom="10dp"
                     android:textColor="#474747"
-                    android:text="SET TEXT"
-                    android:layout_marginBottom="10dp"/>
+                    android:text="SET TEXT" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -133,8 +129,8 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/option2_expansion"
-                    android:layout_below="@+id/textView2"
+                    android:id="@+id/int_option2_expansion"
+                    android:layout_below="@+id/int_textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -143,8 +139,8 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/option3_layout"
-                android:layout_below="@+id/option2_layout"
+                android:id="@+id/int_option3_layout"
+                android:layout_below="@+id/int_option2_layout"
                 android:layout_width="match_parent"
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
@@ -152,13 +148,13 @@
                 android:onClick="option3">
 
                 <TextView
-                    android:layout_width="250dp"
+                    android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:textSize="20dp"
-                    android:id="@+id/textView3"
+                    android:id="@+id/int_textView3"
+                    android:layout_marginBottom="10dp"
                     android:textColor="#474747"
-                    android:text="SET TEXT"
-                    android:layout_marginBottom="10dp"/>
+                    android:text="SET TEXT" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -169,8 +165,8 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/option3_expansion"
-                    android:layout_below="@+id/textView3"
+                    android:id="@+id/int_option3_expansion"
+                    android:layout_below="@+id/int_textView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -179,8 +175,8 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/option4_layout"
-                android:layout_below="@+id/option3_layout"
+                android:id="@+id/int_option4_layout"
+                android:layout_below="@+id/int_option3_layout"
                 android:layout_width="match_parent"
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
@@ -188,13 +184,13 @@
                 android:onClick="option4">
 
                 <TextView
-                    android:layout_width="250dp"
+                    android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:textSize="20dp"
-                    android:id="@+id/textView4"
+                    android:id="@+id/int_textView4"
                     android:textColor="#474747"
-                    android:text="SET TEXT"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp"
+                    android:text="SET TEXT" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -205,48 +201,12 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/option4_expansion"
-                    android:layout_below="@+id/textView4"
+                    android:id="@+id/int_option4_expansion"
+                    android:layout_below="@+id/int_textView4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:animateLayoutChanges="true">
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/option5_layout"
-                android:layout_below="@+id/option4_layout"
-                android:layout_width="match_parent"
-                android:animateLayoutChanges="true"
-                android:layout_height="wrap_content"
-                android:onClick="option5">
-
-                <TextView
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:id="@+id/textView5"
-                    android:textColor="#474747"
-                    android:text="SET TEXT"
-                    android:layout_marginBottom="10dp"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:drawable/arrow_down_float" />
-
-                <LinearLayout
-                    android:id="@+id/option5_expansion"
-                    android:layout_below="@+id/textView5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:animateLayoutChanges="true">
-
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
@@ -255,10 +215,12 @@
     <Button
         android:id="@+id/button"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="15dp"
+        android:textSize="15dp"
+        android:elevation="2dp"
         android:background="@drawable/material_button"
         android:foregroundGravity="center_horizontal"
         android:onClick="restore"

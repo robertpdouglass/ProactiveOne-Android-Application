@@ -13,14 +13,14 @@ public class Advanced extends AppCompatActivity{
         setContentView(R.layout.advanced);
     }
 
-    public void command(View view) {
+    public void dataPackets(View view) {
         Home.Screen = 5;
-        startActivity(new Intent(this, Advanced_Command.class));
+        startActivity(new Intent(this, Advanced_Data.class));
     }
 
-    public void dataPackets(View view) {
+    public void command(View view) {
         Home.Screen = 6;
-        startActivity(new Intent(this, Advanced_Data.class));
+        startActivity(new Intent(this, Advanced_Command.class));
     }
 
     @Override

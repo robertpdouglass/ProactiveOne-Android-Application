@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp">
+
+            <EditText
+                android:id="@+id/int_a_x_edittext"
+                android:layout_width="85dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/material_button_blue"
+                android:foregroundGravity="right"
+                android:gravity="right|center_vertical"
+                android:inputType="numberDecimal"
+                android:paddingRight="25dp"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textColor="#474747"
+                android:foregroundGravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="100dp"
+                android:text="X Axis GForce High Limit"
+                android:textSize="12dp"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/int_a_x_edittext"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp">
+
+            <EditText
+                android:id="@+id/int_a_y_edittext"
+                android:layout_width="85dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/material_button_blue"
+                android:foregroundGravity="right"
+                android:gravity="right|center_vertical"
+                android:inputType="numberDecimal"
+                android:paddingRight="25dp"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textColor="#474747"
+                android:foregroundGravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="100dp"
+                android:text="Y Axis GForce High Limit"
+                android:textSize="12dp"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/int_a_y_edittext"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <EditText
+                android:id="@+id/int_a_z_edittext"
+                android:layout_width="85dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/material_button_blue"
+                android:foregroundGravity="right"
+                android:gravity="right|center_vertical"
+                android:inputType="numberDecimal"
+                android:paddingRight="25dp"
+                android:textColor="#ffffff"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textColor="#474747"
+                android:foregroundGravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="100dp"
+                android:text="Z Axis GForce High Limit"
+                android:textSize="12dp"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/int_a_z_edittext"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

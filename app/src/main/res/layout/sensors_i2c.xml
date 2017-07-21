@@ -1,6 +1,402 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_frame"
+    android:layout_width="match_parent"
+    android:padding="15dp"
+    android:background="#ffffff"
+    android:layout_height="match_parent" >
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:elevation="1dp"
+        app:srcCompat="@drawable/proactiveone" />
+
+    <GridLayout
+        android:id="@+id/button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:rowCount="1"
+        android:columnCount="4"
+        android:foregroundGravity="center_horizontal">
+
+        <Button
+            android:id="@+id/i2c1"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_height="0dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/material_button"
+            android:text="I2C1"
+            android:elevation="2dp"
+            android:textSize="15dp"
+            android:textColor="#ffffff"
+            android:onClick="I2C1"/>
+
+        <Button
+            android:id="@+id/i2c2"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_height="0dp"
+            android:layout_marginRight="10dp"
+            android:elevation="2dp"
+            android:textSize="15dp"
+            android:background="@drawable/material_button"
+            android:text="I2C2"
+            android:textColor="#ffffff"
+            android:onClick="I2C2"/>
+
+        <Button
+            android:id="@+id/i2c3"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_height="0dp"
+            android:layout_marginRight="10dp"
+            android:elevation="2dp"
+            android:textSize="15dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/material_button"
+            android:text="I2C3"
+            android:onClick="I2C3"/>
+
+        <Button
+            android:id="@+id/i2c4"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_height="0dp"
+            android:textColor="#ffffff"
+            android:elevation="2dp"
+            android:textSize="15dp"
+            android:background="@drawable/material_button"
+            android:text="I2C4"
+            android:onClick="I2C4"/>
+    </GridLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/button_layout"
+        android:layout_above="@+id/button">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/i2c_option1_layout"
+                android:onClick="I2COption1">
+
+                <TextView
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView1"
+                    android:textColor="#474747"
+                    android:text="External I2C Enable/Library Index"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/i2c_option1_expansion"
+                    android:layout_below="@+id/textView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/i2c_option2_layout"
+                android:layout_below="@+id/i2c_option1_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="I2COption2">
+
+                <TextView
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView2"
+                    android:textColor="#474747"
+                    android:text="External I2C Power Mode/Source"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/i2c_option2_expansion"
+                    android:layout_below="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/i2c_option3_layout"
+                android:layout_below="@+id/i2c_option2_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="I2COption3">
+
+                <TextView
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView3"
+                    android:textColor="#474747"
+                    android:text="External I2C Interupt Configuration"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/i2c_option3_expansion"
+                    android:layout_below="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/i2c_option4_layout"
+                android:layout_below="@+id/i2c_option3_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="I2COption4">
+
+                <TextView
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView4"
+                    android:textColor="#474747"
+                    android:text="External I2C Polling Interval"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/i2c_option4_expansion"
+                    android:layout_below="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/i2c_option5_layout"
+                android:layout_below="@+id/i2c_option4_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="I2COption5">
+
+                <TextView
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/textView5"
+                    android:textColor="#474747"
+                    android:text="External I2C Address"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/i2c_option5_expansion"
+                    android:layout_below="@+id/textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/i2c_option6_layout"
+                android:layout_below="@+id/i2c_option5_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="I2COption6">
+
+                <TextView
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView6"
+                    android:text="External I2C Calibration"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/i2c_option6_expansion"
+                    android:layout_below="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/i2c_option7_layout"
+                android:layout_below="@+id/i2c_option6_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="I2COption7">
+
+                <TextView
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView7"
+                    android:text="External I2C Multiplier"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/i2c_option7_expansion"
+                    android:layout_below="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/i2c_option8_layout"
+                android:layout_below="@+id/i2c_option7_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="I2COption8">
+
+                <TextView
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
+                    android:id="@+id/textView8"
+                    android:text="External I2C Limits"
+                    android:layout_marginBottom="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/i2c_option8_expansion"
+                    android:layout_below="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:elevation="2dp"
+        android:textSize="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:background="@drawable/material_button"
+        android:foregroundGravity="center_horizontal"
+        android:onClick="restore"
+        android:textColor="#ffffff"
+        android:text="Restore Defaults" />
+
+</RelativeLayout>
