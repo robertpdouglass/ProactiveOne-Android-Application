@@ -17,7 +17,7 @@
         android:text="-"
         android:elevation="2dp"
         android:textColor="#ffffff"
-        android:textSize="20dp" />
+        android:textSize="15dp" />
 
     <Button
         android:id="@+id/i2c_cal_pos"
@@ -31,14 +31,14 @@
         android:background="@drawable/material_button"
         android:text="+"
         android:textColor="#ffffff"
-        android:textSize="20dp" />
+        android:textSize="15dp" />
 
     <EditText
         android:id="@+id/i2c_cal_edittext"
         android:layout_width="85dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_alignParentTop="true"

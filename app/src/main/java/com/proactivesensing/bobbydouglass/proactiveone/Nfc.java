@@ -26,6 +26,7 @@ public class Nfc extends AppCompatActivity {
     NfcAdapter nfcAdapter;
     TextView info;
     Button cancelButton;
+    boolean sent = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,33 +87,21 @@ public class Nfc extends AppCompatActivity {
     }
 
     public void save() {
-        if(Home.Screen == 1) {
+        if(Home.Screen == -1) {
+            for(int i = 0; i < Modbus.Size; i++)
+                new Modbus(getApplicationContext(), Modbus.address[i], Modbus.defaults[i]);
+        }
+        if(Home.Screen == 0) {
             for (int i = 0; i < Sensors_External.SensorCount; i++) {
                 for(int j = 0; j < Sensors_External.SensorChanges; j++) {
                     if (Sensors_External.changes_bool[i][j])
                         new Modbus(getApplicationContext(), Sensors_External.addresses[i][j], Sensors_External.changes[i][j]);
                 }
             }
-        } /*
-        else if(Configure.selected == 1) {
-            for (int i = 0; i < 52; i++) {
-                if (Configure_Sensors.changes_bool[i]) {
-                    new Modbus(getApplicationContext(), Configure_Sensors.addresses[i], Configure_Sensors.changes[i]);
-                }
-            }
         }
-        else if(Configure.selected == 2) {
-
-        } */
-        else if(Home.Screen == 5) {
-            for(int i = 0; i < Advanced_Data.Size; i++) {
-                if(Advanced_Data.changes_bool[i])
-                    new Modbus(getApplicationContext(), Advanced_Data.addresses[i], Advanced_Data.changes[i]);
-            }
-        }
-        /*else {
+        else {
             Log.e("ERROR", "INVALID SELECTED SCREEN INDEX");
-        }*/
+        }
     }
 
     @Override
@@ -131,9 +120,11 @@ public class Nfc extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        NdefMessage ndefMessage = createNdefMessage();
-        writeNdefMessage(tag, ndefMessage);
+        if(!sent) {
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            NdefMessage ndefMessage = createNdefMessage();
+            writeNdefMessage(tag, ndefMessage);
+        }
     }
 
     private void enableForegroundDispatchSystem() {
@@ -157,6 +148,7 @@ public class Nfc extends AppCompatActivity {
             info.setText("Changes Sent To ProactiveOne");
             cancelButton.setText("Back");
             save();
+            sent = true;
         } catch (Exception e) {
         }
     }
@@ -164,14 +156,14 @@ public class Nfc extends AppCompatActivity {
     private void writeNdefMessage(Tag tag, NdefMessage ndefMessage) {
         try {
             if (tag == null) {
-                info.setText("Error communicating with ProactiveOne, please try again...");
+                info.setText("Error(1) communicating with ProactiveOne, please try again...");
                 return;
             }
 
             Ndef ndef = Ndef.get(tag);
 
             if (ndef == null) {
-                info.setText("Error communicating with ProactiveOne, please try again...");
+                info.setText("Error(2) communicating with ProactiveOne, please try again...");
                 formatTag(tag, ndefMessage);
             } else {
                 ndef.connect();
@@ -180,9 +172,10 @@ public class Nfc extends AppCompatActivity {
                 info.setText("Changes Sent To ProactiveOne!");
                 cancelButton.setText("Back");
                 save();
+                sent = true;
             }
         } catch (Exception e) {
-            info.setText("Error communicating with ProactiveOne, please try again...");
+            info.setText("Error(3) communicating with ProactiveOne, please try again...");
         }
     }
 
@@ -206,41 +199,16 @@ public class Nfc extends AppCompatActivity {
     private NdefMessage createNdefMessage() {
         ArrayList<NdefRecord> ndef = new ArrayList<NdefRecord>();
 
-        if(Home.Screen == 1) {
+        if(Home.Screen == -1) {
+            for(int i = 0; i < Modbus.Size; i++)
+                ndef.add(createRecord(Modbus.address[i], Modbus.defaults[i]));
+        }
+        else if(Home.Screen == 0) {
             for(int i = 0; i < Sensors_External.SensorCount; i++) {
                 for(int j = 0; j < Sensors_External.SensorChanges; j++) {
                     if (Sensors_External.changes_bool[i][j])
                         ndef.add(createRecord(Sensors_External.addresses[i][j], Sensors_External.changes[i][j]));
                 }
-            }
-        }
-        /*else if(Home.Screen == 2) {
-            for(int i = 0; i < Sensors_I2C.Size; i++) {
-                if(Sensors_I2C.changes_bool[i])
-                    ndef.add(createRecord(Sensors_I2C.addresses[i], Sensors_I2C.changes[i]));
-            }
-        }
-        else if(Home.Screen == 3) {
-            for(int i = 0; i < Sensors_Internal.Size; i++) {
-                if(Sensors_Internal.changes_bool[i])
-                    ndef.add(createRecord(Sensor_Internal.addresses[i], Sensor_Internal.changes[i]));
-            }
-        } */
-        else if(Home.Screen == 4) {
-            for(int i = 0; i < System_Parameters.Size; i++) {
-                if(System_Parameters.changes_bool[i])
-                    ndef.add(createRecord(System_Parameters.addresses[i], System_Parameters.changes[i]));
-            }
-        }
-        else if(Home.Screen == 5) {
-            for(int i = 0; i < Advanced_Data.Size; i++) {
-                if(Advanced_Data.changes_bool[i])
-                    ndef.add(createRecord(Advanced_Data.addresses[i], Advanced_Data.changes[i]));
-            }
-        }
-        else if(Home.Screen == -1) {
-            for(int i = 0; i < Modbus.Size; i++) {
-                ndef.add(createRecord(Modbus.address[i], Modbus.values[i]));
             }
         }
         else {

@@ -10,7 +10,7 @@
         android:layout_height="40dp"
         android:text="-"
         android:elevation="2dp"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:layout_marginRight="5dp"
         android:background="@drawable/material_button"
         android:layout_alignParentTop="true"
@@ -30,7 +30,7 @@
         android:background="@drawable/material_button"
         android:text="+"
         android:textColor="#ffffff"
-        android:textSize="20dp" />
+        android:textSize="15dp" />
 
     <EditText
         android:id="@+id/sys_cycle_edittext"
@@ -45,7 +45,7 @@
         android:gravity="right|center_vertical"
         android:inputType="number"
         android:elevation="2dp"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:paddingRight="25dp"
         android:textColor="#ffffff" />
 

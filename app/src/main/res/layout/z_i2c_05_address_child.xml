@@ -15,7 +15,7 @@
         android:layout_centerVertical="true"
         android:layout_gravity="right"
         android:elevation="2dp"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:background="@drawable/material_button_blue"
         android:foregroundGravity="right"
         android:gravity="right|center_vertical"

@@ -108,7 +108,7 @@
                 <TextView
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:id="@+id/textView1"
                     android:textColor="#474747"
                     android:text="External I2C Enable/Library Index"
@@ -144,7 +144,7 @@
                 <TextView
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:id="@+id/textView2"
                     android:textColor="#474747"
                     android:text="External I2C Power Mode/Source"
@@ -180,7 +180,7 @@
                 <TextView
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:id="@+id/textView3"
                     android:textColor="#474747"
                     android:text="External I2C Interupt Configuration"
@@ -216,7 +216,7 @@
                 <TextView
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:id="@+id/textView4"
                     android:textColor="#474747"
                     android:text="External I2C Polling Interval"
@@ -252,7 +252,7 @@
                 <TextView
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:id="@+id/textView5"
                     android:textColor="#474747"
                     android:text="External I2C Address"
@@ -288,7 +288,7 @@
                 <TextView
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:textColor="#474747"
                     android:id="@+id/textView6"
                     android:text="External I2C Calibration"
@@ -323,7 +323,7 @@
                 <TextView
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:textColor="#474747"
                     android:id="@+id/textView7"
                     android:text="External I2C Multiplier"
@@ -358,7 +358,7 @@
                 <TextView
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:textColor="#474747"
                     android:id="@+id/textView8"
                     android:text="External I2C Limits"

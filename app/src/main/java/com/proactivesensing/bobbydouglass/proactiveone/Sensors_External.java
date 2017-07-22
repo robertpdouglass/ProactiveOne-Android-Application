@@ -33,17 +33,8 @@ public class Sensors_External extends AppCompatActivity {
     public static final int SensorCount =           4;
     public static final int ViewSize =              6;
 
-    public static LinearLayout[] layoutToAdd =      new LinearLayout[ViewSize];
-    public static View[] viewToInflate =            new View[ViewSize];
-    public static boolean[] clicked =              {false,  false,  false,  false,  false,  false};
     public static int[][] changes =                 new int[SensorCount][SensorChanges];
-    public static boolean[][] changes_bool =      {{false,  false,  false,  false,  false,  false,  false,  false,
-                                                    false,  false,  false,  false,  false,  false},{false,  false,
-                                                    false,  false,  false,  false,  false,  false,  false,  false,
-                                                    false,  false,  false,  false},{false,  false,  false,  false,
-                                                    false,  false,  false,  false,  false,  false,  false,  false,
-                                                    false,  false},{false,  false,  false,  false,  false,  false,
-                                                    false,  false,  false,  false,  false,  false,  false,  false}};
+    public static boolean[][] changes_bool =        new boolean[SensorCount][SensorChanges];
     public static int[][] addresses =             {{1100,   1101,   1102,   1103,   1104,   1105,   1106,   1107,
                                                     1108,   1109,   1110,   1111,   1112,   1113}, {1114,   1115,
                                                     1116,   1117,   1118,   1119,   1120,   1121,   1122,   1123,
@@ -51,13 +42,16 @@ public class Sensors_External extends AppCompatActivity {
                                                     1132,   1133,   1134,   1135,   1136,   1137,   1138,   1139,
                                                     1140,   1141}, {1142,   1143,   1144,   1145,   1146,   1147,
                                                     1148,   1149,   1150,   1151,   1152,   1153,   1154,   1155}};
-    public static int config_low[] = new int[SensorCount];
-    public static int config_high[] = new int[SensorCount];
 
+    LinearLayout[] layoutToAdd =                    new LinearLayout[ViewSize];
+    View[] viewToInflate =                          new View[ViewSize];
+    int config_low[] =                              new int[SensorCount];
+    int config_high[] =                             new int[SensorCount];
+    boolean[] clicked =                            {false,  false,  false,  false,  false,  false};
+    boolean changes_made =                          false;
+    int sensorNum =                                 0;
     boolean[][] loadedSpinner =                   {{false,  false,  false},{false,  false,  false},{false,  false,
                                                     false},{false,  false,  false}};
-    boolean changes_made = false;
-    int sensorNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +64,18 @@ public class Sensors_External extends AppCompatActivity {
         layoutToAdd[3] = (LinearLayout) findViewById(R.id.calibration_expansion);
         layoutToAdd[4] = (LinearLayout) findViewById(R.id.multiplier_expansion);
         layoutToAdd[5] = (LinearLayout) findViewById(R.id.alarm_limits_expansion);
+
+        for (int i = 0; i < SensorCount; i++) {
+            for (int j = 0; j < SensorChanges; j++) {
+                changes[i][j] = new Modbus(getApplicationContext(), addresses[i][j]).getValue();
+                changes_bool[i][j] = false;
+            }
+        }
+
+        for(int i = 0; i < SensorCount; i++) {
+            config_low[i] = ((changes[i][0] >> 8) & 0x00ff);
+            config_high[i] = (changes[i][0] & 0x00ff);
+        }
 
         sensorSelection();
     }
@@ -153,7 +159,7 @@ public class Sensors_External extends AppCompatActivity {
         Button selectedSensor = null;
         Button[] offSensors = new Button[3];
 
-        switch(sensorNum) {
+        switch (sensorNum) {
             case 0:
                 offSensors = new Button[]{sensor1, sensor2, sensor3};
                 selectedSensor = sensor0;
@@ -175,7 +181,7 @@ public class Sensors_External extends AppCompatActivity {
                 break;
         }
 
-        for(int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             if (Build.VERSION.SDK_INT >= 22)
                 offSensors[i].setBackground(getDrawable(R.drawable.material_button));
             else
@@ -186,6 +192,37 @@ public class Sensors_External extends AppCompatActivity {
             selectedSensor.setBackground(getDrawable(R.drawable.material_button_blue));
         else
             selectedSensor.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+
+        if(clicked[0]) {
+            clicked[0] = false;
+            layoutToAdd[0].removeView(viewToInflate[0]);
+            configuration(null);
+        }
+        if(clicked[1]) {
+            clicked[1] = false;
+            layoutToAdd[1].removeView(viewToInflate[1]);
+            alarmRecog(null);
+        }
+        if(clicked[2]) {
+            clicked[2] = false;
+            layoutToAdd[2].removeView(viewToInflate[2]);
+            values(null);
+        }
+        if(clicked[3]) {
+            clicked[3] = false;
+            layoutToAdd[3].removeView(viewToInflate[3]);
+            calibration(null);
+        }
+        if(clicked[4]) {
+            clicked[4] = false;
+            layoutToAdd[4].removeView(viewToInflate[4]);
+            multiplier(null);
+        }
+        if(clicked[5]) {
+            clicked[5] = false;
+            layoutToAdd[5].removeView(viewToInflate[5]);
+            alarmLimits(null);
+        }
     }
 
     public void sensor1(View view) {
@@ -326,7 +363,7 @@ public class Sensors_External extends AppCompatActivity {
             }
         }
         else {
-            clicked[i] = true;
+            clicked[i] = false;
             layoutToAdd[i].removeView(viewToInflate[i]);
         }
     }
@@ -343,7 +380,7 @@ public class Sensors_External extends AppCompatActivity {
                                         (EditText) findViewById(R.id.xsen_analog_high_edittext)};
             for(int l = 0; l < 2; l++) {
                 final int k = l;
-                values[k].setText("" + changes[sensorNum][j]);
+                values[k].setText("" + changes[sensorNum][j + k]);
                 values[k].addTextChangedListener(new TextWatcher() {
                     @Override
                     public void afterTextChanged(Editable s) {}
@@ -497,7 +534,6 @@ public class Sensors_External extends AppCompatActivity {
                                 changes[sensorNum][j] = 100;
                                 break;
                         }
-                        changes[sensorNum][j] = position;
                         changes_made = true;
                         changes_bool[sensorNum][j] = true;
                     }

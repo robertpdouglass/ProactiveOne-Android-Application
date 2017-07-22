@@ -28,7 +28,7 @@
                 android:inputType="numberDecimal"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView1"
@@ -65,7 +65,7 @@
                 android:inputType="numberDecimal"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -101,7 +101,7 @@
                 android:inputType="numberDecimal"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView3"

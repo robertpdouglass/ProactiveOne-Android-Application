@@ -46,41 +46,42 @@ public class System_Parameters extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.system_parameters);
 
-        inflater =            LayoutInflater.from(getApplicationContext());
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_01_locations_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_02_time_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_03_auto_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_04_a_msg_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_05_a_time_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_06_b_msg_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_07_b_time_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_08_battery_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_09_airplane_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_10_3v3_1_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_11_3v3_2_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_12_15v_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_13_cycle_child, null);
-        viewToInflate[0] =    inflater.inflate(R.layout.z_sys_14_vcc_child, null);
+        inflater = LayoutInflater.from(getApplicationContext());
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_01_locations_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_02_time_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_03_auto_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_04_a_msg_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_05_a_time_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_06_b_msg_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_07_b_time_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_08_battery_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_09_airplane_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_10_3v3_1_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_11_3v3_2_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_12_15v_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_13_cycle_child, null);
+        viewToInflate[0] = inflater.inflate(R.layout.z_sys_14_vcc_child, null);
 
-        layoutToAdd[0] =      (LinearLayout) findViewById(R.id.locations);
-        layoutToAdd[1] =      (LinearLayout) findViewById(R.id.daily);
-        layoutToAdd[2] =      (LinearLayout) findViewById(R.id.auto);
-        layoutToAdd[3] =      (LinearLayout) findViewById(R.id.a_msg);
-        layoutToAdd[4] =      (LinearLayout) findViewById(R.id.a_time);
-        layoutToAdd[5] =      (LinearLayout) findViewById(R.id.b_msg);
-        layoutToAdd[6] =      (LinearLayout) findViewById(R.id.b_time);
-        layoutToAdd[7] =      (LinearLayout) findViewById(R.id.battery);
-        layoutToAdd[8] =      (LinearLayout) findViewById(R.id.airplane);
-        layoutToAdd[9] =      (LinearLayout) findViewById(R.id.power_3v3_1);
-        layoutToAdd[10] =     (LinearLayout) findViewById(R.id.power_3v3_2);
-        layoutToAdd[11] =     (LinearLayout) findViewById(R.id.power_15v);
-        layoutToAdd[12] =     (LinearLayout) findViewById(R.id.cycle);
-        layoutToAdd[13] =     (LinearLayout) findViewById(R.id.vcc);
+        layoutToAdd[0] = (LinearLayout) findViewById(R.id.locations);
+        layoutToAdd[1] = (LinearLayout) findViewById(R.id.daily);
+        layoutToAdd[2] = (LinearLayout) findViewById(R.id.auto);
+        layoutToAdd[3] = (LinearLayout) findViewById(R.id.a_msg);
+        layoutToAdd[4] = (LinearLayout) findViewById(R.id.a_time);
+        layoutToAdd[5] = (LinearLayout) findViewById(R.id.b_msg);
+        layoutToAdd[6] = (LinearLayout) findViewById(R.id.b_time);
+        layoutToAdd[7] = (LinearLayout) findViewById(R.id.battery);
+        layoutToAdd[8] = (LinearLayout) findViewById(R.id.airplane);
+        layoutToAdd[9] = (LinearLayout) findViewById(R.id.power_3v3_1);
+        layoutToAdd[10] = (LinearLayout) findViewById(R.id.power_3v3_2);
+        layoutToAdd[11] = (LinearLayout) findViewById(R.id.power_15v);
+        layoutToAdd[12] = (LinearLayout) findViewById(R.id.cycle);
+        layoutToAdd[13] = (LinearLayout) findViewById(R.id.vcc);
 
-        transition =          new LayoutTransition();
+        transition = new LayoutTransition();
 
-        for(int i = 0; i < Size; i++) {
+        for (int i = 0; i < Size; i++) {
             layoutToAdd[i].setLayoutTransition(transition);
+            changes[i] = new Modbus(getApplicationContext(), addresses[i]).getValue();
         }
     }
 

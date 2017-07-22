@@ -61,7 +61,7 @@
                 android:text="-"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/data_a3_pos"
@@ -75,7 +75,7 @@
                 android:text="+"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <EditText
                 android:id="@+id/data_a3_edittext"
@@ -87,7 +87,7 @@
                 android:layout_centerVertical="true"
                 android:layout_gravity="right"
                 android:background="@drawable/material_button_blue"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 android:foregroundGravity="right"
                 android:elevation="2dp"
                 android:gravity="right|center_vertical"

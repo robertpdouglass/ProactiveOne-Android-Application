@@ -58,6 +58,12 @@ public class Advanced_Data extends AppCompatActivity {
         layoutToAdd[9] =      (LinearLayout) findViewById(R.id.data_b10_expansion);
         layoutToAdd[10] =     (LinearLayout) findViewById(R.id.data_b11_expansion);
         layoutToAdd[11] =     (LinearLayout) findViewById(R.id.data_b12_expansion);
+
+        for (int i = 0; i < Size; i++) {
+            changes[i] = new Modbus(getApplicationContext(), addresses[i]).getValue();
+            changes_low[i] = ((changes[i] >> 8) & 0x00ff);
+            changes_high[i] = (changes[i] & 0x00ff);
+        }
     }
 
     public void onBackPressed() {

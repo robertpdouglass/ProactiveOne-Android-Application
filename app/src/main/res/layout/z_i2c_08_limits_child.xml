@@ -28,7 +28,7 @@
                 android:inputType="number"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView1"
@@ -68,7 +68,7 @@
                 android:inputType="number"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -107,7 +107,7 @@
                 android:inputType="number"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -145,7 +145,7 @@
                 android:inputType="number"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/textView4"

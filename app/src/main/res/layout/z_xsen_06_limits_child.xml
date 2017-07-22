@@ -27,7 +27,7 @@
                 android:text="-"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/xsen_low_1_pos"
@@ -41,7 +41,7 @@
                 android:text="+"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <EditText
                 android:id="@+id/xsen_low_1_edittext"
@@ -56,7 +56,7 @@
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:elevation="2dp"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff" />
 
@@ -95,7 +95,7 @@
                 android:text="-"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/xsen_high_1_pos"
@@ -109,7 +109,7 @@
                 android:text="+"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <EditText
                 android:id="@+id/xsen_high_1_edittext"
@@ -125,7 +125,7 @@
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:elevation="2dp"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff" />
 
@@ -164,7 +164,7 @@
                 android:text="-"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/xsen_low_2_pos"
@@ -178,7 +178,7 @@
                 android:text="+"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <EditText
                 android:id="@+id/xsen_low_2_edittext"
@@ -194,7 +194,7 @@
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:elevation="2dp"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff" />
 
@@ -233,7 +233,7 @@
                 android:text="-"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/xsen_high_2_pos"
@@ -247,7 +247,7 @@
                 android:text="+"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <EditText
                 android:id="@+id/xsen_high_2_edittext"
@@ -263,7 +263,7 @@
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:elevation="2dp"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff" />
 
@@ -302,7 +302,7 @@
                 android:text="-"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/xsen_low_3_pos"
@@ -316,7 +316,7 @@
                 android:text="+"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <EditText
                 android:id="@+id/xsen_low_3_edittext"
@@ -332,7 +332,7 @@
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:elevation="2dp"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff" />
 
@@ -371,7 +371,7 @@
                 android:text="-"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/xsen_high_3_pos"
@@ -385,7 +385,7 @@
                 android:text="+"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <EditText
                 android:id="@+id/xsen_high_3_edittext"
@@ -401,7 +401,7 @@
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:elevation="2dp"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff" />
 
@@ -440,7 +440,7 @@
                 android:text="-"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/xsen_low_4_pos"
@@ -454,7 +454,7 @@
                 android:text="+"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <EditText
                 android:id="@+id/xsen_low_4_edittext"
@@ -470,7 +470,7 @@
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:elevation="2dp"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff" />
 
@@ -508,7 +508,7 @@
                 android:text="-"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <Button
                 android:id="@+id/xsen_high_4_pos"
@@ -522,7 +522,7 @@
                 android:text="+"
                 android:elevation="2dp"
                 android:textColor="#ffffff"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <EditText
                 android:id="@+id/xsen_high_4_edittext"
@@ -538,7 +538,7 @@
                 android:gravity="right|center_vertical"
                 android:inputType="number"
                 android:elevation="2dp"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 android:paddingRight="25dp"
                 android:textColor="#ffffff" />
 

@@ -74,6 +74,11 @@ public class Sensors_Internal extends AppCompatActivity {
         layoutToAdd[1] =     (LinearLayout) findViewById(R.id.int_option2_expansion);
         layoutToAdd[2] =     (LinearLayout) findViewById(R.id.int_option3_expansion);
         layoutToAdd[3] =     (LinearLayout) findViewById(R.id.int_option4_expansion);
+
+        for (int i = 0; i < MainCount; i++) {
+            for(int j = 0; j < ChangesSize; j++)
+                changes[i][j] = new Modbus(getApplicationContext(), addresses[i][j]).getValue();
+        }
     }
 
     public void onBackPressed() {

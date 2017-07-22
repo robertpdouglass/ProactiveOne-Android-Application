@@ -8,5 +8,5 @@
     android:paddingTop="5dp"
     android:paddingRight="25dp"
     android:paddingLeft="25dp"
-    android:textSize="20dp"
+    android:textSize="15dp"
     android:foregroundGravity="right"/>

@@ -16,7 +16,7 @@
         android:text="-"
         android:elevation="2dp"
         android:textColor="#ffffff"
-        android:textSize="20dp" />
+        android:textSize="15dp" />
 
     <Button
         android:id="@+id/int_t_cal_pos"
@@ -29,7 +29,7 @@
         android:text="+"
         android:elevation="2dp"
         android:textColor="#ffffff"
-        android:textSize="20dp" />
+        android:textSize="15dp" />
 
     <EditText
         android:id="@+id/int_t_cal_edittext"
@@ -44,7 +44,7 @@
         android:gravity="right|center_vertical"
         android:inputType="number"
         android:elevation="2dp"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:paddingRight="25dp"
         android:textColor="#ffffff" />
 

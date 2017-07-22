@@ -78,7 +78,7 @@ public class Modbus extends SQLiteOpenHelper {
     static final int sensor_input_4_config =            1;          // 1142
     static final int sensor_input_4_recog =             3;          // 1143
     static final int sensor_4_analog_low =              0;          // 1144
-    static final int  sensor_4_analog_high =            100;        // 1145
+    static final int sensor_4_analog_high =             100;        // 1145
     static final int sensor_4_calibration =             0;          // 1146
     static final int sensor_4_multiplier =              1;          // 1147
     static final int sensor_4_low_1 =                   0;          // 1148
@@ -171,54 +171,90 @@ public class Modbus extends SQLiteOpenHelper {
 
     public static final int Size =  137;
 
-    public static int[] address =  {1001,   1002,   1003,   1004,   1005,   1006,   1007,   1009,   1010,   1011,   1012,   1013,
-                                    1014,   1020,   1021,   1100,   1101,   1102,   1103,   1104,   1105,   1106,   1107,   1108,
-                                    1109,   1110,   1111,   1112,   1113,   1114,   1115,   1116,   1117,   1118,   1119,   1120,
-                                    1121,   1122,   1123,   1124,   1125,   1126,   1127,   1128,   1129,   1130,   1131,   1132,
-                                    1133,   1134,   1135,   1136,   1137,   1138,   1139,   1140,   1141,   1142,   1143,   1144,
-                                    1145,   1146,   1147,   1148,   1149,   1150,   1151,   1152,   1153,   1154,   1155,   1200,
-                                    1201,   1202,   1203,   1204,   1205,   1206,   1207,   1208,   1209,   1300,   1301,   1302,
-                                    1303,   1304,   1305,   1306,   1307,   1308,   1309,   1310,   1311,   1312,   1313,   1314,
-                                    1315,   1316,   1317,   1318,   1319,   1320,   1321,   1322,   1323,   1324,   1325,   1326,
-                                    1327,   1328,   1329,   1330,   1331,   1332,   1333,   1334,   1335,   1336,   1337,   1338,
-                                    1339,   1340,   1341,   1342,   1343,   1500,   1501,   1502,   1503,   1504,   1505,   1506,
-                                    1507,   1508,   1509,   1510,   1511};
+    public static int[] address =      {1001,   1002,   1003,   1004,   1005,   1006,   1007,   1009,   1010,   1011,   1012,   1013,
+                                        1014,   1020,   1021,   1100,   1101,   1102,   1103,   1104,   1105,   1106,   1107,   1108,
+                                        1109,   1110,   1111,   1112,   1113,   1114,   1115,   1116,   1117,   1118,   1119,   1120,
+                                        1121,   1122,   1123,   1124,   1125,   1126,   1127,   1128,   1129,   1130,   1131,   1132,
+                                        1133,   1134,   1135,   1136,   1137,   1138,   1139,   1140,   1141,   1142,   1143,   1144,
+                                        1145,   1146,   1147,   1148,   1149,   1150,   1151,   1152,   1153,   1154,   1155,   1200,
+                                        1201,   1202,   1203,   1204,   1205,   1206,   1207,   1208,   1209,   1300,   1301,   1302,
+                                        1303,   1304,   1305,   1306,   1307,   1308,   1309,   1310,   1311,   1312,   1313,   1314,
+                                        1315,   1316,   1317,   1318,   1319,   1320,   1321,   1322,   1323,   1324,   1325,   1326,
+                                        1327,   1328,   1329,   1330,   1331,   1332,   1333,   1334,   1335,   1336,   1337,   1338,
+                                        1339,   1340,   1341,   1342,   1343,   1500,   1501,   1502,   1503,   1504,   1505,   1506,
+                                        1507,   1508,   1509,   1510,   1511};
 
-    public static int[] values =   {locations_per_day,      time_daily_msg,         auto_location,          a_sensor_msg,
-                                    a_sensor_time,          b_sensor_msg,           b_sensor_time,          battery_low_alarm,
-                                    command_input_reg,      airplane_mode,          power_config_3v3_1,     power_config_3v3_2,
-                                    power_config_15v,       sensor_cycle,           vcc_wait_scan,          sensor_input_1_config,
-                                    sensor_input_1_recog,   sensor_1_analog_low,    sensor_1_analog_high,   sensor_1_calibration,
-                                    sensor_1_multiplier,    sensor_1_low_1,         sensor_1_high_1,        sensor_1_low_2,
-                                    sensor_1_high_2,        sensor_1_low_3,         sensor_1_high_3,        sensor_1_low_4,
-                                    sensor_1_high_4,        sensor_input_2_config,  sensor_input_2_recog,   sensor_2_analog_low,
-                                    sensor_2_analog_high,   sensor_2_calibration,   sensor_2_multiplier,    sensor_2_low_1,
-                                    sensor_2_high_1,        sensor_2_low_2,         sensor_2_high_2,        sensor_2_low_3,
-                                    sensor_2_high_3,        sensor_2_low_4,         sensor_2_high_4,        sensor_input_3_config,
-                                    sensor_input_3_recog,   sensor_3_analog_low,    sensor_3_analog_high,   sensor_3_calibration,
-                                    sensor_3_multiplier,    sensor_3_low_1,         sensor_3_high_1,        sensor_3_low_2,
-                                    sensor_3_high_2,        sensor_3_low_3,         sensor_3_high_3,        sensor_3_low_4,
-                                    sensor_3_high_4,        sensor_input_4_config,  sensor_input_4_recog,   sensor_4_analog_low,
-                                    sensor_4_analog_high,   sensor_4_calibration,   sensor_4_multiplier,    sensor_4_low_1,
-                                    sensor_4_high_1,        sensor_4_low_2,         sensor_4_high_2,        sensor_4_low_3,
-                                    sensor_4_high_3,        sensor_4_low_4,         sensor_4_high_4,        temp_config,
-                                    temp_calibration,       temp_multiplier,        temp_low,               temp_high,
-                                    accel_config,           accel_x_high,           accel_y_high,           accel_z_high,
-                                    accel_combined_high,    i2c_1_enable_library,   i2c_1_power_mode,       i2c_1_interupt_config,
-                                    i2c_1_polling_interval, i2c_1_address,          i2c_1_calibration,      i2c_1_multiplier,
-                                    i2c_1_low_1,            i2c_1_high_1,           i2c_1_low_2,            i2c_1_high_2,
-                                    i2c_2_enable_library,   i2c_2_power_mode,       i2c_2_interupt_config,  i2c_2_polling_interval,
-                                    i2c_2_address,          i2c_2_calibration,      i2c_2_multiplier,       i2c_2_low_1,
-                                    i2c_2_high_1,           i2c_2_low_2,            i2c_2_high_2,           i2c_3_enable_library,
-                                    i2c_3_power_mode,       i2c_3_interupt_config,  i2c_3_polling_interval, i2c_3_address,
-                                    i2c_3_calibration,      i2c_3_multiplier,       i2c_3_low_1,            i2c_3_high_1,
-                                    i2c_3_low_2,            i2c_3_high_2,           i2c_4_enable_library,   i2c_4_power_mode,
-                                    i2c_4_interupt_config,  i2c_4_polling_interval, i2c_4_address,          i2c_4_calibration,
-                                    i2c_4_multiplier,       i2c_4_low_1,            i2c_4_high_1,           i2c_4_low_2,
-                                    i2c_4_high_2,           data_a1_source,         data_a2_source,         data_a3_source,
-                                    data_a4_source,         data_a5_source,         data_b6_source,         data_b7_source,
-                                    data_b8_source,         data_b9_source,         data_b10_source,        data_b11_source,
-                                    data_b12_source};
+    public static final int[] defaults =   {locations_per_day,      time_daily_msg,         auto_location,          a_sensor_msg,
+                                            a_sensor_time,          b_sensor_msg,           b_sensor_time,          battery_low_alarm,
+                                            command_input_reg,      airplane_mode,          power_config_3v3_1,     power_config_3v3_2,
+                                            power_config_15v,       sensor_cycle,           vcc_wait_scan,          sensor_input_1_config,
+                                            sensor_input_1_recog,   sensor_1_analog_low,    sensor_1_analog_high,   sensor_1_calibration,
+                                            sensor_1_multiplier,    sensor_1_low_1,         sensor_1_high_1,        sensor_1_low_2,
+                                            sensor_1_high_2,        sensor_1_low_3,         sensor_1_high_3,        sensor_1_low_4,
+                                            sensor_1_high_4,        sensor_input_2_config,  sensor_input_2_recog,   sensor_2_analog_low,
+                                            sensor_2_analog_high,   sensor_2_calibration,   sensor_2_multiplier,    sensor_2_low_1,
+                                            sensor_2_high_1,        sensor_2_low_2,         sensor_2_high_2,        sensor_2_low_3,
+                                            sensor_2_high_3,        sensor_2_low_4,         sensor_2_high_4,        sensor_input_3_config,
+                                            sensor_input_3_recog,   sensor_3_analog_low,    sensor_3_analog_high,   sensor_3_calibration,
+                                            sensor_3_multiplier,    sensor_3_low_1,         sensor_3_high_1,        sensor_3_low_2,
+                                            sensor_3_high_2,        sensor_3_low_3,         sensor_3_high_3,        sensor_3_low_4,
+                                            sensor_3_high_4,        sensor_input_4_config,  sensor_input_4_recog,   sensor_4_analog_low,
+                                            sensor_4_analog_high,   sensor_4_calibration,   sensor_4_multiplier,    sensor_4_low_1,
+                                            sensor_4_high_1,        sensor_4_low_2,         sensor_4_high_2,        sensor_4_low_3,
+                                            sensor_4_high_3,        sensor_4_low_4,         sensor_4_high_4,        temp_config,
+                                            temp_calibration,       temp_multiplier,        temp_low,               temp_high,
+                                            accel_config,           accel_x_high,           accel_y_high,           accel_z_high,
+                                            accel_combined_high,    i2c_1_enable_library,   i2c_1_power_mode,       i2c_1_interupt_config,
+                                            i2c_1_polling_interval, i2c_1_address,          i2c_1_calibration,      i2c_1_multiplier,
+                                            i2c_1_low_1,            i2c_1_high_1,           i2c_1_low_2,            i2c_1_high_2,
+                                            i2c_2_enable_library,   i2c_2_power_mode,       i2c_2_interupt_config,  i2c_2_polling_interval,
+                                            i2c_2_address,          i2c_2_calibration,      i2c_2_multiplier,       i2c_2_low_1,
+                                            i2c_2_high_1,           i2c_2_low_2,            i2c_2_high_2,           i2c_3_enable_library,
+                                            i2c_3_power_mode,       i2c_3_interupt_config,  i2c_3_polling_interval, i2c_3_address,
+                                            i2c_3_calibration,      i2c_3_multiplier,       i2c_3_low_1,            i2c_3_high_1,
+                                            i2c_3_low_2,            i2c_3_high_2,           i2c_4_enable_library,   i2c_4_power_mode,
+                                            i2c_4_interupt_config,  i2c_4_polling_interval, i2c_4_address,          i2c_4_calibration,
+                                            i2c_4_multiplier,       i2c_4_low_1,            i2c_4_high_1,           i2c_4_low_2,
+                                            i2c_4_high_2,           data_a1_source,         data_a2_source,         data_a3_source,
+                                            data_a4_source,         data_a5_source,         data_b6_source,         data_b7_source,
+                                            data_b8_source,         data_b9_source,         data_b10_source,        data_b11_source,
+                                            data_b12_source};
+
+    public static int[] values =           {locations_per_day,      time_daily_msg,         auto_location,          a_sensor_msg,
+                                            a_sensor_time,          b_sensor_msg,           b_sensor_time,          battery_low_alarm,
+                                            command_input_reg,      airplane_mode,          power_config_3v3_1,     power_config_3v3_2,
+                                            power_config_15v,       sensor_cycle,           vcc_wait_scan,          sensor_input_1_config,
+                                            sensor_input_1_recog,   sensor_1_analog_low,    sensor_1_analog_high,   sensor_1_calibration,
+                                            sensor_1_multiplier,    sensor_1_low_1,         sensor_1_high_1,        sensor_1_low_2,
+                                            sensor_1_high_2,        sensor_1_low_3,         sensor_1_high_3,        sensor_1_low_4,
+                                            sensor_1_high_4,        sensor_input_2_config,  sensor_input_2_recog,   sensor_2_analog_low,
+                                            sensor_2_analog_high,   sensor_2_calibration,   sensor_2_multiplier,    sensor_2_low_1,
+                                            sensor_2_high_1,        sensor_2_low_2,         sensor_2_high_2,        sensor_2_low_3,
+                                            sensor_2_high_3,        sensor_2_low_4,         sensor_2_high_4,        sensor_input_3_config,
+                                            sensor_input_3_recog,   sensor_3_analog_low,    sensor_3_analog_high,   sensor_3_calibration,
+                                            sensor_3_multiplier,    sensor_3_low_1,         sensor_3_high_1,        sensor_3_low_2,
+                                            sensor_3_high_2,        sensor_3_low_3,         sensor_3_high_3,        sensor_3_low_4,
+                                            sensor_3_high_4,        sensor_input_4_config,  sensor_input_4_recog,   sensor_4_analog_low,
+                                            sensor_4_analog_high,   sensor_4_calibration,   sensor_4_multiplier,    sensor_4_low_1,
+                                            sensor_4_high_1,        sensor_4_low_2,         sensor_4_high_2,        sensor_4_low_3,
+                                            sensor_4_high_3,        sensor_4_low_4,         sensor_4_high_4,        temp_config,
+                                            temp_calibration,       temp_multiplier,        temp_low,               temp_high,
+                                            accel_config,           accel_x_high,           accel_y_high,           accel_z_high,
+                                            accel_combined_high,    i2c_1_enable_library,   i2c_1_power_mode,       i2c_1_interupt_config,
+                                            i2c_1_polling_interval, i2c_1_address,          i2c_1_calibration,      i2c_1_multiplier,
+                                            i2c_1_low_1,            i2c_1_high_1,           i2c_1_low_2,            i2c_1_high_2,
+                                            i2c_2_enable_library,   i2c_2_power_mode,       i2c_2_interupt_config,  i2c_2_polling_interval,
+                                            i2c_2_address,          i2c_2_calibration,      i2c_2_multiplier,       i2c_2_low_1,
+                                            i2c_2_high_1,           i2c_2_low_2,            i2c_2_high_2,           i2c_3_enable_library,
+                                            i2c_3_power_mode,       i2c_3_interupt_config,  i2c_3_polling_interval, i2c_3_address,
+                                            i2c_3_calibration,      i2c_3_multiplier,       i2c_3_low_1,            i2c_3_high_1,
+                                            i2c_3_low_2,            i2c_3_high_2,           i2c_4_enable_library,   i2c_4_power_mode,
+                                            i2c_4_interupt_config,  i2c_4_polling_interval, i2c_4_address,          i2c_4_calibration,
+                                            i2c_4_multiplier,       i2c_4_low_1,            i2c_4_high_1,           i2c_4_low_2,
+                                            i2c_4_high_2,           data_a1_source,         data_a2_source,         data_a3_source,
+                                            data_a4_source,         data_a5_source,         data_b6_source,         data_b7_source,
+                                            data_b8_source,         data_b9_source,         data_b10_source,        data_b11_source,
+                                            data_b12_source};
     /* *************** Arrays ************** */
 
     /* *********** Stored Values *********** */
@@ -267,7 +303,8 @@ public class Modbus extends SQLiteOpenHelper {
         sql = getWritableDatabase();
         if(addressExists(add)) {
             m_value = val;
-            save();
+            updateValue();
+            readValues();
         }
         else {
             Log.e("ERROR", "ADDRESS DOES NOT EXIST");
@@ -325,20 +362,13 @@ public class Modbus extends SQLiteOpenHelper {
     }
 
     public void updateValue() {
-        String command = "UPDATE " + TABLE_NAME + " SET " + BASE_NAME + address[m_index] + " = ";
-        command = command + values[m_index] + ";";
+        String command = "UPDATE " + TABLE_NAME + " SET " + BASE_NAME + m_address + " = ";
+        command = command + m_value + ";";
         sql.execSQL(command);
+        Log.e("UpdateValue()", "Address: " + m_address +
+                             "\nValue:   " + m_value);
     }
 
-    public void save() {
-        saveToArray();
-        updateValue();
-        readValues();
-    }
-
-    public void saveToArray() {
-        values[m_index] = m_value;
-    }
 
     public int getValue() {
         return m_value;

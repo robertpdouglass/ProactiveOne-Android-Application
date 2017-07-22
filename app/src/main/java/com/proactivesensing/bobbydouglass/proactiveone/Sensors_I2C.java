@@ -10,9 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -23,29 +26,22 @@ public class Sensors_I2C extends AppCompatActivity {
     public static final int SensorCount =           4;
     public static final int ViewSize =              8;
 
-    public static LinearLayout[] layoutToAdd =      new LinearLayout[ViewSize];
-    public static View[] viewToInflate =            new View[ViewSize];
-    public static boolean[] clicked =              {false,  false,  false,  false,  false,  false,  false,  false};
     public static int[][] changes =                 new int[SensorCount][SensorSize];
-    public static boolean[][] changes_bool =      {{false,  false,  false,  false,  false,  false,  false,  false,
-                                                    false,  false,  false},{false,  false,  false,  false,  false,
-                                                    false,  false,  false,  false,  false,  false},{false,  false,
-                                                    false,  false,  false,  false,  false,  false,  false,  false,
-                                                    false},{false,  false,  false,  false,  false,  false,  false,
-                                                    false,  false,  false,  false}};
+    public static boolean[][] changes_bool =        new boolean[SensorCount][SensorSize];
     public static int[][] addresses =             {{1300,   1301,   1302,   1303,   1304,   1305,   1306,   1307,
                                                     1308,   1309,   1310}, {1311,   1312,   1313,   1314,   1315,
                                                     1316,   1317,   1318,   1319,   1320,   1321}, {1322,   1323,
                                                     1324,   1325,   1326,   1327,   1328,   1329,   1330,   1331,
                                                     1332}, {1333,   1334,   1335,   1336,   1337,   1338,   1339,
                                                     1340,   1341,   1342,   1343}};
-    public static LayoutTransition transition;
-    public static LayoutInflater inflater;
 
-    int[][] lowBytes = new int[4][3];
-    int[][] highBytes = new int[4][3];
-    int sensorNum = 0;
-    boolean changes_made = false;
+    LinearLayout[] layoutToAdd =                    new LinearLayout[ViewSize];
+    View[] viewToInflate =                          new View[ViewSize];
+    boolean[] clicked =                            {false,  false,  false,  false,  false,  false,  false,  false};
+    int[][] lowBytes =                              new int[4][3];
+    int[][] highBytes =                             new int[4][3];
+    int sensorNum =                                 0;
+    boolean changes_made =                          false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,26 +49,23 @@ public class Sensors_I2C extends AppCompatActivity {
         setContentView(R.layout.sensors_i2c);
 
         for(int i = 0; i < SensorCount; i++) {
-            for(int j = 0; j < SensorSize; j++)
+            for(int j = 0; j < SensorSize; j++) {
                 changes[i][j] = new Modbus(getApplicationContext(), addresses[i][j]).getValue();
+                changes_bool[i][j] = false;
+            }
         }
 
         for(int i = 0; i < SensorCount; i++) {
             for(int j = 0; j < 3; j++) {
-                lowBytes[i][j] = getLowInt(changes[i][j]);
-                highBytes[i][j] = getHighInt(changes[i][j]);
+                lowBytes[i][j] = ((changes[i][j] >> 8) & 0x00ff);
+                highBytes[i][j] = (changes[i][j] & 0x00ff);
             }
         }
 
-        inflater = LayoutInflater.from(getApplicationContext());
-        viewToInflate[0] = inflater.inflate(R.layout.z_i2c_01_enable_child, null);
-        viewToInflate[1] = inflater.inflate(R.layout.z_i2c_02_power_child, null);
-        viewToInflate[2] = inflater.inflate(R.layout.z_i2c_03_inter_child, null);
-        viewToInflate[3] = inflater.inflate(R.layout.z_i2c_04_polling_child, null);
-        viewToInflate[4] = inflater.inflate(R.layout.z_i2c_05_address_child, null);
-        viewToInflate[5] = inflater.inflate(R.layout.z_i2c_06_cal_child, null);
-        viewToInflate[6] = inflater.inflate(R.layout.z_i2c_07_multi_child, null);
-        viewToInflate[7] = inflater.inflate(R.layout.z_i2c_08_limits_child, null);
+        for(int i = 0; i < SensorCount; i++) {
+            //for(int j = 0; j < 5; j++)
+                //loadedSpinner[i][j] = false;
+        }
 
         layoutToAdd[0] = (LinearLayout) findViewById(R.id.i2c_option1_expansion);
         layoutToAdd[1] = (LinearLayout) findViewById(R.id.i2c_option2_expansion);
@@ -220,35 +213,47 @@ public class Sensors_I2C extends AppCompatActivity {
         sensorSelection();
     }
 
-    public int combineBytes(int low, int high) {
-        return ((low & 0x00ff) << 8) | ((high & 0x00ff));
-    }
-
-    public int getHighInt(int combined) {
-        return (combined & 0x00ff);
-    }
-
-    public int getLowInt(int combined) {
-        return ((combined >> 8) & 0x00ff);
-    }
-
     public void I2COption1(View view) {
-        final int i = 0;
+        final int i = 0, j = 0;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_i2c_01_enable_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             ToggleButton enable = (ToggleButton) findViewById(R.id.i2c_enable_toggle);
-            //enable.setChecked(changes[i] == 1);
+            enable.setChecked(lowBytes[sensorNum][j] == 1);
             enable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                    //changes[i + (sensorNum * Size)] = (isChecked) ? 1 : 0;
+                    lowBytes[sensorNum][j] = (isChecked) ? 1 : 0;
+                    changes[sensorNum][j] = changes[sensorNum][j] = ((lowBytes[sensorNum][j] & 0x00ff) << 8) | ((highBytes[sensorNum][j] & 0x00ff));
+                    changes_bool[sensorNum][j] = true;
                     changes_made = true;
-                    //changes_bool[i + (sensorNum * Size)] = true;
                 }
             });
+
+            Spinner dropdown = (Spinner) findViewById(R.id.i2c_library_spinner);
+            String[] items = new String[]{"Sensor 1", "Sensor 2", "Sensor 3", "Temp Sensor", "Accel Sensor"};
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
+            dropdown.setAdapter(adapter);
+            dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    //if(loadedSpinner[sensorNum][0]) {
+                        //config_low[sensorNum] = position;
+                        //changes[sensorNum][j] = ((config_low[sensorNum] & 0x00ff) << 8) | ((config_high[sensorNum] & 0x00ff));
+                        //changes_made = true;
+                        //changes_bool[sensorNum][j] = true;
+                    //}
+                    //else {
+                        //loadedSpinner[sensorNum][0] = true;
+                    //}/
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+            //dropdown_low.setSelection(config_low[sensorNum]);
         }
         else {
             layoutToAdd[i].removeView(viewToInflate[i]);
@@ -257,30 +262,107 @@ public class Sensors_I2C extends AppCompatActivity {
     }
 
     public void I2COption2(View view) {
+        final int i = 1, j = 1;
+        if(!clicked[i]) {
+            clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_i2c_02_power_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
+        }
+        else {
+            layoutToAdd[i].removeView(viewToInflate[i]);
+            clicked[i] = false;
+        }
     }
 
     public void I2COption3(View view) {
+        final int i = 2, j = 2;
+        if(!clicked[i]) {
+            clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_i2c_03_inter_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
+        }
+        else {
+            layoutToAdd[i].removeView(viewToInflate[i]);
+            clicked[i] = false;
+        }
     }
 
     public void I2COption4(View view) {
+        final int i = 3;
+        if(!clicked[i]) {
+            clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_i2c_04_polling_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
+        }
+        else {
+            layoutToAdd[i].removeView(viewToInflate[i]);
+            clicked[i] = false;
+        }
     }
 
     public void I2COption5(View view) {
+        final int i = 4;
+        if(!clicked[i]) {
+            clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_i2c_05_address_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
+        }
+        else {
+            layoutToAdd[i].removeView(viewToInflate[i]);
+            clicked[i] = false;
+        }
     }
 
     public void I2COption6(View view) {
+        final int i = 5;
+        if(!clicked[i]) {
+            clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_i2c_06_cal_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
+        }
+        else {
+            layoutToAdd[i].removeView(viewToInflate[i]);
+            clicked[i] = false;
+        }
     }
 
     public void I2COption7(View view) {
+        final int i = 6;
+        if(!clicked[i]) {
+            clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_i2c_07_multi_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
+        }
+        else {
+            layoutToAdd[i].removeView(viewToInflate[i]);
+            clicked[i] = false;
+        }
     }
 
     public void I2COption8(View view) {
+        final int i = 7;
+        if(!clicked[i]) {
+            clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_i2c_08_limits_child, null);
+            layoutToAdd[i].addView(viewToInflate[i]);
 
+        }
+        else {
+            layoutToAdd[i].removeView(viewToInflate[i]);
+            clicked[i] = false;
+        }
     }
 }
