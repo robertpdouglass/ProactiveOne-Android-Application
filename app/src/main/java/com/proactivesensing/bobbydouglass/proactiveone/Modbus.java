@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Modbus extends SQLiteOpenHelper {
 
     static final int zero = ((0 & 0x00ff) << 8) | (0 & 0x00ff);
@@ -261,8 +264,13 @@ public class Modbus extends SQLiteOpenHelper {
     int m_address;
     int m_value;
     int m_index;
-    Context context;
     /* *********** Stored Values *********** */
+
+    /* *************** Other *************** */
+    List<Integer> dbMediumVal = new ArrayList<Integer>();
+    List<Integer> dbMediumAdd = new ArrayList<Integer>();
+    int dbMediumSize =          0;
+    /* *************** Other *************** */
 
     /* ************* SQL Stuff ************* */
     public static final String DATABASE_NAME = "Modbus.db";
@@ -274,56 +282,71 @@ public class Modbus extends SQLiteOpenHelper {
     SQLiteDatabase sql;
     /* ************* SQL Stuff ************* */
 
-    public Modbus(Context c, boolean firstTime) {
+    public Modbus(Context c, int value) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         sql = getWritableDatabase();
-        context = c;
-        if(firstTime) {
+
+        // First time use modbus setup
+        if(value == 0) {
             constructSQLiteTable();
             insertValues();
             readValues();
         }
-        else {
+
+        // Restore defaults
+        else if(value == 1) {
+            sql.execSQL(SQL_DELETE_ENTRIES);
+            constructSQLiteTable();
+            insertValues();
             readValues();
+        }
+
+        // Second time use and beyond modbus setup
+        else if(value == 2) {
+            readValues();
+        }
+
+        // Get value
+        else {
+            if(addressExists(value))
+                m_value = values[m_index];
+            else
+                Log.e("ERROR", "ADDRESS DOES NOT EXIST");
         }
     }
 
-    public Modbus(Context c, boolean restore, boolean other) {
+    public Modbus(Context c, int[][][] changes, int sizeY, int sizeZ) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         sql = getWritableDatabase();
-        context = c;
-        sql.execSQL(SQL_DELETE_ENTRIES);
-        constructSQLiteTable();
-        insertValues();
+        for(int i = 0; i < sizeY; i++) {
+            for(int j = 0; j < sizeZ; j++) {
+                if(changes[1][i][j] == 1) {
+                    dbMediumSize++;
+                    dbMediumVal.add(changes[0][i][j]);
+                    dbMediumAdd.add(changes[2][i][j]);
+                }
+            }
+        }
+        updateValues();
         readValues();
     }
 
-    public Modbus(Context c, int add, int val) {
+    public Modbus(Context c, int[][] changes, int sizeZ) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
         sql = getWritableDatabase();
-        if(addressExists(add)) {
-            m_value = val;
-            updateValue();
-            readValues();
+        for(int i = 0; i < sizeZ; i++) {
+            if (changes[1][i] == 1) {
+                dbMediumSize++;
+                dbMediumVal.add(changes[0][i]);
+                dbMediumAdd.add(changes[2][i]);
+            }
         }
-        else {
-            Log.e("ERROR", "ADDRESS DOES NOT EXIST");
-        }
-    }
-
-    public Modbus(Context c, int add) {
-        super(c, DATABASE_NAME, null, DATABASE_VERSION);
-        sql = getWritableDatabase();
-
-        if(addressExists(add))
-            m_value = values[m_index];
-        else
-            Log.e("ERROR", "ADDRESS DOES NOT EXIST");
+        updateValues();
+        readValues();
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-    }
+    public void onCreate(SQLiteDatabase db) {}
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -348,7 +371,7 @@ public class Modbus extends SQLiteOpenHelper {
     public void insertValues() {
         ContentValues cv = new ContentValues();
         for(int i = 0; i < Size; i++)
-            cv.put(BASE_NAME + address[i], values[i]);
+            cv.put(BASE_NAME + address[i], defaults[i]);
         sql.insert(TABLE_NAME, null, cv);
     }
 
@@ -361,14 +384,13 @@ public class Modbus extends SQLiteOpenHelper {
         c.close();
     }
 
-    public void updateValue() {
-        String command = "UPDATE " + TABLE_NAME + " SET " + BASE_NAME + m_address + " = ";
-        command = command + m_value + ";";
-        sql.execSQL(command);
-        Log.e("UpdateValue()", "Address: " + m_address +
-                             "\nValue:   " + m_value);
+    public void updateValues() {
+        String str = "UPDATE " + TABLE_NAME + " SET ";
+        for(int i = 0; i < dbMediumSize - 1; i++)
+            str = str + BASE_NAME + dbMediumAdd.get(i) + " = " + dbMediumVal.get(i) + ", ";
+        str = str + BASE_NAME + dbMediumAdd.get(dbMediumSize - 1) + " = " + dbMediumVal.get(dbMediumSize - 1) + ";";
+        sql.execSQL(str);
     }
-
 
     public int getValue() {
         return m_value;

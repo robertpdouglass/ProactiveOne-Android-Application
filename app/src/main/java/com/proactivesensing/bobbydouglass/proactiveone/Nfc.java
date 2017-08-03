@@ -87,20 +87,28 @@ public class Nfc extends AppCompatActivity {
     }
 
     public void save() {
-        if(Home.Screen == -1) {
-            for(int i = 0; i < Modbus.Size; i++)
-                new Modbus(getApplicationContext(), Modbus.address[i], Modbus.defaults[i]);
-        }
-        if(Home.Screen == 0) {
-            for (int i = 0; i < Sensors_External.SensorCount; i++) {
-                for(int j = 0; j < Sensors_External.SensorChanges; j++) {
-                    if (Sensors_External.changes_bool[i][j])
-                        new Modbus(getApplicationContext(), Sensors_External.addresses[i][j], Sensors_External.changes[i][j]);
-                }
-            }
-        }
-        else {
-            Log.e("ERROR", "INVALID SELECTED SCREEN INDEX");
+        switch(Home.Screen) {
+            case -1:
+                new Modbus(getApplicationContext(), 1);
+                break;
+            case 0:
+                new Modbus(getApplicationContext(), Sensors_External.changes, Sensors_External.ChangesSizeY, Sensors_External.ChangesSizeZ);
+                break;
+            case 1:
+                break;
+            case 2:
+                new Modbus(getApplicationContext(), Sensors_External.changes, Sensors_External.ChangesSizeY, Sensors_External.ChangesSizeZ);
+                break;
+            case 3:
+                break;
+            case 4:
+                new Modbus(getApplicationContext(), Advanced_Data.changes, Advanced_Data.ChangesSizeZ);
+                break;
+            case 5:
+                break;
+            default:
+                Log.e("ERROR", "INVALID SELECTED SCREEN INDEX");
+                break;
         }
     }
 
@@ -154,28 +162,28 @@ public class Nfc extends AppCompatActivity {
     }
 
     private void writeNdefMessage(Tag tag, NdefMessage ndefMessage) {
-        try {
-            if (tag == null) {
-                info.setText("Error(1) communicating with ProactiveOne, please try again...");
-                return;
-            }
+        if (tag == null) {
+            info.setText("Error(1) communicating with ProactiveOne, please try again...");
+            return;
+        }
 
-            Ndef ndef = Ndef.get(tag);
+        Ndef ndef = Ndef.get(tag);
 
-            if (ndef == null) {
-                info.setText("Error(2) communicating with ProactiveOne, please try again...");
-                formatTag(tag, ndefMessage);
-            } else {
+        if (ndef == null) {
+            info.setText("Error(2) communicating with ProactiveOne, please try again...");
+            formatTag(tag, ndefMessage);
+        } else {
+            try {
                 ndef.connect();
                 ndef.writeNdefMessage(ndefMessage);
                 ndef.close();
-                info.setText("Changes Sent To ProactiveOne!");
-                cancelButton.setText("Back");
-                save();
-                sent = true;
+            } catch (Exception e) {
+                info.setText("Error(3) communicating with ProactiveOne, please try again...");
             }
-        } catch (Exception e) {
-            info.setText("Error(3) communicating with ProactiveOne, please try again...");
+            info.setText("Changes Sent To ProactiveOne!");
+            cancelButton.setText("Back");
+            save();
+            sent = true;
         }
     }
 
@@ -199,17 +207,34 @@ public class Nfc extends AppCompatActivity {
     private NdefMessage createNdefMessage() {
         ArrayList<NdefRecord> ndef = new ArrayList<NdefRecord>();
 
-        if(Home.Screen == -1) {
+        if(Home.Screen == -1)
             for(int i = 0; i < Modbus.Size; i++)
                 ndef.add(createRecord(Modbus.address[i], Modbus.defaults[i]));
-        }
         else if(Home.Screen == 0) {
-            for(int i = 0; i < Sensors_External.SensorCount; i++) {
-                for(int j = 0; j < Sensors_External.SensorChanges; j++) {
-                    if (Sensors_External.changes_bool[i][j])
-                        ndef.add(createRecord(Sensors_External.addresses[i][j], Sensors_External.changes[i][j]));
-                }
-            }
+            for(int i = 0; i < Sensors_External.ChangesSizeY; i++)
+                for(int j = 0; j < Sensors_External.ChangesSizeZ; j++)
+                    if(Sensors_External.changes[1][i][j] == 1)
+                        ndef.add(createRecord(Sensors_External.changes[2][i][j], Sensors_External.changes[0][i][j]));
+        }
+        else if(Home.Screen == 1) {
+
+        }
+        else if(Home.Screen == 2) {
+            for(int i = 0; i < Sensors_Internal.ChangesSizeY; i++)
+                for(int j = 0; j < Sensors_Internal.ChangesSizeZ; j++)
+                    if(Sensors_Internal.changes[1][i][j] == 1)
+                        ndef.add(createRecord(Sensors_Internal.changes[2][i][j], Sensors_Internal.changes[0][i][j]));
+        }
+        else if(Home.Screen == 3) {
+
+        }
+        else if(Home.Screen == 4) {
+            for(int i = 0; i < Advanced_Data.ChangesSizeZ; i++)
+                if(Advanced_Data.changes[1][i] == 1)
+                    ndef.add(createRecord(Advanced_Data.changes[2][i], Advanced_Data.changes[0][i]));
+        }
+        else if(Home.Screen == 5) {
+
         }
         else {
             Log.e("ERROR", "INVALID SELECTED SCREEN INDEX");

@@ -136,7 +136,7 @@ public class Sensors_I2C extends AppCompatActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     toast();
                     Home.Screen = -1;
-                    new Modbus(getApplicationContext(), true);
+                    new Modbus(getApplicationContext(), 1);
                     startNfc();
                     break;
 

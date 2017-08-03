@@ -23,19 +23,25 @@ import android.widget.Toast;
 public class Advanced_Data extends AppCompatActivity {
 
     public static final int Size =              12;
+    public static final int ChangesSizeY =      3;
+    public static final int ChangesSizeZ =      12;
 
     static LinearLayout[] layoutToAdd =         new LinearLayout[Size];
     View[] viewToInflate =                      new View[Size];
     boolean changes_made =                      false;
     boolean[] loadedSpinner =                  {false,  false,  false,  false,  false,  false,
                                                 false,  false,  false,  false,  false,  false};
-    public static int[] changes =               new int[Size];
     public static boolean[] clicked =          {false,  false,  false,  false,  false,  false,
                                                 false,  false,  false,  false,  false,  false};
-    public static boolean[] changes_bool =     {false,  false,  false,  false,  false,  false,
-                                                false,  false,  false,  false,  false,  false};
-    public static int[] addresses =            {1500,   1501,   1502,   1503,   1504,   1505,
-                                                1506,   1507,   1508,   1509,   1510,   1511};
+    public static int[][] changes =           {{-1,     -1,     -1,     -1,     -1,     -1,
+                                                -1,     -1,     -1,     -1,     -1,     -1},
+
+                                               {0,      0,      0,      0,      0,      0,
+                                                0,      0,      0,      0,      0,      0},
+
+                                               {1500,   1501,   1502,   1503,   1504,   1505,
+                                                1506,   1507,   1508,   1509,   1510,   1511}};
+
     public static int[] changes_low =           new int[Size];
     public static int[] changes_high =          new int[Size];
     String[] items =                           {"Disable",          "External Sensor",  "Internal Sensor",
@@ -59,10 +65,10 @@ public class Advanced_Data extends AppCompatActivity {
         layoutToAdd[10] =     (LinearLayout) findViewById(R.id.data_b11_expansion);
         layoutToAdd[11] =     (LinearLayout) findViewById(R.id.data_b12_expansion);
 
-        for (int i = 0; i < Size; i++) {
-            changes[i] = new Modbus(getApplicationContext(), addresses[i]).getValue();
-            changes_low[i] = ((changes[i] >> 8) & 0x00ff);
-            changes_high[i] = (changes[i] & 0x00ff);
+        for (int i = 0; i < ChangesSizeZ; i++) {
+            changes[0][i] = new Modbus(getApplicationContext(), changes[1][i]).getValue();
+            changes_low[i] = ((changes[0][i] >> 8) & 0x00ff);
+            changes_high[i] = (changes[0][i] & 0x00ff);
         }
     }
 
@@ -123,7 +129,7 @@ public class Advanced_Data extends AppCompatActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     toast();
                     Home.Screen = -1;
-                    new Modbus(getApplicationContext(), true, true);
+                    new Modbus(getApplicationContext(), 1);
                     startNfc();
                     break;
 
@@ -389,9 +395,9 @@ public class Advanced_Data extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(loadedSpinner[i]) {
                     changes_made = true;
-                    changes_bool[i] = true;
+                    changes[1][i] = 1;
                     changes_high[i] = position;
-                    changes[i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
+                    changes[0][i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
                 }
                 else {
                     loadedSpinner[i] = true;
@@ -412,9 +418,9 @@ public class Advanced_Data extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0) {
                     changes_made = true;
-                    changes_bool[i] = true;
+                    changes[1][i] = 1;
                     changes_low[i] = Integer.parseInt(s.toString());
-                    changes[i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
+                    changes[0][i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
                 }
             }
         });
@@ -433,12 +439,12 @@ public class Advanced_Data extends AppCompatActivity {
 
                             if (changes_low[i] < 255) {
                                 changes_made = true;
-                                changes_bool[i] = true;
+                                changes[1][i] = 1;
                                 if(k == 0)
                                     changes_low[i]--;
                                 else
                                     changes_low[i]++;
-                                changes[i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
+                                changes[0][i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
                                 editText.setText("" + changes_low[i]);
                             }
                             else

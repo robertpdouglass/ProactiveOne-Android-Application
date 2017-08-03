@@ -33,7 +33,7 @@ public class Home extends AppCompatActivity {
             firstTime = true;
             settings.edit().putBoolean("firstTime", false).commit();
         }
-        new Modbus(getApplicationContext(), firstTime);
+        new Modbus(getApplicationContext(), ((firstTime) ? 0 : 2));
 
         setContentView(R.layout.home);
     }
@@ -47,7 +47,7 @@ public class Home extends AppCompatActivity {
     }
 
     public void sysParameters(View view) {
-        Screen = 4;
+        Screen = 3;
         startActivity(new Intent(this, System_Parameters.class));
     }
 

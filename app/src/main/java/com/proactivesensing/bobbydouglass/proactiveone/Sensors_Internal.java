@@ -27,18 +27,23 @@ import android.widget.ToggleButton;
 public class Sensors_Internal extends AppCompatActivity {
 
     public static final int Size =                      10;
-    public static final int MainCount =                 2;
-    public static final int ChangesSize =               5;
+    public static final int ChangesSizeX =              3;
+    public static final int ChangesSizeY =              2;
+    public static final int ChangesSizeZ =              5;
 
     public static LinearLayout[] layoutToAdd =          new LinearLayout[4];
-    public static View[][] viewToInflate =              new View[MainCount][4];
-    public static int[][] changes =                     new int[MainCount][ChangesSize];
+    public static View[][] viewToInflate =              new View[2][4];
+    public static int[][][] changes =                {{{-1,     -1,     -1,     -1,     -1},
+                                                       {-1,     -1,     -1,     -1,     -1}},
+
+                                                      {{0,      0,      0,      0,      0},
+                                                       {0,      0,      0,      0,      0}},
+
+                                                      {{1200,   1201,   1202,   1203,   1204},
+                                                       {1205,   1206,   1207,   1208,   1209}}};
+
     public static boolean[][] clicked =               {{false,  false,  false,  false},{false,
                                                         false,  false,  false}};
-    public static boolean[][] changes_bool =          {{false,  false,  false,  false,  false},
-                                                       {false,  false,  false,  false,  false}};
-    public static int[][] addresses =                 {{1200,   1201,   1202,   1203,   1204},
-                                                       {1205,   1206,   1207,   1208,   1209}};
 
     boolean[] loadedSpinner =                          {false, false};
     Button temp;
@@ -75,9 +80,9 @@ public class Sensors_Internal extends AppCompatActivity {
         layoutToAdd[2] =     (LinearLayout) findViewById(R.id.int_option3_expansion);
         layoutToAdd[3] =     (LinearLayout) findViewById(R.id.int_option4_expansion);
 
-        for (int i = 0; i < MainCount; i++) {
-            for(int j = 0; j < ChangesSize; j++)
-                changes[i][j] = new Modbus(getApplicationContext(), addresses[i][j]).getValue();
+        for (int i = 0; i < ChangesSizeY; i++) {
+            for(int j = 0; j < ChangesSizeZ; j++)
+                changes[0][i][j] = new Modbus(getApplicationContext(), changes[2][i][j]).getValue();
         }
     }
 
@@ -132,7 +137,7 @@ public class Sensors_Internal extends AppCompatActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     toast();
                     Home.Screen = -1;
-                    new Modbus(getApplicationContext(), true);
+                    new Modbus(getApplicationContext(), 1);
                     startNfc();
                     break;
 
@@ -154,6 +159,7 @@ public class Sensors_Internal extends AppCompatActivity {
 
     public void temperature(View view) {
         if(screen == 1) {
+            refreshScreen();
             screen = 0;
             for(int i = 0; i < (4 - screen); i++)
                 optionTextViews[i].setText(optionTexts[screen][i]);
@@ -161,7 +167,6 @@ public class Sensors_Internal extends AppCompatActivity {
             lastLayout.setVisibility(View.VISIBLE);
             lastLayout.setClickable(true);
             lastLayout.setEnabled(true);
-            refreshScreen();
             if (Build.VERSION.SDK_INT >= 22) {
                 temp.setBackground(getDrawable(R.drawable.material_button_blue));
                 accel.setBackground(getDrawable(R.drawable.material_button));
@@ -174,6 +179,7 @@ public class Sensors_Internal extends AppCompatActivity {
 
     public void accelerometer(View view) {
         if(screen == 0) {
+            refreshScreen();
             screen = 1;
             for(int i = 0; i < (4 - screen); i++)
                 optionTextViews[i].setText(optionTexts[screen][i]);
@@ -181,7 +187,6 @@ public class Sensors_Internal extends AppCompatActivity {
             lastLayout.setVisibility(View.INVISIBLE);
             lastLayout.setClickable(false);
             lastLayout.setEnabled(false);
-            refreshScreen();
             if (Build.VERSION.SDK_INT >= 22) {
                 accel.setBackground(getDrawable(R.drawable.material_button_blue));
                 temp.setBackground(getDrawable(R.drawable.material_button));
@@ -242,9 +247,9 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[0]) {
-                        changes[0][j] = position;
+                        changes[0][0][j] = position;
+                        changes[1][0][j] = 1;
                         changes_made = true;
-                        changes_bool[0][j] = true;
                     }
                     else
                         loadedSpinner[0] = true;
@@ -252,7 +257,7 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {}
             });
-            dropdown.setSelection(changes[0][j]);
+            dropdown.setSelection(changes[0][0][j]);
         }
         else {
             clicked[0][i] = false;
@@ -268,7 +273,7 @@ public class Sensors_Internal extends AppCompatActivity {
             viewToInflate[0][i] = inflater.inflate(R.layout.z_int_t_02_cal_child, null);
             layoutToAdd[i].addView(viewToInflate[0][i]);
             final EditText e = (EditText) findViewById(R.id.int_t_cal_edittext);
-            e.setText("" + changes[0][j]);
+            e.setText("" + changes[0][0][j]);
             e.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {}
@@ -277,9 +282,9 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][j] = Integer.parseInt(s.toString());
+                        changes[0][0][j] = Integer.parseInt(s.toString());
+                        changes[1][0][j] = 1;
                         changes_made = true;
-                        changes_bool[0][j] = true;
                     }
                 }
             });
@@ -293,8 +298,8 @@ public class Sensors_Internal extends AppCompatActivity {
                     public boolean onTouch(View v, MotionEvent event) {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
-                                changes[0][j] += m;
-                                e.setText("" + changes[0][i]);
+                                changes[0][0][j] += m;
+                                e.setText("" + changes[0][0][i]);
                                 if (Build.VERSION.SDK_INT >= 22)
                                     button[k].setBackground(getDrawable(R.drawable.material_button_blue));
                                 else
@@ -336,20 +341,20 @@ public class Sensors_Internal extends AppCompatActivity {
                     if(loadedSpinner[1]) {
                         switch (position) {
                             case 0:
-                                changes[0][j] = 1;
+                                changes[0][0][j] = 1;
                                 break;
                             case 1:
-                                changes[0][j] = 2;
+                                changes[0][0][j] = 2;
                                 break;
                             case 2:
-                                changes[0][j] = 10;
+                                changes[0][0][j] = 10;
                                 break;
                             case 3:
-                                changes[0][j] = 100;
+                                changes[0][0][j] = 100;
                                 break;
                         }
+                        changes[1][0][j] = 1;
                         changes_made = true;
-                        changes_bool[0][j] = true;
                     }
                     else
                         loadedSpinner[1] = true;
@@ -359,18 +364,18 @@ public class Sensors_Internal extends AppCompatActivity {
                 public void onNothingSelected(AdapterView<?> parent) {}
             });
             int selected;
-            switch(changes[0][j]) {
-                case 0:
-                    selected = 1;
-                    break;
+            switch(changes[0][0][j]) {
                 case 1:
-                    selected = 2;
+                    selected = 0;
                     break;
                 case 2:
-                    selected = 10;
+                    selected = 1;
                     break;
-                case 3:
-                    selected = 100;
+                case 10:
+                    selected = 2;
+                    break;
+                case 100:
+                    selected = 3;
                     break;
                 default:
                     selected = 0;
@@ -396,7 +401,7 @@ public class Sensors_Internal extends AppCompatActivity {
                                     (EditText) findViewById(R.id.int_t_high_edittext)};
             for(int l = 0; l < 2; l++) {
                 final int k = l;
-                limits[k].setText("" + changes[0][j + k]);
+                limits[k].setText("" + changes[0][0][j + k]);
                 limits[k].addTextChangedListener(new TextWatcher() {
                     @Override
                     public void afterTextChanged(Editable s) {}
@@ -405,9 +410,9 @@ public class Sensors_Internal extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.length() != 0) {
-                            changes[0][j + k] = Integer.parseInt(s.toString());
+                            changes[0][0][j + k] = Integer.parseInt(s.toString());
+                            changes[1][0][j + k] = 1;
                             changes_made = true;
-                            changes_bool[0][j + k] = true;
                         }
                     }
                 });
@@ -429,10 +434,10 @@ public class Sensors_Internal extends AppCompatActivity {
                                 else
                                     button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
                                 if (k == 0 || k == 2)
-                                    changes[0][j + (((k + 2) / 2) - 1)]--;
+                                    changes[0][0][j + (((k + 2) / 2) - 1)]--;
                                 else
-                                    changes[0][j + (((k + 2) / 2) - 1)]++;
-                                limits[(((k + 2) / 2) - 1)].setText("" + changes[0][j + (((k + 2) / 2) - 1)]);
+                                    changes[0][0][j + (((k + 2) / 2) - 1)]++;
+                                limits[(((k + 2) / 2) - 1)].setText("" + changes[0][0][j + (((k + 2) / 2) - 1)]);
                                 break;
                             case MotionEvent.ACTION_UP:
                                 if (Build.VERSION.SDK_INT >= 22)
@@ -474,13 +479,13 @@ public class Sensors_Internal extends AppCompatActivity {
                             tgl.setBackground(getDrawable(R.drawable.material_button_blue));
                         else
                             tgl.setBackground(getResources().getDrawable(R.drawable.material_button));
-                        changes[1][j] = (isChecked) ? 1 : 0;
-                        changes_bool[1][j] = true;
+                        changes[0][1][j] = (isChecked) ? 1 : 0;
+                        changes[1][1][j] = 1;
                         changes_made = true;
                     }
                 }
             });
-            tgl.setChecked(changes[1][j] == 1);
+            tgl.setChecked(changes[0][1][j] == 1);
         }
         else {
             clicked[1][i] = false;
@@ -501,7 +506,7 @@ public class Sensors_Internal extends AppCompatActivity {
                                 (EditText) findViewById(R.id.int_a_z_edittext)};
             for(int l = 0; l < 3; l++) {
                 final int k = l;
-                xyz[k].setText("" + changes[1][j + k]);
+                xyz[k].setText("" + (((float) (changes[0][1][j + k])) / 100));
                 xyz[k].addTextChangedListener(new TextWatcher() {
                     @Override
                     public void afterTextChanged(Editable s) {}
@@ -510,9 +515,9 @@ public class Sensors_Internal extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.length() != 0) {
-                            changes[1][j + k] = ((int) Float.parseFloat(s.toString())) * 100;
+                            changes[0][1][j + k] = ((int) ((Float.parseFloat(s.toString())) * 100));
+                            changes[1][1][j + k] = 1;
                             changes_made = true;
-                            changes_bool[1][j + k] = true;
                         }
                     }
                 });
@@ -533,7 +538,7 @@ public class Sensors_Internal extends AppCompatActivity {
             layoutToAdd[i].addView(viewToInflate[1][i]);
 
             EditText combo = (EditText) findViewById(R.id.int_a_combo_edittext);
-            combo.setText("" + changes[1][j]);
+            combo.setText("" + (((float) (changes[0][1][j])) / 100));
             combo.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {}
@@ -542,9 +547,9 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[1][j] = ((int) Float.parseFloat(s.toString())) * 100;
+                        changes[0][1][j] = ((int) ((Float.parseFloat(s.toString())) * 100));
+                        changes[1][1][j] = 1;
                         changes_made = true;
-                        changes_bool[1][j] = true;
                     }
                 }
             });

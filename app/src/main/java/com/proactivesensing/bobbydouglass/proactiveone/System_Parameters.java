@@ -27,40 +27,31 @@ import android.widget.ToggleButton;
 public class System_Parameters extends AppCompatActivity{
 
     public static final int Size =                  14;
+    public static final int ChangesSizeY =          3;
+    public static final int ChangesSizeZ =          14;
 
     public static LinearLayout[] layoutToAdd =      new LinearLayout[Size];
     public static View[] viewToInflate =            new View[Size];
     boolean[] clicked =                            {false,  false,  false,  false,  false,  false,  false,
                                                     false,  false,  false,  false,  false,  false,  false};
-    public static int[] changes =                   new int[Size];
-    public static boolean[] changes_bool =         {false,  false,  false,  false,  false,  false,  false,
-                                                    false,  false,  false,  false,  false,  false,  false};
+    public static int[][] changes =               {{-1,     -1,     -1,     -1,     -1,     -1,     -1,
+                                                    -1,     -1,     -1,     -1,     -1,     -1,     -1},
+
+                                                   {0,      0,      0,      0,      0,      0,      0,
+                                                    0,      0,      0,      0,      0,      0,      0},
+
+                                                   {1001,   1002,   1003,   1004,   1005,   1006,   1007,
+                                                    1009,   1011,   1012,   1013,   1014,   1020,   1021}};
     boolean changes_made =                          false;
-    public static final int[] addresses =          {1001,   1002,   1003,   1004,   1005,   1006,   1007,
-                                                    1009,   1011,   1012,   1013,   1014,   1020,   1021};
-    public static LayoutInflater inflater;
-    public static LayoutTransition transition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.system_parameters);
 
-        inflater = LayoutInflater.from(getApplicationContext());
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_01_locations_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_02_time_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_03_auto_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_04_a_msg_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_05_a_time_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_06_b_msg_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_07_b_time_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_08_battery_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_09_airplane_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_10_3v3_1_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_11_3v3_2_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_12_15v_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_13_cycle_child, null);
-        viewToInflate[0] = inflater.inflate(R.layout.z_sys_14_vcc_child, null);
+
+        //LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        //viewToInflate[i] = inflater.inflate(R.layout.z_sys_14_vcc_child, null);
 
         layoutToAdd[0] = (LinearLayout) findViewById(R.id.locations);
         layoutToAdd[1] = (LinearLayout) findViewById(R.id.daily);
@@ -77,11 +68,8 @@ public class System_Parameters extends AppCompatActivity{
         layoutToAdd[12] = (LinearLayout) findViewById(R.id.cycle);
         layoutToAdd[13] = (LinearLayout) findViewById(R.id.vcc);
 
-        transition = new LayoutTransition();
-
         for (int i = 0; i < Size; i++) {
-            layoutToAdd[i].setLayoutTransition(transition);
-            changes[i] = new Modbus(getApplicationContext(), addresses[i]).getValue();
+            //changes[i] = new Modbus(getApplicationContext(), addresses[i]).getValue();
         }
     }
 
@@ -143,7 +131,7 @@ public class System_Parameters extends AppCompatActivity{
                 case DialogInterface.BUTTON_POSITIVE:
                     toast();
                     Home.Screen = -1;
-                    new Modbus(getApplicationContext(), true);
+                    new Modbus(getApplicationContext(), 1);
                     startNfc();
                     break;
 
@@ -156,11 +144,13 @@ public class System_Parameters extends AppCompatActivity{
     public void toast() {
         Toast.makeText(this, "Please Wait...", Toast.LENGTH_SHORT).show();
     }
-
+/*
     public void locations(View view) {
         final int i = 0;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_01_locations_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
             final EditText e = (EditText) findViewById(R.id.sys_location_edittext);
             e.setText("" + changes[i]);
@@ -244,6 +234,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 1;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_02_time_child, null);
             layoutToAdd[i].addView(viewToInflate[1]);
             TimePicker t = (TimePicker) findViewById(R.id.sys_time);
             t.setIs24HourView(false);
@@ -277,6 +269,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 2;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_03_auto_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             final EditText e = (EditText) findViewById(R.id.sys_auto_edittext);
@@ -356,6 +350,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 3;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_04_a_msg_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             final EditText e = (EditText) findViewById(R.id.sys_a_msg_edittext);
@@ -439,6 +435,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 4;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_05_a_time_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             TimePicker t = (TimePicker) findViewById(R.id.sys_a_time);
@@ -471,6 +469,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 5;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_06_b_msg_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             final EditText e = (EditText) findViewById(R.id.sys_b_msg_edittext);
@@ -563,6 +563,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 6;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_07_b_time_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             TimePicker t = (TimePicker) findViewById(R.id.sys_b_time);
@@ -595,6 +597,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 7;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_08_battery_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             final EditText e = (EditText) findViewById(R.id.sys_battery_edittext);
@@ -685,6 +689,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 8;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_09_airplane_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             Spinner dropdown = (Spinner) findViewById(R.id.sys_airplane_spinner);
@@ -713,6 +719,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 9;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_10_3v3_1_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             Spinner dropdown = (Spinner) findViewById(R.id.sys_3v3_1_spinner);
@@ -741,6 +749,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 10;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_11_3v3_2_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             Spinner dropdown = (Spinner) findViewById(R.id.sys_3v3_2_spinner);
@@ -769,6 +779,8 @@ public class System_Parameters extends AppCompatActivity{
         final int i = 11;
         if(!clicked[i]) {
             clicked[i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_12_15v_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             Spinner dropdown = (Spinner) findViewById(R.id.sys_15v_spinner);
@@ -975,4 +987,5 @@ public class System_Parameters extends AppCompatActivity{
             layoutToAdd[i].removeView(viewToInflate[i]);
         }
     }
+    */
 }
