@@ -22,30 +22,33 @@ import android.widget.Toast;
 
 public class Advanced_Data extends AppCompatActivity {
 
-    public static final int Size =              12;
+    public static final int LayoutSize =        12;
     public static final int ChangesSizeY =      3;
-    public static final int ChangesSizeZ =      12;
+    public static final int ChangesSizeZ =      24;
 
-    static LinearLayout[] layoutToAdd =         new LinearLayout[Size];
-    View[] viewToInflate =                      new View[Size];
+    static LinearLayout[] layoutToAdd =         new LinearLayout[LayoutSize];
+    View[] viewToInflate =                      new View[LayoutSize];
     boolean changes_made =                      false;
     boolean[] loadedSpinner =                  {false,  false,  false,  false,  false,  false,
                                                 false,  false,  false,  false,  false,  false};
     public static boolean[] clicked =          {false,  false,  false,  false,  false,  false,
                                                 false,  false,  false,  false,  false,  false};
-    public static int[][] changes =           {{-1,     -1,     -1,     -1,     -1,     -1,
+    public static short[][] changes =         {{-1,     -1,     -1,     -1,     -1,     -1,
+                                                -1,     -1,     -1,     -1,     -1,     -1,
+                                                -1,     -1,     -1,     -1,     -1,     -1,
                                                 -1,     -1,     -1,     -1,     -1,     -1},
 
                                                {0,      0,      0,      0,      0,      0,
+                                                0,      0,      0,      0,      0,      0,
+                                                0,      0,      0,      0,      0,      0,
                                                 0,      0,      0,      0,      0,      0},
 
                                                {1500,   1501,   1502,   1503,   1504,   1505,
-                                                1506,   1507,   1508,   1509,   1510,   1511}};
-
-    public static int[] changes_low =           new int[Size];
-    public static int[] changes_high =          new int[Size];
-    String[] items =                           {"Disable",          "External Sensor",  "Internal Sensor",
-                                                "Low Limit",        "High Limit",       "I2C"};
+                                                1506,   1507,   1508,   1509,   1510,   1511,
+                                                1512,   1513,   1514,   1515,   1516,   1517,
+                                                1518,   1519,   1520,   1521,   1522,   1523}};
+    String[] items =                           {"Disabled",         "External Sensor",  "Internal Sensor",
+                                                "I2C Sensor",       "Virtual Sensor"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +65,11 @@ public class Advanced_Data extends AppCompatActivity {
         layoutToAdd[7] =      (LinearLayout) findViewById(R.id.data_b8_expansion);
         layoutToAdd[8] =      (LinearLayout) findViewById(R.id.data_b9_expansion);
         layoutToAdd[9] =      (LinearLayout) findViewById(R.id.data_b10_expansion);
-        layoutToAdd[10] =     (LinearLayout) findViewById(R.id.data_b11_expansion);
-        layoutToAdd[11] =     (LinearLayout) findViewById(R.id.data_b12_expansion);
+        layoutToAdd[10] =     (LinearLayout) findViewById(R.id.data_c11_expansion);
+        layoutToAdd[11] =     (LinearLayout) findViewById(R.id.data_c12_expansion);
 
         for (int i = 0; i < ChangesSizeZ; i++) {
-            changes[0][i] = new Modbus(getApplicationContext(), changes[1][i]).getValue();
-            changes_low[i] = ((changes[0][i] >> 8) & 0x00ff);
-            changes_high[i] = (changes[0][i] & 0x00ff);
+            changes[0][i] = new Modbus(getApplicationContext(), changes[2][i]).getValue();
         }
     }
 
@@ -347,18 +348,18 @@ public class Advanced_Data extends AppCompatActivity {
         }
     }
 
-    public void dataB11(View view) {
+    public void dataC11(View view) {
         final int index = 10;
         if(!clicked[index]) {
             clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.z_data_b11_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_c11_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner spinner =       (Spinner) findViewById(R.id.data_b11_spinner);
-            EditText e =            (EditText) findViewById(R.id.data_b11_edittext);
-            Button[] button =      {(Button) findViewById(R.id.data_b11_neg),
-                                    (Button) findViewById(R.id.data_b11_pos)};
+            Spinner spinner =       (Spinner) findViewById(R.id.data_c11_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_c11_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_c11_neg),
+                                    (Button) findViewById(R.id.data_c11_pos)};
             display(index, spinner, e, button);
         }
         else {
@@ -367,18 +368,18 @@ public class Advanced_Data extends AppCompatActivity {
         }
     }
 
-    public void dataB12(View view) {
+    public void dataC12(View view) {
         final int index = 11;
         if(!clicked[index]) {
             clicked[index] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[index] = inflater.inflate(R.layout.z_data_b12_child, null);
+            viewToInflate[index] = inflater.inflate(R.layout.z_data_c12_child, null);
             layoutToAdd[index].addView(viewToInflate[index]);
 
-            Spinner spinner =       (Spinner) findViewById(R.id.data_b12_spinner);
-            EditText e =            (EditText) findViewById(R.id.data_b12_edittext);
-            Button[] button =      {(Button) findViewById(R.id.data_b12_neg),
-                                    (Button) findViewById(R.id.data_b12_pos)};
+            Spinner spinner =       (Spinner) findViewById(R.id.data_c12_spinner);
+            EditText e =            (EditText) findViewById(R.id.data_c12_edittext);
+            Button[] button =      {(Button) findViewById(R.id.data_c12_neg),
+                                    (Button) findViewById(R.id.data_c12_pos)};
             display(index, spinner, e, button);
         }
         else {
@@ -394,10 +395,9 @@ public class Advanced_Data extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(loadedSpinner[i]) {
+                    changes[0][i * 2] = (short) position;
+                    changes[1][i * 2] = 1;
                     changes_made = true;
-                    changes[1][i] = 1;
-                    changes_high[i] = position;
-                    changes[0][i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
                 }
                 else {
                     loadedSpinner[i] = true;
@@ -406,9 +406,9 @@ public class Advanced_Data extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-        dropdown.setSelection(changes_high[i]);
+        dropdown.setSelection(changes[0][i * 2]);
 
-        editText.setText("" + changes_low[i]);
+        editText.setText("" + changes[0][(i * 2) + 1]);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {}
@@ -417,17 +417,16 @@ public class Advanced_Data extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0) {
+                    changes[0][(i * 2) + 1] = Short.parseShort(s.toString());
+                    changes[1][(i * 2) + 1] = 1;
                     changes_made = true;
-                    changes[1][i] = 1;
-                    changes_low[i] = Integer.parseInt(s.toString());
-                    changes[0][i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
                 }
             }
         });
 
         for(int j = 0; j < 2; j++) {
             final int k = j;
-            button[j].setOnTouchListener(new Button.OnTouchListener() {
+            button[k].setOnTouchListener(new Button.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()) {
@@ -437,15 +436,14 @@ public class Advanced_Data extends AppCompatActivity {
                             else
                                 button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
-                            if (changes_low[i] < 255) {
+                            if (changes[0][(i * 2) + 1] < 255) {
                                 changes_made = true;
-                                changes[1][i] = 1;
+                                changes[1][(i * 2) + 1] = 1;
                                 if(k == 0)
-                                    changes_low[i]--;
+                                    changes[0][(i * 2) + 1]--;
                                 else
-                                    changes_low[i]++;
-                                changes[0][i] = ((changes_low[i] & 0x00ff) << 8) | ((changes_high[i] & 0x00ff));
-                                editText.setText("" + changes_low[i]);
+                                    changes[0][(i * 2) + 1]++;
+                                editText.setText("" + changes[0][(i * 2) + 1]);
                             }
                             else
                                 indexToast();

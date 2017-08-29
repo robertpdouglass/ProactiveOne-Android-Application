@@ -18,14 +18,19 @@ public class Configure_Sensors extends AppCompatActivity {
         startActivity(new Intent(this, Sensors_External.class));
     }
 
-    public void i2c(View view) {
+    public void internal(View view) {
         Home.Screen = 1;
+        startActivity(new Intent(this, Sensors_Internal.class));
+    }
+
+    public void i2c(View view) {
+        Home.Screen = 2;
         startActivity(new Intent(this, Sensors_I2C.class));
     }
 
-    public void internal(View view) {
-        Home.Screen = 2;
-        startActivity(new Intent(this, Sensors_Internal.class));
+    public void virtual(View view) {
+        Home.Screen = 3;
+        startActivity(new Intent(this, Sensors_Virtual.class));
     }
 
     @Override

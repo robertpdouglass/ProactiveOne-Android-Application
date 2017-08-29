@@ -64,10 +64,31 @@ public class Nfc extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent Home = new Intent(this, Home.class);
-        Home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(Home);
+        if(!sent) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("If You Exit Now, Your Changes Won't Be Saved");
+            builder.setPositiveButton("Stay", changesDialog);
+            builder.setNegativeButton("Exit", changesDialog);
+            builder.show();
+        }
+        else {
+            startHome();
+        }
     }
+
+    DialogInterface.OnClickListener changesDialog = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    startHome();
+                    break;
+            }
+        }
+    };
 
     public void back(View view)  {
         Intent Home = new Intent(this, Home.class);
@@ -93,18 +114,39 @@ public class Nfc extends AppCompatActivity {
                 break;
             case 0:
                 new Modbus(getApplicationContext(), Sensors_External.changes, Sensors_External.ChangesSizeY, Sensors_External.ChangesSizeZ);
+                for(int i = 0; i < Sensors_External.ChangesSizeY; i++)
+                    for(int j = 0; j < Sensors_External.ChangesSizeZ; j++)
+                        Sensors_External.changes[1][i][j] = 0;
                 break;
             case 1:
+                new Modbus(getApplicationContext(), Sensors_Internal.changes, Sensors_Internal.ChangesSizeY, Sensors_Internal.ChangesSizeZ);
+                for(int i = 0; i < Sensors_Internal.ChangesSizeY; i++)
+                    for(int j = 0; j < Sensors_Internal.ChangesSizeZ; j++)
+                        Sensors_Internal.changes[1][i][j] = 0;
                 break;
             case 2:
-                new Modbus(getApplicationContext(), Sensors_External.changes, Sensors_External.ChangesSizeY, Sensors_External.ChangesSizeZ);
+                new Modbus(getApplicationContext(), Sensors_I2C.changes, Sensors_I2C.ChangesSizeY, Sensors_I2C.ChangesSizeZ);
+                for(int i = 0; i < Sensors_I2C.ChangesSizeY; i++)
+                    for(int j = 0; j < Sensors_I2C.ChangesSizeZ; j++)
+                        Sensors_I2C.changes[1][i][j] = 0;
                 break;
             case 3:
+                new Modbus(getApplicationContext(), Sensors_Virtual.changes, Sensors_Virtual.ChangesSizeY, Sensors_Virtual.ChangesSizeZ);
+                for(int i = 0; i < Sensors_Virtual.ChangesSizeY; i++)
+                    for(int j = 0; j < Sensors_Virtual.ChangesSizeZ; j++)
+                        Sensors_Virtual.changes[1][i][j] = 0;
                 break;
             case 4:
-                new Modbus(getApplicationContext(), Advanced_Data.changes, Advanced_Data.ChangesSizeZ);
+                new Modbus(getApplicationContext(), System_Parameters.changes, System_Parameters.ChangesSizeZ);
+                for(int i = 0; i < System_Parameters.ChangesSizeZ; i++)
+                    System_Parameters.changes[1][i] = 0;
                 break;
             case 5:
+                new Modbus(getApplicationContext(), Advanced_Data.changes, Advanced_Data.ChangesSizeZ);
+                for(int i = 0; i < Advanced_Data.ChangesSizeZ; i++)
+                    Advanced_Data.changes[1][i] = 0;
+                break;
+            case 6:
                 break;
             default:
                 Log.e("ERROR", "INVALID SELECTED SCREEN INDEX");
@@ -187,7 +229,7 @@ public class Nfc extends AppCompatActivity {
         }
     }
 
-    private NdefRecord createRecord(int address, int value) {
+    private NdefRecord createRecord(int address, short value) {
         ByteArrayOutputStream payload = new ByteArrayOutputStream(11);
 
         payload.write('M');
@@ -217,23 +259,34 @@ public class Nfc extends AppCompatActivity {
                         ndef.add(createRecord(Sensors_External.changes[2][i][j], Sensors_External.changes[0][i][j]));
         }
         else if(Home.Screen == 1) {
-
-        }
-        else if(Home.Screen == 2) {
             for(int i = 0; i < Sensors_Internal.ChangesSizeY; i++)
                 for(int j = 0; j < Sensors_Internal.ChangesSizeZ; j++)
                     if(Sensors_Internal.changes[1][i][j] == 1)
                         ndef.add(createRecord(Sensors_Internal.changes[2][i][j], Sensors_Internal.changes[0][i][j]));
         }
+        else if(Home.Screen == 2) {
+            for(int i = 0; i < Sensors_I2C.ChangesSizeY; i++)
+                for(int j = 0; j < Sensors_I2C.ChangesSizeZ; j++)
+                    if(Sensors_I2C.changes[1][i][j] == 1)
+                        ndef.add(createRecord(Sensors_I2C.changes[2][i][j], Sensors_I2C.changes[0][i][j]));
+        }
         else if(Home.Screen == 3) {
-
+            for(int i = 0; i < Sensors_Virtual.ChangesSizeY; i++)
+                for(int j = 0; j < Sensors_Virtual.ChangesSizeZ; j++)
+                    if(Sensors_Virtual.changes[1][i][j] == 1)
+                        ndef.add(createRecord(Sensors_Virtual.changes[2][i][j], Sensors_Virtual.changes[0][i][j]));
         }
         else if(Home.Screen == 4) {
+            for(int i = 0; i < System_Parameters.ChangesSizeZ; i++)
+                if(System_Parameters.changes[1][i] == 1)
+                    ndef.add(createRecord(System_Parameters.changes[2][i], System_Parameters.changes[0][i]));
+        }
+        else if(Home.Screen == 5) {
             for(int i = 0; i < Advanced_Data.ChangesSizeZ; i++)
                 if(Advanced_Data.changes[1][i] == 1)
                     ndef.add(createRecord(Advanced_Data.changes[2][i], Advanced_Data.changes[0][i]));
         }
-        else if(Home.Screen == 5) {
+        else if(Home.Screen == 6) {
 
         }
         else {

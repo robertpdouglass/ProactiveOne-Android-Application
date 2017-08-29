@@ -6,13 +6,13 @@
     android:layout_height="wrap_content">
 
     <Button
-        android:id="@+id/xsen_cal_neg"
+        android:id="@+id/vir_config_neg"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignTop="@+id/xsen_cal_edittext"
+        android:layout_alignParentTop="true"
         android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/xsen_cal_pos"
-        android:layout_toStartOf="@+id/xsen_cal_pos"
+        android:layout_toLeftOf="@+id/vir_config_pos"
+        android:layout_toStartOf="@+id/vir_config_pos"
         android:background="@drawable/material_button"
         android:text="-"
         android:elevation="2dp"
@@ -20,22 +20,21 @@
         android:textSize="15dp" />
 
     <Button
-        android:id="@+id/xsen_cal_pos"
+        android:id="@+id/vir_config_pos"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignBaseline="@+id/xsen_cal_edittext"
-        android:layout_alignBottom="@+id/xsen_cal_edittext"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/xsen_cal_edittext"
-        android:layout_toStartOf="@+id/xsen_cal_edittext"
         android:background="@drawable/material_button"
         android:text="+"
         android:elevation="2dp"
+        android:layout_marginRight="5dp"
         android:textColor="#ffffff"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/vir_config_edittext"
+        android:layout_toStartOf="@+id/vir_config_edittext" />
 
     <EditText
-        android:id="@+id/xsen_cal_edittext"
+        android:id="@+id/vir_config_edittext"
         android:layout_width="85dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
@@ -60,11 +59,11 @@
         android:layout_marginRight="10dp"
         android:foregroundGravity="center_vertical"
         android:gravity="center_vertical"
-        android:text="Signed Integer To Add To Value"
+        android:text="Library Index"
         android:textSize="12dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/xsen_cal_neg"
-        android:layout_toStartOf="@+id/xsen_cal_neg" />
+        android:layout_toLeftOf="@+id/vir_config_neg"
+        android:layout_toStartOf="@+id/vir_config_neg" />
 </RelativeLayout>

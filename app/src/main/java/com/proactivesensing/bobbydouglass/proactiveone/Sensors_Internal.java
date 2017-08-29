@@ -26,35 +26,39 @@ import android.widget.ToggleButton;
 
 public class Sensors_Internal extends AppCompatActivity {
 
-    public static final int Size =                      10;
     public static final int ChangesSizeX =              3;
     public static final int ChangesSizeY =              2;
-    public static final int ChangesSizeZ =              5;
+    public static final int ChangesSizeZ =              6;
+    public static final int ViewSizeTotal =             5;
+    public static final int ViewSize_1 =                5;
+    public static final int ViewSize_2 =                3;
 
-    public static LinearLayout[] layoutToAdd =          new LinearLayout[4];
-    public static View[][] viewToInflate =              new View[2][4];
-    public static int[][][] changes =                {{{-1,     -1,     -1,     -1,     -1},
-                                                       {-1,     -1,     -1,     -1,     -1}},
+    public static LinearLayout[] layoutToAdd =          new LinearLayout[ViewSizeTotal];
+    public static View[][] viewToInflate =            {{null,   null,   null,   null,   null},
+                                                       {null,   null,   null}};
+    public static short[][][] changes =              {{{-1,     -1,     -1,     -1,     -1,     -1},
+                                                       {-1,     -1,     -1,     -1,     -1,     -1}},
 
-                                                      {{0,      0,      0,      0,      0},
-                                                       {0,      0,      0,      0,      0}},
+                                                      {{0,      0,      0,      0,      0,      0},
+                                                       {0,      0,      0,      0,      0,      -1}},
 
-                                                      {{1200,   1201,   1202,   1203,   1204},
-                                                       {1205,   1206,   1207,   1208,   1209}}};
+                                                      {{1200,   1201,   1202,   1203,   1204,   1205},
+                                                       {1208,   1209,   1210,   1211,   1212,   -1}}};
 
-    public static boolean[][] clicked =               {{false,  false,  false,  false},{false,
-                                                        false,  false,  false}};
+    public static boolean[][] clicked =               {{false,  false,  false,  false,  false},
+                                                       {false,  false,  false}};
 
     boolean[] loadedSpinner =                          {false, false};
     Button temp;
     Button accel;
     boolean changes_made =                              false;
     int screen =                                        0;
-    TextView[] optionTextViews =                        new TextView[4];
-    String[][] optionTexts =                          {{"Temperature Configuration",    "Temperature Sensor Calibration",
-                                                        "Temperature Multiplier",       "Temperature Sensor Alarm Limits"},
+    TextView[] optionTextViews =                        new TextView[ViewSizeTotal];
+    String[][] optionTexts =                          {{"Temperature Configuration",    "Temperature Skip Count",
+                                                        "Temperature Calibration",      "Temperature Multiplier",
+                                                        "Temperature Limits"},
                                                        {"Accelerometer Configuration",  "Accelerometer Axis Limits",
-                                                        "Accelerometer Combined Limit"}};
+                                                        "Accelerometer Combined Limit", "", ""}};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,9 +71,12 @@ public class Sensors_Internal extends AppCompatActivity {
         optionTextViews[1] =    (TextView) findViewById(R.id.int_textView2);
         optionTextViews[2] =    (TextView) findViewById(R.id.int_textView3);
         optionTextViews[3] =    (TextView) findViewById(R.id.int_textView4);
+        optionTextViews[4] =    (TextView) findViewById(R.id.int_textView5);
 
-        for(int i = 0; i < (4 - screen); i++)
+
+        for(int i = 0; i < ViewSizeTotal; i++)
             optionTextViews[i].setText(optionTexts[screen][i]);
+
         if (Build.VERSION.SDK_INT >= 22)
             temp.setBackground(getDrawable(R.drawable.material_button_blue));
         else
@@ -79,11 +86,12 @@ public class Sensors_Internal extends AppCompatActivity {
         layoutToAdd[1] =     (LinearLayout) findViewById(R.id.int_option2_expansion);
         layoutToAdd[2] =     (LinearLayout) findViewById(R.id.int_option3_expansion);
         layoutToAdd[3] =     (LinearLayout) findViewById(R.id.int_option4_expansion);
+        layoutToAdd[4] =     (LinearLayout) findViewById(R.id.int_option5_expansion);
 
-        for (int i = 0; i < ChangesSizeY; i++) {
-            for(int j = 0; j < ChangesSizeZ; j++)
+
+        for (int i = 0; i < ChangesSizeY; i++)
+            for(int j = 0; j < ChangesSizeZ - i; j++)
                 changes[0][i][j] = new Modbus(getApplicationContext(), changes[2][i][j]).getValue();
-        }
     }
 
     public void onBackPressed() {
@@ -161,12 +169,18 @@ public class Sensors_Internal extends AppCompatActivity {
         if(screen == 1) {
             refreshScreen();
             screen = 0;
-            for(int i = 0; i < (4 - screen); i++)
+
+            for(int i = 0; i < ViewSizeTotal; i++)
                 optionTextViews[i].setText(optionTexts[screen][i]);
-            RelativeLayout lastLayout = (RelativeLayout) findViewById(R.id.int_option4_layout);
-            lastLayout.setVisibility(View.VISIBLE);
-            lastLayout.setClickable(true);
-            lastLayout.setEnabled(true);
+
+            RelativeLayout[] layouts = {(RelativeLayout) findViewById(R.id.int_option4_layout),
+                                        (RelativeLayout) findViewById(R.id.int_option5_layout),};
+            for(int i = 0; i < 2; i++) {
+                layouts[i].setVisibility(View.VISIBLE);
+                layouts[i].setClickable(true);
+                layouts[i].setEnabled(true);
+            }
+
             if (Build.VERSION.SDK_INT >= 22) {
                 temp.setBackground(getDrawable(R.drawable.material_button_blue));
                 accel.setBackground(getDrawable(R.drawable.material_button));
@@ -181,12 +195,19 @@ public class Sensors_Internal extends AppCompatActivity {
         if(screen == 0) {
             refreshScreen();
             screen = 1;
-            for(int i = 0; i < (4 - screen); i++)
+
+            for(int i = 0; i < ViewSizeTotal; i++)
                 optionTextViews[i].setText(optionTexts[screen][i]);
-            RelativeLayout lastLayout = (RelativeLayout) findViewById(R.id.int_option4_layout);
-            lastLayout.setVisibility(View.INVISIBLE);
-            lastLayout.setClickable(false);
-            lastLayout.setEnabled(false);
+
+            RelativeLayout[] layouts = {(RelativeLayout) findViewById(R.id.int_option4_layout),
+                                        (RelativeLayout) findViewById(R.id.int_option5_layout),};
+            for(int i = 0; i < 2; i++) {
+                clicked[0][i + 3] = false;
+                layouts[i].setVisibility(View.INVISIBLE);
+                layouts[i].setClickable(false);
+                layouts[i].setEnabled(false);
+            }
+
             if (Build.VERSION.SDK_INT >= 22) {
                 accel.setBackground(getDrawable(R.drawable.material_button_blue));
                 temp.setBackground(getDrawable(R.drawable.material_button));
@@ -198,7 +219,13 @@ public class Sensors_Internal extends AppCompatActivity {
     }
 
     public void refreshScreen() {
-        for (int i = 0; i < (4 - screen); i++) {
+        int tempInt = 0;
+        if(screen == 0)
+            tempInt = ViewSize_1;
+        else
+            tempInt = ViewSize_2;
+
+        for (int i = 0; i < tempInt; i++) {
             if (clicked[screen][i]) {
                 clicked[screen][i] = false;
                 layoutToAdd[i].removeView(viewToInflate[screen][i]);
@@ -215,19 +242,23 @@ public class Sensors_Internal extends AppCompatActivity {
 
     public void option2(View view) {
         if(screen == 0)
-            tempCal();
+            tempSkip();
         else
             accelLimits();
     }
 
     public void option3(View view) {
         if(screen == 0)
-            tempMulti();
+            tempCalibration();
         else
             accelCombo();
     }
 
     public void option4(View view) {
+        tempMultiplier();
+    }
+
+    public void option5(View view) {
         tempLimits();
     }
 
@@ -247,7 +278,7 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[0]) {
-                        changes[0][0][j] = position;
+                        changes[0][0][j] = (short) position;
                         changes[1][0][j] = 1;
                         changes_made = true;
                     }
@@ -265,14 +296,15 @@ public class Sensors_Internal extends AppCompatActivity {
         }
     }
 
-    public void tempCal() {
+    public void tempSkip() {
         final int i = 1, j = 1;
         if(!clicked[0][i]) {
             clicked[0][i] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[0][i] = inflater.inflate(R.layout.z_int_t_02_cal_child, null);
+            viewToInflate[0][i] = inflater.inflate(R.layout.z_int_t_02_skip_child, null);
             layoutToAdd[i].addView(viewToInflate[0][i]);
-            final EditText e = (EditText) findViewById(R.id.int_t_cal_edittext);
+
+            final EditText e = (EditText) findViewById(R.id.int_t_skip_edittext);
             e.setText("" + changes[0][0][j]);
             e.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -282,28 +314,35 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][0][j] = Integer.parseInt(s.toString());
+                        changes[0][0][j] = Short.parseShort(s.toString());
                         changes[1][0][j] = 1;
                         changes_made = true;
                     }
                 }
             });
 
-            final Button[] button =    {(Button) findViewById(R.id.int_t_cal_neg),
-                                        (Button) findViewById(R.id.int_t_cal_pos)};
-            for(int l = 0, h = -1; l < 2; l++, h += 2) {
-                final int k = l, m = h;
+            final Button[] button =    {(Button) findViewById(R.id.int_t_skip_neg),
+                                        (Button) findViewById(R.id.int_t_skip_pos)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
                 button[k].setOnTouchListener(new Button.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
-                                changes[0][0][j] += m;
-                                e.setText("" + changes[0][0][i]);
                                 if (Build.VERSION.SDK_INT >= 22)
                                     button[k].setBackground(getDrawable(R.drawable.material_button_blue));
                                 else
                                     button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+
+                                if(k == 0)
+                                    changes[0][0][j]--;
+                                else
+                                    changes[0][0][j]++;
+                                changes[1][0][j] = 1;
+                                changes_made = true;
+
+                                e.setText("" + changes[0][0][j]);
                                 break;
                             case MotionEvent.ACTION_UP:
                                 if (Build.VERSION.SDK_INT >= 22)
@@ -323,19 +362,85 @@ public class Sensors_Internal extends AppCompatActivity {
         }
     }
 
-    public void tempMulti() {
+    public void tempCalibration() {
         final int i = 2, j = 2;
         if(!clicked[0][i]) {
             clicked[0][i] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[0][i] = inflater.inflate(R.layout.z_int_t_03_multi_child, null);
+            viewToInflate[0][i] = inflater.inflate(R.layout.z_int_t_03_calibration_child, null);
             layoutToAdd[i].addView(viewToInflate[0][i]);
+
+            final EditText e = (EditText) findViewById(R.id.int_t_cal_edittext);
+            e.setText("" + changes[0][0][j]);
+            e.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {}
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(s.length() != 0) {
+                        changes[0][0][j] = Short.parseShort(s.toString());
+                        changes[1][0][j] = 1;
+                        changes_made = true;
+                    }
+                }
+            });
+
+            final Button[] button =    {(Button) findViewById(R.id.int_t_cal_neg),
+                                        (Button) findViewById(R.id.int_t_cal_pos)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
+                button[k].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+
+                                if(k == 0)
+                                    changes[0][0][j]--;
+                                else
+                                    changes[0][0][j]++;
+                                changes[1][0][j] = 1;
+                                changes_made = true;
+
+                                e.setText("" + changes[0][0][j]);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
+                    }
+                });
+            }
+        }
+        else {
+            clicked[0][i] = false;
+            layoutToAdd[i].removeView(viewToInflate[0][i]);
+        }
+    }
+
+    public void tempMultiplier() {
+        final int i = 3, j = 3;
+        if(!clicked[0][i]) {
+            clicked[0][i] = true;
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[0][i] = inflater.inflate(R.layout.z_int_t_04_multiplier_child, null);
+            layoutToAdd[i].addView(viewToInflate[0][i]);
+
             Spinner dropdown = (Spinner) findViewById(R.id.int_t_multi_spinner);
             String[] items = new String[]{"1X", "2X", "10X", "100X"};
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
             dropdown.setAdapter(adapter);
             dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[1]) {
@@ -359,10 +464,10 @@ public class Sensors_Internal extends AppCompatActivity {
                     else
                         loadedSpinner[1] = true;
                 }
-
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {}
             });
+
             int selected;
             switch(changes[0][0][j]) {
                 case 1:
@@ -390,15 +495,15 @@ public class Sensors_Internal extends AppCompatActivity {
     }
 
     public void tempLimits() {
-        final int i = 3, j = 3;
+        final int i = 4, j = 4;
         if(!clicked[0][i]) {
             clicked[0][i] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[0][i] = inflater.inflate(R.layout.z_int_t_04_limits_child, null);
+            viewToInflate[0][i] = inflater.inflate(R.layout.z_int_t_05_limits_child, null);
             layoutToAdd[i].addView(viewToInflate[0][i]);
 
-            final EditText[] limits =    {(EditText) findViewById(R.id.int_t_low_edittext),
-                                    (EditText) findViewById(R.id.int_t_high_edittext)};
+            final EditText[] limits =  {(EditText) findViewById(R.id.int_t_low_edittext),
+                                        (EditText) findViewById(R.id.int_t_high_edittext)};
             for(int l = 0; l < 2; l++) {
                 final int k = l;
                 limits[k].setText("" + changes[0][0][j + k]);
@@ -410,7 +515,7 @@ public class Sensors_Internal extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.length() != 0) {
-                            changes[0][0][j + k] = Integer.parseInt(s.toString());
+                            changes[0][0][j + k] = Short.parseShort(s.toString());
                             changes[1][0][j + k] = 1;
                             changes_made = true;
                         }
@@ -418,10 +523,8 @@ public class Sensors_Internal extends AppCompatActivity {
                 });
             }
 
-            final Button[] button =    {(Button) findViewById(R.id.int_t_low_neg),
-                                        (Button) findViewById(R.id.int_t_low_pos),
-                                        (Button) findViewById(R.id.int_t_high_neg),
-                                        (Button) findViewById(R.id.int_t_high_pos)};
+            final Button[] button =    {(Button) findViewById(R.id.int_t_low_neg),  (Button) findViewById(R.id.int_t_low_pos),
+                                        (Button) findViewById(R.id.int_t_high_neg), (Button) findViewById(R.id.int_t_high_pos)};
             for(int l = 0; l < 4; l++) {
                 final int k = l;
                 button[k].setOnTouchListener(new Button.OnTouchListener() {
@@ -433,10 +536,14 @@ public class Sensors_Internal extends AppCompatActivity {
                                     button[k].setBackground(getDrawable(R.drawable.material_button_blue));
                                 else
                                     button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+
                                 if (k == 0 || k == 2)
                                     changes[0][0][j + (((k + 2) / 2) - 1)]--;
                                 else
                                     changes[0][0][j + (((k + 2) / 2) - 1)]++;
+                                changes[1][0][j + (((k + 2) / 2) - 1)] = 1;
+                                changes_made = true;
+
                                 limits[(((k + 2) / 2) - 1)].setText("" + changes[0][0][j + (((k + 2) / 2) - 1)]);
                                 break;
                             case MotionEvent.ACTION_UP:
@@ -479,7 +586,7 @@ public class Sensors_Internal extends AppCompatActivity {
                             tgl.setBackground(getDrawable(R.drawable.material_button_blue));
                         else
                             tgl.setBackground(getResources().getDrawable(R.drawable.material_button));
-                        changes[0][1][j] = (isChecked) ? 1 : 0;
+                        changes[0][1][j] = (short) ((isChecked) ? 1 : 0);
                         changes[1][1][j] = 1;
                         changes_made = true;
                     }
@@ -515,7 +622,7 @@ public class Sensors_Internal extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.length() != 0) {
-                            changes[0][1][j + k] = ((int) ((Float.parseFloat(s.toString())) * 100));
+                            changes[0][1][j + k] = ((short) ((Float.parseFloat(s.toString())) * 100));
                             changes[1][1][j + k] = 1;
                             changes_made = true;
                         }
@@ -547,7 +654,7 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][1][j] = ((int) ((Float.parseFloat(s.toString())) * 100));
+                        changes[0][1][j] = ((short) ((Float.parseFloat(s.toString())) * 100));
                         changes[1][1][j] = 1;
                         changes_made = true;
                     }

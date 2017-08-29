@@ -19,6 +19,20 @@
         app:srcCompat="@drawable/proactiveone" />
 
     <Button
+        android:id="@+id/button"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:background="@drawable/material_button"
+        android:elevation="2dp"
+        android:textSize="15dp"
+        android:onClick="external"
+        android:text="External Hardwired"
+        android:textColor="#ffffff"
+        android:layout_above="@+id/button2"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2" />
+
+    <Button
         android:id="@+id/button2"
         android:layout_width="250dp"
         android:layout_height="40dp"
@@ -28,8 +42,8 @@
         android:elevation="2dp"
         android:layout_centerHorizontal="true"
         android:textSize="15dp"
-        android:onClick="external"
-        android:text="External Hardwired"
+        android:onClick="internal"
+        android:text="Internal"
         android:textColor="#ffffff" />
 
     <Button
@@ -54,9 +68,9 @@
         android:background="@drawable/material_button"
         android:elevation="2dp"
         android:textSize="15dp"
-        android:onClick="internal"
+        android:onClick="virtual"
         android:layout_marginBottom="15dp"
-        android:text="Internal"
+        android:text="Virtual"
         android:textColor="#ffffff"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />

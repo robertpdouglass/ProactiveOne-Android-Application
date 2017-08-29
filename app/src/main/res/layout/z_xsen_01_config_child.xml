@@ -12,8 +12,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="10dp">
+            android:layout_height="40dp">
 
             <Spinner
                 android:id="@+id/xsen_config_spinner"
@@ -44,43 +43,6 @@
                 android:layout_alignBaseline="@+id/xsen_config_spinner"
                 android:layout_alignBottom="@+id/xsen_config_spinner"
                 android:layout_toLeftOf="@+id/xsen_config_spinner"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <Spinner
-                android:id="@+id/xsen_power_spinner"
-                android:layout_width="175dp"
-                android:layout_height="40dp"
-                android:elevation="2dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="true"
-                android:foregroundGravity="right"
-                android:gravity="right"
-                android:background="@drawable/material_button_blue"
-                android:popupBackground="@drawable/material_button_blue"
-                android:textColor="#ffffff"
-                android:textSize="15dp" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:textColor="#474747"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="10dp"
-                android:foregroundGravity="center_vertical"
-                android:gravity="center_vertical"
-                android:text="Power Mode"
-                android:textSize="12dp"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/xsen_power_spinner"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
         </RelativeLayout>

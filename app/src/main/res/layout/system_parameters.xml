@@ -320,44 +320,8 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/airplane_layout"
-                android:layout_below="@+id/battery_layout"
-                android:layout_width="match_parent"
-                android:animateLayoutChanges="true"
-                android:layout_marginBottom="10dp"
-                android:layout_height="wrap_content"
-                android:onClick="airplane">
-
-                <TextView
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:textColor="#474747"
-                    android:id="@+id/textView9"
-                    android:layout_marginBottom="10dp"
-                    android:text="Enable Airplane Mode"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:drawable/arrow_down_float" />
-
-                <LinearLayout
-                    android:id="@+id/airplane"
-                    android:layout_below="@+id/textView9"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:animateLayoutChanges="true">
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/power_3v3_1_layout"
-                android:layout_below="@+id/airplane_layout"
+                android:layout_below="@+id/battery_layout"
                 android:layout_width="match_parent"
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
@@ -498,43 +462,6 @@
                     android:animateLayoutChanges="true">
                 </LinearLayout>
             </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/vcc_layout"
-                android:layout_below="@+id/cycle_layout"
-                android:layout_width="match_parent"
-                android:animateLayoutChanges="true"
-                android:layout_marginBottom="10dp"
-                android:layout_height="wrap_content"
-                android:onClick="vcc">
-
-                <TextView
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:id="@+id/textView14"
-                    android:textColor="#474747"
-                    android:layout_marginBottom="10dp"
-                    android:text="VCC Wait Scan"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:drawable/arrow_down_float" />
-
-                <LinearLayout
-                    android:id="@+id/vcc"
-                    android:layout_below="@+id/textView14"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:animateLayoutChanges="true">
-                </LinearLayout>
-            </RelativeLayout>
-
         </LinearLayout>
     </ScrollView>
 
@@ -545,12 +472,12 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="15dp"
-        android:elevation="2dp"
-        android:textSize="20dp"
-        android:textColor="#ffffff"
         android:background="@drawable/material_button"
+        android:elevation="2dp"
         android:foregroundGravity="center_horizontal"
         android:onClick="restore"
-        android:text="Restore Defaults" />
+        android:text="Restore Defaults"
+        android:textColor="#ffffff"
+        android:textSize="15sp" />
 
 </RelativeLayout>

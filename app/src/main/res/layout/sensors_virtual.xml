@@ -18,77 +18,148 @@
         android:elevation="1dp"
         app:srcCompat="@drawable/proactiveone" />
 
-    <GridLayout
-        android:id="@+id/button_layout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_layout"
         android:layout_below="@id/imageView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:rowCount="1"
-        android:columnCount="4"
-        android:foregroundGravity="center_horizontal">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/i2c1"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_height="0dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/material_button"
-            android:text="I2C1"
-            android:elevation="2dp"
-            android:textSize="15dp"
-            android:textColor="#ffffff"
-            android:onClick="I2C1"/>
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:rowCount="1"
+            android:columnCount="4"
+            android:foregroundGravity="center_horizontal">
 
-        <Button
-            android:id="@+id/i2c2"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_height="0dp"
-            android:layout_marginRight="10dp"
-            android:elevation="2dp"
-            android:textSize="15dp"
-            android:background="@drawable/material_button"
-            android:text="I2C2"
-            android:textColor="#ffffff"
-            android:onClick="I2C2"/>
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_height="0dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/material_button"
+                android:text="Virtual 1"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:textColor="#ffffff"
+                android:onClick="sensor0"/>
 
-        <Button
-            android:id="@+id/i2c3"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_height="0dp"
-            android:layout_marginRight="10dp"
-            android:elevation="2dp"
-            android:textSize="15dp"
-            android:textColor="#ffffff"
-            android:background="@drawable/material_button"
-            android:text="I2C3"
-            android:onClick="I2C3"/>
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_height="0dp"
+                android:layout_marginRight="10dp"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:background="@drawable/material_button"
+                android:text="Virtual 2"
+                android:textColor="#ffffff"
+                android:onClick="sensor1"/>
 
-        <Button
-            android:id="@+id/i2c4"
-            android:layout_width="0dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_height="0dp"
-            android:textColor="#ffffff"
-            android:elevation="2dp"
-            android:textSize="15dp"
-            android:background="@drawable/material_button"
-            android:text="I2C4"
-            android:onClick="I2C4"/>
-    </GridLayout>
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_height="0dp"
+                android:layout_marginRight="10dp"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:textColor="#ffffff"
+                android:background="@drawable/material_button"
+                android:text="Virtual 3"
+                android:onClick="sensor2"/>
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_height="0dp"
+                android:textColor="#ffffff"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:background="@drawable/material_button"
+                android:text="Virtual 4"
+                android:onClick="sensor3"/>
+        </GridLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:rowCount="1"
+            android:columnCount="4"
+            android:foregroundGravity="center_horizontal">
+
+            <Button
+                android:id="@+id/button5"
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_height="0dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/material_button"
+                android:text="Virtual 5"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:textColor="#ffffff"
+                android:onClick="sensor4"/>
+
+            <Button
+                android:id="@+id/button6"
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_height="0dp"
+                android:layout_marginRight="10dp"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:background="@drawable/material_button"
+                android:text="Virtual 6"
+                android:textColor="#ffffff"
+                android:onClick="sensor5"/>
+
+            <Button
+                android:id="@+id/button7"
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_height="0dp"
+                android:layout_marginRight="10dp"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:textColor="#ffffff"
+                android:background="@drawable/material_button"
+                android:text="Virtual 7"
+                android:onClick="sensor6"/>
+
+            <Button
+                android:id="@+id/button8"
+                android:layout_width="0dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_height="0dp"
+                android:textColor="#ffffff"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:background="@drawable/material_button"
+                android:text="Virtual 8"
+                android:onClick="sensor7"/>
+        </GridLayout>
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
         android:layout_below="@+id/button_layout"
         android:layout_above="@+id/button">
 
@@ -102,17 +173,17 @@
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/i2c_enable_library_layout"
-                android:onClick="enableLibrary">
+                android:id="@+id/config_layout"
+                android:onClick="configuration">
 
                 <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="350dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Enable/Library Index"
+                    android:textSize="20dp"
+                    android:id="@+id/textView1"
                     android:textColor="#474747"
-                    android:textSize="20sp" />
+                    android:text="Sensor Configuration"
+                    android:layout_marginBottom="10dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -123,7 +194,7 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/i2c_enable_library_expansion"
+                    android:id="@+id/config_expansion"
                     android:layout_below="@+id/textView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -133,22 +204,22 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/i2c_power_layout"
-                android:layout_below="@+id/i2c_enable_library_layout"
+                android:id="@+id/skip_layout"
+                android:layout_below="@+id/config_layout"
                 android:layout_width="match_parent"
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
-                android:onClick="power">
+                android:onClick="skip">
 
                 <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="350dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Power Configuration"
+                    android:textSize="20dp"
+                    android:id="@+id/textView2"
                     android:textColor="#474747"
-                    android:textSize="20sp" />
+                    android:text="Skip Count"
+                    android:layout_marginBottom="10dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -159,7 +230,7 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/i2c_power_expansion"
+                    android:id="@+id/skip_expansion"
                     android:layout_below="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -169,22 +240,22 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/i2c_interrupt_layout"
-                android:layout_below="@+id/i2c_power_layout"
+                android:id="@+id/data_a_layout"
+                android:layout_below="@+id/skip_layout"
                 android:layout_width="match_parent"
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
-                android:onClick="interrupt">
+                android:onClick="dataA">
 
                 <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="350dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Interupt Configuration"
+                    android:textSize="20dp"
+                    android:id="@+id/textView3"
                     android:textColor="#474747"
-                    android:textSize="20sp" />
+                    android:text="Data A Configuration"
+                    android:layout_marginBottom="10dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -195,7 +266,7 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/i2c_interrupt_expansion"
+                    android:id="@+id/data_a_expansion"
                     android:layout_below="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -205,22 +276,22 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/i2c_skip_layout"
-                android:layout_below="@+id/i2c_interrupt_layout"
+                android:id="@+id/data_b_layout"
+                android:layout_below="@+id/data_a_layout"
                 android:layout_width="match_parent"
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
-                android:onClick="skip">
+                android:onClick="dataB">
 
                 <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="350dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Skip Count"
+                    android:textSize="20dp"
+                    android:id="@+id/textView4"
                     android:textColor="#474747"
-                    android:textSize="20sp" />
+                    android:text="Data B Configuration"
+                    android:layout_marginBottom="10dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -231,7 +302,7 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/i2c_skip_expansion"
+                    android:id="@+id/data_b_expansion"
                     android:layout_below="@+id/textView4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -241,22 +312,22 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/i2c_address_layout"
-                android:layout_below="@+id/i2c_skip_layout"
+                android:id="@+id/data_c_layout"
+                android:layout_below="@+id/data_b_layout"
                 android:layout_width="match_parent"
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
-                android:onClick="address">
+                android:onClick="dataC">
 
                 <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="350dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="I2C Address"
+                    android:textSize="20dp"
+                    android:id="@+id/textView5"
                     android:textColor="#474747"
-                    android:textSize="20sp" />
+                    android:text="Data C Configuration"
+                    android:layout_marginBottom="10dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -267,7 +338,7 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/i2c_address_expansion"
+                    android:id="@+id/data_c_expansion"
                     android:layout_below="@+id/textView5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -277,22 +348,22 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/i2c_calibration_layout"
-                android:layout_below="@+id/i2c_address_layout"
+                android:id="@+id/data_d_layout"
+                android:layout_below="@+id/data_c_layout"
                 android:layout_width="match_parent"
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
-                android:onClick="calibration">
+                android:onClick="dataD">
 
                 <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="350dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Calibration"
+                    android:textSize="20dp"
                     android:textColor="#474747"
-                    android:textSize="20sp" />
+                    android:id="@+id/textView6"
+                    android:text="Data D Configuration"
+                    android:layout_marginBottom="10dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -303,7 +374,7 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/i2c_calibration_expansion"
+                    android:id="@+id/data_d_expansion"
                     android:layout_below="@+id/textView6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -313,25 +384,22 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/i2c_multiplier_layout"
-                android:layout_below="@+id/i2c_calibration_layout"
+                android:id="@+id/manual_layout"
+                android:layout_below="@+id/data_d_layout"
                 android:layout_width="match_parent"
                 android:animateLayoutChanges="true"
                 android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
-                android:onClick="multiplier">
+                android:onClick="manual">
 
                 <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textColor="#474747"
                     android:id="@+id/textView7"
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginBottom="10dp"
-                    android:text="Multiplier"
-                    android:textColor="#474747"
-                    android:textSize="20sp" />
+                    android:text="Manual Parameters"
+                    android:layout_marginBottom="10dp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -342,44 +410,8 @@
                     android:background="@android:drawable/arrow_down_float" />
 
                 <LinearLayout
-                    android:id="@+id/i2c_multiplier_expansion"
+                    android:id="@+id/manual_expansion"
                     android:layout_below="@+id/textView7"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:animateLayoutChanges="true">
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/i2c_limits_layout"
-                android:layout_below="@+id/i2c_limits_layout"
-                android:layout_width="match_parent"
-                android:animateLayoutChanges="true"
-                android:layout_marginBottom="10dp"
-                android:layout_height="wrap_content"
-                android:onClick="limits">
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="350dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="I2C Limits"
-                    android:textColor="#474747"
-                    android:textSize="20sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:drawable/arrow_down_float" />
-
-                <LinearLayout
-                    android:id="@+id/i2c_limits_expansion"
-                    android:layout_below="@+id/textView8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -393,11 +425,11 @@
         android:id="@+id/button"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:elevation="2dp"
-        android:textSize="15dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="15dp"
+        android:elevation="2dp"
+        android:textSize="15dp"
         android:background="@drawable/material_button"
         android:foregroundGravity="center_horizontal"
         android:onClick="restore"

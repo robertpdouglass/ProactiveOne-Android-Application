@@ -17,7 +17,6 @@ import android.widget.TextView;
 public class Home extends AppCompatActivity {
 
     public static int Screen =      0;
-    public static boolean loaded =  false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class Home extends AppCompatActivity {
     }
 
     public void sysParameters(View view) {
-        Screen = 3;
+        Screen = 4;
         startActivity(new Intent(this, System_Parameters.class));
     }
 

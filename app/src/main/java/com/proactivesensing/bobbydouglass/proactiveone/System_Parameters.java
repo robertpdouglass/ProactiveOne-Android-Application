@@ -26,32 +26,28 @@ import android.widget.ToggleButton;
 
 public class System_Parameters extends AppCompatActivity{
 
-    public static final int Size =                  14;
+    public static final int Size =                  13;
     public static final int ChangesSizeY =          3;
-    public static final int ChangesSizeZ =          14;
+    public static final int ChangesSizeZ =          13;
 
     public static LinearLayout[] layoutToAdd =      new LinearLayout[Size];
     public static View[] viewToInflate =            new View[Size];
     boolean[] clicked =                            {false,  false,  false,  false,  false,  false,  false,
-                                                    false,  false,  false,  false,  false,  false,  false};
-    public static int[][] changes =               {{-1,     -1,     -1,     -1,     -1,     -1,     -1,
-                                                    -1,     -1,     -1,     -1,     -1,     -1,     -1},
+                                                    false,  false,  false,  false,  false,  false};
+    public static short[][] changes =             {{-1,     -1,     -1,     -1,     -1,     -1,     -1,
+                                                    -1,     -1,     -1,     -1,     -1,     -1},
 
                                                    {0,      0,      0,      0,      0,      0,      0,
-                                                    0,      0,      0,      0,      0,      0,      0},
+                                                    0,      0,      0,      0,      0,      0},
 
                                                    {1001,   1002,   1003,   1004,   1005,   1006,   1007,
-                                                    1009,   1011,   1012,   1013,   1014,   1020,   1021}};
+                                                    1009,   1011,   1012,   1013,   1014,   1020}};
     boolean changes_made =                          false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.system_parameters);
-
-
-        //LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-        //viewToInflate[i] = inflater.inflate(R.layout.z_sys_14_vcc_child, null);
 
         layoutToAdd[0] = (LinearLayout) findViewById(R.id.locations);
         layoutToAdd[1] = (LinearLayout) findViewById(R.id.daily);
@@ -61,12 +57,11 @@ public class System_Parameters extends AppCompatActivity{
         layoutToAdd[5] = (LinearLayout) findViewById(R.id.b_msg);
         layoutToAdd[6] = (LinearLayout) findViewById(R.id.b_time);
         layoutToAdd[7] = (LinearLayout) findViewById(R.id.battery);
-        layoutToAdd[8] = (LinearLayout) findViewById(R.id.airplane);
+        //layoutToAdd[8] = (LinearLayout) findViewById(R.id.airplane);
         layoutToAdd[9] = (LinearLayout) findViewById(R.id.power_3v3_1);
         layoutToAdd[10] = (LinearLayout) findViewById(R.id.power_3v3_2);
         layoutToAdd[11] = (LinearLayout) findViewById(R.id.power_15v);
         layoutToAdd[12] = (LinearLayout) findViewById(R.id.cycle);
-        layoutToAdd[13] = (LinearLayout) findViewById(R.id.vcc);
 
         for (int i = 0; i < Size; i++) {
             changes[0][i] = new Modbus(getApplicationContext(), changes[2][i]).getValue();
@@ -145,6 +140,18 @@ public class System_Parameters extends AppCompatActivity{
         Toast.makeText(this, "Please Wait...", Toast.LENGTH_SHORT).show();
     }
 
+    public void negativeToast() {
+        Toast.makeText(this, "Input Cannot Be Negative", Toast.LENGTH_SHORT).show();
+    }
+
+    public void disabledToast() {
+        Toast.makeText(this, "Disabled", Toast.LENGTH_SHORT).show();
+    }
+
+    public void enabledToast() {
+        Toast.makeText(this, "Enabled", Toast.LENGTH_SHORT).show();
+    }
+
     public void locations(View view) {
         final int i = 0;
         if(!clicked[i]) {
@@ -152,76 +159,71 @@ public class System_Parameters extends AppCompatActivity{
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
             viewToInflate[i] = inflater.inflate(R.layout.z_sys_01_locations_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
+
             final EditText e = (EditText) findViewById(R.id.sys_location_edittext);
             e.setText("" + changes[0][i]);
             e.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {}
-
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][i] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes[1][i] = 1;
+                        short value = Short.parseShort(s.toString());
+                        if(value > -1) {
+                            changes[0][i] = value;
+                            changes[1][i] = 1;
+                            changes_made = true;
+                        }
+                        else
+                            negativeToast();
                     }
                 }
             });
 
-            final Button b1 = (Button) findViewById(R.id.sys_location_pos);
-            b1.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]++;
-                            changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22)
-                                b1.setBackground(getDrawable(R.drawable.material_button_blue));
-                            else
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22)
-                                b1.setBackground(getDrawable(R.drawable.material_button));
-                            else
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            break;
-                    }
-                    return false;
-                }
-            });
+            final Button[] button =    {(Button) findViewById(R.id.sys_location_neg),
+                                        (Button) findViewById(R.id.sys_location_pos)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
+                button[k].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
-            final Button b2 = (Button) findViewById(R.id.sys_location_neg);
-            b2.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]--;
-                            changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22)
-                                b2.setBackground(getDrawable(R.drawable.material_button_blue));
-                            else
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22)
-                                b2.setBackground(getDrawable(R.drawable.material_button));
-                            else
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            break;
+                                if(k == 0) {
+                                    if(changes[0][i] > 0) {
+                                        changes[0][i]--;
+                                        changes[1][i] = 1;
+                                        changes_made = true;
+                                        e.setText("" + changes[0][i]);
+                                    }
+                                    else
+                                        negativeToast();
+                                }
+                                else {
+                                    changes[0][i]++;
+                                    changes[1][i] = 1;
+                                    changes_made = true;
+                                    e.setText("" + changes[0][i]);
+                                }
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
                     }
-                    return false;
-                }
-            });
+                });
+            }
         }
 
         else {
@@ -251,7 +253,7 @@ public class System_Parameters extends AppCompatActivity{
             t.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                    changes[0][i] = minute;
+                    changes[0][i] = (short) minute;
                     changes[0][i] += (hourOfDay * 60);
                     changes[1][i] = 1;
                     changes_made = true;
@@ -275,70 +277,76 @@ public class System_Parameters extends AppCompatActivity{
 
             final EditText e = (EditText) findViewById(R.id.sys_auto_edittext);
             e.setText("" + changes[0][i]);
-            final ToggleButton b = (ToggleButton) findViewById(R.id.sys_auto_toggle);
-            if(changes[0][i] > 0) {
-                b.setText("Enabled");
-                e.setEnabled(true);
-                if (Build.VERSION.SDK_INT >= 22)
-                    b.setBackground(getDrawable(R.drawable.material_button_blue));
-                else
-                    b.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-            }
-            else {
-                b.setText("Disabled");
-                e.setEnabled(false);
-                if (Build.VERSION.SDK_INT >= 22)
-                    b.setBackground(getDrawable(R.drawable.material_button));
-                else
-                    b.setBackground(getResources().getDrawable(R.drawable.material_button));
-            }
-
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(changes[0][i] > 0) {
-                        changes[0][i] = 0;
-                        e.setText("" + changes[0][i]);
-                        e.setEnabled(false);
-                        if (Build.VERSION.SDK_INT >= 22)
-                            b.setBackground(getDrawable(R.drawable.material_button));
-                        else
-                            b.setBackground(getResources().getDrawable(R.drawable.material_button));
-                        b.setText("Disabled");
-                    }
-                    else if(changes[0][i] == 0) {
-                        if(new Modbus(getApplicationContext(), changes[2][i]).getValue() > 0)
-                            changes[0][i] = new Modbus(getApplicationContext(), changes[2][i]).getValue();
-                        else
-                            changes[0][i] = 1;
-                        e.setText("" + changes[0][i]);
-                        e.setEnabled(true);
-                        if (Build.VERSION.SDK_INT >= 22)
-                            b.setBackground(getDrawable(R.drawable.material_button_blue));
-                        else
-                            b.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                        b.setText("Enabled");
-                    }
-                }
-            });
-
             e.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {}
-
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][i] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes[1][i] = 1;
+                        short value = Short.parseShort(s.toString());
+                        if(value > -1) {
+                            if(value == 0)
+                                disabledToast();
+                            if(value > 0 && changes[0][i] == 0)
+                                enabledToast();
+                            changes[0][i] = value;
+                            changes[1][i] = 1;
+                            changes_made = true;
+                        }
+                        else
+                            negativeToast();
                     }
                 }
             });
+
+            final Button[] button =    {(Button) findViewById(R.id.sys_auto_neg),
+                                        (Button) findViewById(R.id.sys_auto_pos)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
+                button[k].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+
+                                if(k == 0) {
+                                    if(changes[0][i] > 0) {
+                                        if(changes[0][i] == 1)
+                                            disabledToast();
+                                        changes[0][i]--;
+                                        changes[1][i] = 1;
+                                        changes_made = true;
+                                        e.setText("" + changes[0][i]);
+                                    }
+                                    else
+                                        negativeToast();
+                                }
+                                else {
+                                    if(changes[0][i] == 0)
+                                        enabledToast();
+                                    changes[0][i]++;
+                                    changes[1][i] = 1;
+                                    changes_made = true;
+                                    e.setText("" + changes[0][i]);
+                                }
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
+                    }
+                });
+            }
         }
         else {
             clicked[i] = false;
@@ -359,71 +367,65 @@ public class System_Parameters extends AppCompatActivity{
             e.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {}
-
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][i] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes[1][i] = 1;
+                        short value = Short.parseShort(s.toString());
+                        if(value > -1) {
+                            changes[0][i] = value;
+                            changes[1][i] = 1;
+                            changes_made = true;
+                        }
+                        else
+                            negativeToast();
                     }
                 }
             });
 
-            final Button b1 = (Button) findViewById(R.id.sys_a_msg_pos);
-            b1.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]++;
-                            changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22)
-                                b1.setBackground(getDrawable(R.drawable.material_button_blue));
-                            else
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22)
-                                b1.setBackground(getDrawable(R.drawable.material_button));
-                            else
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            break;
-                    }
-                    return false;
-                }
-            });
+            final Button[] button =    {(Button) findViewById(R.id.sys_a_msg_neg),
+                                        (Button) findViewById(R.id.sys_a_msg_pos)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
+                button[k].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
-            final Button b2 = (Button) findViewById(R.id.sys_a_msg_neg);
-            b2.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]--;
-                            changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22)
-                                b2.setBackground(getDrawable(R.drawable.material_button_blue));
-                            else
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22)
-                                b2.setBackground(getDrawable(R.drawable.material_button));
-                            else
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            break;
+                                if(k == 0) {
+                                    if(changes[0][i] > 0) {
+                                        changes[0][i]--;
+                                        changes[1][i] = 1;
+                                        changes_made = true;
+                                        e.setText("" + changes[0][i]);
+                                    }
+                                    else
+                                        negativeToast();
+                                }
+                                else {
+                                    changes[0][i]++;
+                                    changes[1][i] = 1;
+                                    changes_made = true;
+                                    e.setText("" + changes[0][i]);
+                                }
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
                     }
-                    return false;
-                }
-            });
+                });
+            }
         }
         else {
             clicked[3] = false;
@@ -452,7 +454,7 @@ public class System_Parameters extends AppCompatActivity{
             t.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                    changes[0][i] = minute;
+                    changes[0][i] = (short) minute;
                     changes[0][i] += (hourOfDay * 60);
                     changes[1][i] = 1;
                     changes_made = true;
@@ -486,72 +488,60 @@ public class System_Parameters extends AppCompatActivity{
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][i] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes[1][i] = 1;
+                        short value = Short.parseShort(s.toString());
+                        if(value > -1) {
+                            changes[0][i] = value;
+                            changes[1][i] = 1;
+                            changes_made = true;
+                        }
+                        else
+                            negativeToast();
                     }
                 }
             });
 
-            final Button b1 = (Button) findViewById(R.id.sys_b_msg_pos);
-            b1.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]++;
-                            changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b1.setBackground(getDrawable(R.drawable.material_button_blue));
-                            }
-                            else {
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            }
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b1.setBackground(getDrawable(R.drawable.material_button));
-                            }
-                            else {
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            }
-                            break;
-                    }
-                    return false;
-                }
-            });
+            final Button[] button =    {(Button) findViewById(R.id.sys_b_msg_neg),
+                                        (Button) findViewById(R.id.sys_b_msg_pos)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
+                button[k].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
-            final Button b2 = (Button) findViewById(R.id.sys_b_msg_neg);
-            b2.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]--;
-                            changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b2.setBackground(getDrawable(R.drawable.material_button_blue));
-                            }
-                            else {
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            }
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b2.setBackground(getDrawable(R.drawable.material_button));
-                            }
-                            else {
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            }
-                            break;
+                                if(k == 0) {
+                                    if(changes[0][i] > 0) {
+                                        changes[0][i]--;
+                                        changes[1][i] = 1;
+                                        changes_made = true;
+                                        e.setText("" + changes[0][i]);
+                                    }
+                                    else
+                                        negativeToast();
+                                }
+                                else {
+                                    changes[0][i]++;
+                                    changes[1][i] = 1;
+                                    changes_made = true;
+                                    e.setText("" + changes[0][i]);
+                                }
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
                     }
-                    return false;
-                }
-            });
+                });
+            }
         }
         else {
             clicked[i] = false;
@@ -580,7 +570,7 @@ public class System_Parameters extends AppCompatActivity{
             t.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                    changes[0][i] = minute;
+                    changes[0][i] = (short) minute;
                     changes[0][i] += (hourOfDay * 60);
                     changes[1][i] = 1;
                     changes_made = true;
@@ -613,101 +603,60 @@ public class System_Parameters extends AppCompatActivity{
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][i] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes[1][i] = 1;
-                    }
-                }
-            });
-            final Button b1 = (Button) findViewById(R.id.sys_battery_pos);
-            b1.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]++;
-                            changes_made = true;
+                        short value = Short.parseShort(s.toString());
+                        if(value > -1) {
+                            changes[0][i] = value;
                             changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b1.setBackground(getDrawable(R.drawable.material_button_blue));
-                            }
-                            else {
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            }
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b1.setBackground(getDrawable(R.drawable.material_button));
-                            }
-                            else {
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            }
-                            break;
-                    }
-                    return false;
-                }
-            });
-
-            final Button b2 = (Button) findViewById(R.id.sys_battery_neg);
-            b2.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]--;
                             changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b2.setBackground(getDrawable(R.drawable.material_button_blue));
-                            }
-                            else {
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            }
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b2.setBackground(getDrawable(R.drawable.material_button));
-                            }
-                            else {
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            }
-                            break;
+                        }
+                        else
+                            negativeToast();
                     }
-                    return false;
                 }
             });
-        }
-        else {
-            clicked[i] = false;
-            layoutToAdd[i].removeView(viewToInflate[i]);
-        }
-    }
 
-    public void airplane(View view) {
-        final int i = 8;
-        if(!clicked[i]) {
-            clicked[i] = true;
-            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            viewToInflate[i] = inflater.inflate(R.layout.z_sys_09_airplane_child, null);
-            layoutToAdd[i].addView(viewToInflate[i]);
+            final Button[] button =    {(Button) findViewById(R.id.sys_battery_neg),
+                                        (Button) findViewById(R.id.sys_battery_pos)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
+                button[k].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
-            Spinner dropdown = (Spinner) findViewById(R.id.sys_airplane_spinner);
-            String[] items = new String[]{"Disable", "Enable", "Transmit Over 10,000ft"};
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
-            dropdown.setAdapter(adapter);
-            dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    changes[0][i] = position;
-                    changes_made = true;
-                    changes[1][i] = 1;
-                }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            });
-            dropdown.setSelection(changes[0][i]);
+                                if(k == 0) {
+                                    if(changes[0][i] > 0) {
+                                        changes[0][i]--;
+                                        changes[1][i] = 1;
+                                        changes_made = true;
+                                        e.setText("" + changes[0][i]);
+                                    }
+                                    else
+                                        negativeToast();
+                                }
+                                else {
+                                    changes[0][i]++;
+                                    changes[1][i] = 1;
+                                    changes_made = true;
+                                    e.setText("" + changes[0][i]);
+                                }
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
+                    }
+                });
+            }
         }
         else {
             clicked[i] = false;
@@ -730,7 +679,7 @@ public class System_Parameters extends AppCompatActivity{
             dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    changes[0][i] = position;
+                    changes[0][i] = (short) position;
                     changes_made = true;
                     changes[1][i] = 1;
                 }
@@ -760,7 +709,7 @@ public class System_Parameters extends AppCompatActivity{
             dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    changes[0][i] = position;
+                    changes[0][i] = (short) position;
                     changes_made = true;
                     changes[1][i] = 1;
                 }
@@ -790,7 +739,7 @@ public class System_Parameters extends AppCompatActivity{
             dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    changes[0][i] = position;
+                    changes[0][i] = (short) position;
                     changes_made = true;
                     changes[1][i] = 1;
                 }
@@ -810,6 +759,7 @@ public class System_Parameters extends AppCompatActivity{
         if(!clicked[i]) {
             clicked[i] = true;
             LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            viewToInflate[i] = inflater.inflate(R.layout.z_sys_13_cycle_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
             final EditText e = (EditText) findViewById(R.id.sys_cycle_edittext);
@@ -817,175 +767,69 @@ public class System_Parameters extends AppCompatActivity{
             e.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {}
-
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][i] = Integer.parseInt(s.toString());
-                        changes_made = true;
-                        changes[1][i] = 1;
+                        short value = Short.parseShort(s.toString());
+                        if(value > -1) {
+                            changes[0][i] = value;
+                            changes[1][i] = 1;
+                            changes_made = true;
+                        }
+                        else
+                            negativeToast();
                     }
                 }
             });
 
-            final Button b1 = (Button) findViewById(R.id.sys_cycle_pos);
-            b1.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]++;
-                            changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b1.setBackground(getDrawable(R.drawable.material_button_blue));
-                            }
-                            else {
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            }
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b1.setBackground(getDrawable(R.drawable.material_button));
-                            }
-                            else {
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            }
-                            break;
-                    }
-                    return false;
-                }
-            });
+            final Button[] button =    {(Button) findViewById(R.id.sys_cycle_neg),
+                                        (Button) findViewById(R.id.sys_cycle_pos)};
+            for(int l = 0; l < 2; l++) {
+                final int k = l;
+                button[k].setOnTouchListener(new Button.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
-            final Button b2 = (Button) findViewById(R.id.sys_cycle_neg);
-            b2.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]--;
-                            changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b2.setBackground(getDrawable(R.drawable.material_button_blue));
-                            }
-                            else {
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            }
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b2.setBackground(getDrawable(R.drawable.material_button));
-                            }
-                            else {
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            }
-                            break;
+                                if(k == 0) {
+                                    if(changes[0][i] > 0) {
+                                        changes[0][i]--;
+                                        changes[1][i] = 1;
+                                        changes_made = true;
+                                        e.setText("" + changes[0][i]);
+                                    }
+                                    else
+                                        negativeToast();
+                                }
+                                else {
+                                    changes[0][i]++;
+                                    changes[1][i] = 1;
+                                    changes_made = true;
+                                    e.setText("" + changes[0][i]);
+                                }
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                if (Build.VERSION.SDK_INT >= 22)
+                                    button[k].setBackground(getDrawable(R.drawable.material_button));
+                                else
+                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                break;
+                        }
+                        return false;
                     }
-                    return false;
-                }
-            });
+                });
+            }
         }
         else {
             clicked[i] = false;
             layoutToAdd[i].removeView(viewToInflate[i]);
         }
     }
-
-    public void vcc(View view) {
-        final int i = 13;
-        if(!clicked[i]) {
-            clicked[i] = true;
-            layoutToAdd[i].addView(viewToInflate[i]);
-
-            final EditText e = (EditText) findViewById(R.id.sys_vcc_edittext);
-            e.setText("" + changes[0][i]);
-            e.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        changes[0][i] = Integer.parseInt(s.toString());
-                        changes[1][i] = 1;
-                        changes_made = true;
-                    }
-                }
-            });
-
-            final Button b1 = (Button) findViewById(R.id.sys_cycle_pos);
-            b1.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]++;
-                            changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b1.setBackground(getDrawable(R.drawable.material_button_blue));
-                            }
-                            else {
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            }
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b1.setBackground(getDrawable(R.drawable.material_button));
-                            }
-                            else {
-                                b1.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            }
-                            break;
-                    }
-                    return false;
-                }
-            });
-
-            final Button b2 = (Button) findViewById(R.id.sys_cycle_neg);
-            b2.setOnTouchListener(new Button.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch(event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            changes[0][i]--;
-                            changes_made = true;
-                            changes[1][i] = 1;
-                            e.setText("" + changes[0][i]);
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b2.setBackground(getDrawable(R.drawable.material_button_blue));
-                            }
-                            else {
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-                            }
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (Build.VERSION.SDK_INT >= 22) {
-                                b2.setBackground(getDrawable(R.drawable.material_button));
-                            }
-                            else {
-                                b2.setBackground(getResources().getDrawable(R.drawable.material_button));
-                            }
-                            break;
-                    }
-                    return false;
-                }
-            });
-        }
-        else {
-            clicked[i] = false;
-            layoutToAdd[i].removeView(viewToInflate[i]);
-        }
-    }
-
 }

@@ -209,6 +209,42 @@
                     android:animateLayoutChanges="true">
                 </LinearLayout>
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/int_option5_layout"
+                android:layout_below="@+id/int_option4_layout"
+                android:layout_width="match_parent"
+                android:animateLayoutChanges="true"
+                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
+                android:onClick="option5">
+
+                <TextView
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:id="@+id/int_textView5"
+                    android:textColor="#474747"
+                    android:layout_marginBottom="10dp"
+                    android:text="SET TEXT" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:drawable/arrow_down_float" />
+
+                <LinearLayout
+                    android:id="@+id/int_option5_expansion"
+                    android:layout_below="@+id/int_textView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true">
+                </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

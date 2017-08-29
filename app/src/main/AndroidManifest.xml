@@ -19,16 +19,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Configure_Sensors"> </activity>
         <activity android:name=".Read_Status"> </activity>
-        <activity android:name=".Nfc"> </activity>
+        <activity android:name=".Configure_Sensors"> </activity>
+        <activity android:name=".Sensors_External"> </activity>
+        <activity android:name=".Sensors_Internal"> </activity>
+        <activity android:name=".Sensors_I2C"> </activity>
+        <activity android:name=".Sensors_Virtual"> </activity>
+        <activity android:name=".System_Parameters"> </activity>
         <activity android:name=".Advanced"> </activity>
         <activity android:name=".Advanced_Data"> </activity>
         <activity android:name=".Advanced_Command"> </activity>
-        <activity android:name=".Sensors_External"> </activity>
-        <activity android:name=".Sensors_I2C"> </activity>
-        <activity android:name=".Sensors_Internal"> </activity>
-        <activity android:name=".System_Parameters"> </activity>
+        <activity android:name=".Nfc"> </activity>
     </application>
 
 </manifest>

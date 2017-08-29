@@ -24,12 +24,13 @@
         android:layout_height="40dp"
         android:layout_above="@+id/button2"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/material_button"
         android:elevation="2dp"
         android:onClick="readStatus"
         android:text="Read Status"
-        android:textSize="15dp"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:textSize="15dp" />
 
     <Button
         android:id="@+id/button2"

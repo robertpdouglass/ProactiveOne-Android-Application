@@ -14,12 +14,12 @@ public class Advanced extends AppCompatActivity{
     }
 
     public void dataPackets(View view) {
-        Home.Screen = 4;
+        Home.Screen = 5;
         startActivity(new Intent(this, Advanced_Data.class));
     }
 
     public void command(View view) {
-        Home.Screen = 5;
+        Home.Screen = 6;
         startActivity(new Intent(this, Advanced_Command.class));
     }
 
