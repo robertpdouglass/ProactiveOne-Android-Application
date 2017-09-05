@@ -473,7 +473,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="15dp"
         android:elevation="2dp"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:textColor="#ffffff"
         android:background="@drawable/material_button"
         android:foregroundGravity="center_horizontal"

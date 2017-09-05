@@ -22,25 +22,23 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/textView"
+        android:id="@+id/advanced_command_receive_textview"
         android:textColor="#474747"
-        android:text="Tap ProactiveOne To Read Programming"
+        android:text="SET TEXT"
         android:layout_below="@+id/imageView"
-        android:layout_above="@+id/toggleButton" />
+        android:layout_above="@+id/cancel" />
 
-    <ToggleButton
+    <Button
+        android:id="@+id/cancel"
         android:layout_width="250dp"
-        android:id="@+id/toggleButton"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="15dp"
         android:elevation="2dp"
         android:textSize="15dp"
-        android:textColor="#ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/material_button"
-        android:foregroundGravity="center_horizontal"
-        android:textOn="Debug"
-        android:textOff="Status" />
+        android:onClick="cancel"
+        android:textColor="#ffffff"
+        android:text="Back" />
 
 </RelativeLayout>

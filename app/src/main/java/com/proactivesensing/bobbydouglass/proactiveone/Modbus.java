@@ -549,8 +549,8 @@ public class Modbus extends SQLiteOpenHelper {
     /* ************* SQL Stuff ************* */
     public static final String DATABASE_NAME =      "Modbus.db";
     public static final int    DATABASE_VERSION =   6;
-    public static final String TABLE_NAME =         "ProactiveOne" + DATABASE_VERSION;
-    public static final String OLD_TABLE_NAME =     "ProactiveOne" + (DATABASE_VERSION - 1);
+    public static final String TABLE_NAME =         "ProactiveOne6";
+    public static final String OLD_TABLE_NAME =     "ProactiveOne";
     public static final String BASE_NAME =          "modbus_";
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     /* ************* SQL Stuff ************* */
@@ -562,45 +562,19 @@ public class Modbus extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        int[] address =    {1000,   1001,   1002,   1003,   1004,   1005,   1006,   1007,   1008,   1009,   1010,   1011,
-                            1012,   1013,   1014,   1015,   1016,   1017,   1018,   1019,   1020,   1021,   1022,   1023,
-                            1024,   1025,   1026,   1027,   1028,   1029,   1030,   1031,   1032,   1100,   1101,   1102,
-                            1103,   1104,   1105,   1106,   1107,   1108,   1109,   1110,   1111,   1112,   1113,   1114,
-                            1115,   1116,   1117,   1118,   1119,   1120,   1121,   1122,   1123,   1124,   1125,   1126,
-                            1127,   1128,   1129,   1130,   1131,   1132,   1133,   1134,   1135,   1136,   1137,   1138,
-                            1139,   1140,   1141,   1142,   1143,   1144,   1145,   1146,   1147,   1148,   1149,   1150,
-                            1151,   1152,   1153,   1154,   1155,   1200,   1201,   1202,   1203,   1204,   1205,   1206,
-                            1207,   1208,   1209,   1210,   1211,   1212,   1213,   1214,   1215,   1300,   1301,   1302,
-                            1303,   1304,   1305,   1306,   1307,   1308,   1309,   1310,   1311,   1312,   1313,   1314,
-                            1315,   1316,   1317,   1318,   1319,   1320,   1321,   1322,   1323,   1324,   1325,   1326,
-                            1327,   1328,   1329,   1330,   1331,   1332,   1333,   1334,   1335,   1336,   1337,   1338,
-                            1339,   1340,   1341,   1342,   1343,   1344,   1345,   1346,   1347,   1348,   1349,   1350,
-                            1351,   1352,   1353,   1354,   1355,   1500,   1501,   1502,   1503,   1504,   1505,   1506,
-                            1507,   1508,   1509,   1510,   1511,   1512,   1513,   1514,   1515,   1516,   1517,   1518,
-                            1519,   1520,   1521,   1522,   1523,   1700,   1701,   1702,   1703,   1704,   1705,   1706,
-                            1707,   1708,   1709,   1710,   1711,   1712,   1713,   1714,   1715,   1716,   1717,   1718,
-                            1719,   1720,   1721,   1722,   1723,   1724,   1725,   1726,   1727,   1728,   1729,   1730,
-                            1731,   1732,   1733,   1734,   1735,   1736,   1737,   1738,   1739,   1740,   1741,   1742,
-                            1743,   1744,   1745,   1746,   1747,   1748,   1749,   1750,   1751,   1752,   1753,   1754,
-                            1755,   1756,   1757,   1758,   1759,   1760,   1761,   1762,   1763,   1764,   1765,   1766,
-                            1767,   1768,   1769,   1770,   1771,   1772,   1773,   1774,   1775,   1776,   1777,   1778,
-                            1779,   1780,   1781,   1782,   1783,   1784,   1785,   1786,   1787,   1788,   1789,   1790,
-                            1791,   1792,   1793,   1794,   1795,   1796,   1797,   1798,   1799,   1800,   1801,   1802,
-                            1803,   1804,   1805,   1806,   1807,   1808,   1809,   1810,   1811,   1812,   1813,   1814,
-                            1815,   1816,   1817,   1818,   1819};
-
         constructSQLiteTable(db);
         insertValues(db);
         readValues(db);
 
-        int OldSize = 305;
-
         String str1 = "SELECT * FROM " + OLD_TABLE_NAME;
         Cursor c = db.rawQuery(str1, null);
         c.moveToFirst();
+        int OldSize = c.getColumnCount() - 1;
         for(int i = 0; i < OldSize; i++) {
             for (int j = 0; j < Size; j++) {
-                if (this.address[j] == address[i]) {
+                String colName = c.getColumnName(1 + i);
+                int add = Integer.parseInt("" + colName.charAt(7) + colName.charAt(8) + colName.charAt(9) + colName.charAt(10));
+                if (this.address[j] == add) {
                     short temp = ((short) c.getInt(1 + i));
                     if(this.values[j] != temp) {
                         db.execSQL("UPDATE " + TABLE_NAME + " SET " + BASE_NAME + address[j] + " = " + temp + ";");

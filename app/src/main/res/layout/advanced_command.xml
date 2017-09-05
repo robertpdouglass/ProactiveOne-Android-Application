@@ -1,6 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_frame"
+    android:layout_width="match_parent"
+    android:padding="15dp"
+    android:background="#ffffff"
+    android:layout_height="match_parent" >
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:elevation="1dp"
+        app:srcCompat="@drawable/proactiveone" />
+
+    <EditText
+        android:id="@+id/advanced_command_edittext"
+        android:textSize="20dp"
+        android:layout_width="175dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textColor="#ffffff"
+        android:paddingRight="25dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/material_background_blue"
+        android:gravity="center_vertical|center_horizontal" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/advanced_command_edittext"
+        android:textColor="#474747"
+        android:layout_marginBottom="10dp"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="Enter Command" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="175dp"
+        android:layout_height="40dp"
+        android:text="Send Command"
+        android:layout_marginTop="10dp"
+        android:elevation="2dp"
+        android:textSize="15dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/material_button"
+        android:foregroundGravity="center_horizontal"
+        android:onClick="command"
+        android:layout_below="@+id/advanced_command_edittext"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:elevation="2dp"
+        android:textSize="15dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/material_button"
+        android:foregroundGravity="center_horizontal"
+        android:onClick="cancel"
+        android:text="Cancel" />
+
+</RelativeLayout>
