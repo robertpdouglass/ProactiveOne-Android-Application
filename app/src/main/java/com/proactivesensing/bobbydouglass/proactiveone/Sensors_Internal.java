@@ -572,27 +572,40 @@ public class Sensors_Internal extends AppCompatActivity {
             viewToInflate[1][i] = inflater.inflate(R.layout.z_int_a_01_config_child, null);
             layoutToAdd[i].addView(viewToInflate[1][i]);
             final ToggleButton tgl = (ToggleButton) findViewById(R.id.int_a_config_toggle);
+            tgl.setChecked(changes[0][1][j] == 1);
             if(tgl.isChecked()){
                 if(Build.VERSION.SDK_INT >= 22)
                     tgl.setBackground(getDrawable(R.drawable.material_button_blue));
+                else
+                    tgl.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+            }
+            else {
+                if(Build.VERSION.SDK_INT >= 22)
+                    tgl.setBackground(getDrawable(R.drawable.material_button));
                 else
                     tgl.setBackground(getResources().getDrawable(R.drawable.material_button));
             }
             tgl.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(tgl.isChecked()){
-                        if(Build.VERSION.SDK_INT >= 22)
+                    if (isChecked) {
+                        if (Build.VERSION.SDK_INT >= 22)
                             tgl.setBackground(getDrawable(R.drawable.material_button_blue));
                         else
-                            tgl.setBackground(getResources().getDrawable(R.drawable.material_button));
-                        changes[0][1][j] = (short) ((isChecked) ? 1 : 0);
-                        changes[1][1][j] = 1;
-                        changes_made = true;
+                            tgl.setBackground(getResources().getDrawable(R.drawable.material_button_blue));
                     }
+                    else {
+                        if (Build.VERSION.SDK_INT >= 22)
+                            tgl.setBackground(getDrawable(R.drawable.material_button));
+                        else
+                            tgl.setBackground(getResources().getDrawable(R.drawable.material_button));
+                    }
+
+                    changes[0][1][j] = (short) ((isChecked) ? 1 : 0);
+                    changes[1][1][j] = 1;
+                    changes_made = true;
                 }
             });
-            tgl.setChecked(changes[0][1][j] == 1);
         }
         else {
             clicked[1][i] = false;

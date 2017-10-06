@@ -3,6 +3,7 @@ package com.proactivesensing.bobbydouglass.proactiveone;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -14,6 +15,7 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -198,11 +200,6 @@ public class Advanced_Command extends AppCompatActivity {
         return ndefMessage;
     }
 
-
-
-
-
-
     private void readTextFromMessage(NdefMessage ndefMessage) {
         NdefRecord[] ndefRecords = ndefMessage.getRecords();
         String[] outputs = new String[ndefRecords.length];
@@ -214,6 +211,9 @@ public class Advanced_Command extends AppCompatActivity {
         for(int i = 0; i < ndefRecords.length; i++)
             temp = temp + "\n" + "\n" + outputs[i];
         receiveText.setText(temp);
+        receiveText.setMovementMethod(new ScrollingMovementMethod());
+        receiveText.setTextScaleX(1.0f);
+        receiveText.setTypeface(Typeface.MONOSPACE);
     }
 
     public String getTextFromNdefRecordDebug(NdefRecord ndefRecord) {

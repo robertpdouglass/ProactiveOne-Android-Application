@@ -17,6 +17,7 @@ import android.widget.TextView;
 public class Home extends AppCompatActivity {
 
     public static int Screen =      0;
+    public static SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +27,15 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.splash_screen);
 
         final String PREFS_NAME = "Preferences";
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        settings = getSharedPreferences(PREFS_NAME, 0);
         boolean firstTime = false;
         if (settings.getBoolean("firstTime", true)) {
             firstTime = true;
             settings.edit().putBoolean("firstTime", false).commit();
+            settings.edit().putString("table_name", Modbus.TABLE_NAME);
+        }
+        else if(settings.getString("table_name","").length() < 3) {
+            settings.edit().putString("table_name", Modbus.TABLE_NAME);
         }
         new Modbus(getApplicationContext(), ((firstTime) ? 0 : 2));
 
@@ -59,5 +64,13 @@ public class Home extends AppCompatActivity {
         finish();
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(1);
+    }
+
+    public String getOldTableName() {
+        return settings.getString("table_name","");
+    }
+
+    public void setOldTableName(String str) {
+        settings.edit().putString("table_name", str);
     }
 }

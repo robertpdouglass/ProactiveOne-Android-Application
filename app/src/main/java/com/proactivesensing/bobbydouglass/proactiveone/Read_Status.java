@@ -3,6 +3,7 @@ package com.proactivesensing.bobbydouglass.proactiveone;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -29,6 +30,8 @@ public class Read_Status extends AppCompatActivity {
         nfcAdapter = nfcAdapter.getDefaultAdapter(this);
         read = (TextView) findViewById(R.id.textView);
         read.setMovementMethod(new ScrollingMovementMethod());
+        read.setTextScaleX(1.0f);
+        read.setTypeface(Typeface.MONOSPACE);
         tgl = (ToggleButton) findViewById(R.id.toggleButton);
     }
 

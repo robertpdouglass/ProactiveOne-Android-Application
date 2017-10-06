@@ -235,13 +235,13 @@ public class Nfc extends AppCompatActivity {
         payload.write('M');
         payload.write('1');
         payload.write(16);
-        payload.write((byte) ((address >> 8) & 0x00ff));
-        payload.write((byte) (address & 0x00ff));
+        payload.write((byte) ((address >> 8) & 0xff));
+        payload.write((byte) (address & 0xff));
         payload.write(0);
         payload.write(1);
         payload.write(2);
-        payload.write((byte) ((value >> 8) & 0x00ff));
-        payload.write((byte) (value & 0x00ff));
+        payload.write((byte) ((value >> 8) & 0xff));
+        payload.write((byte) (value & 0xff));
 
         return new NdefRecord(NdefRecord.TNF_MIME_MEDIA, NdefRecord.RTD_TEXT, null, payload.toByteArray());
     }

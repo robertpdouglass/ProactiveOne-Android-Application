@@ -36,14 +36,14 @@ public class Modbus extends SQLiteOpenHelper {
     static final short sensor_cycle =                       20;         // 1020
     static final short unused_delete =                      0;          // 1021
     static final short time_zone =                          5;          // 1022
-    static final short time_first_gps =                    (6 * 60);    // 1023
+    static final short time_first_gps =                    (short) (((6 & 0xff) << 8) | (0 & 0xff));
     static final short time_between_gps_msgs =              1440;       // 1024
     static final short total_gps_msg =                      1;          // 1025
     static final short auto_location =                      0;          // 1026
-    static final short time_first_a_msg =                  (7 * 60);    // 1027
+    static final short time_first_a_msg =                  (short) (((7 & 0xff) << 8) | (0 & 0xff));
     static final short time_between_a_msgs =                1440;       // 1028
     static final short total_a_msgs =                       0;          // 1029
-    static final short time_first_b_msg =                  (8 * 60);    // 1030
+    static final short time_first_b_msg =                  (short) (((8 & 0xff) << 8) | (0 & 0xff));
     static final short time_between_b_msgs =                1440;       // 1031
     static final short total_b_msgs =                       0;          // 1032
     /* ****************** 033 ***** Modbus 1000 ***** 033 ****************** */
@@ -548,17 +548,14 @@ public class Modbus extends SQLiteOpenHelper {
 
     /* ************* SQL Stuff ************* */
     public static final String DATABASE_NAME =      "Modbus.db";
-    public static final int    DATABASE_VERSION =   6;
-    public static final String TABLE_NAME =         "ProactiveOne6";
-    public static final String OLD_TABLE_NAME =     "ProactiveOne";
+    public static final int    DATABASE_VERSION =   9;
+    public static final String TABLE_NAME =         "ProactiveOne" + DATABASE_VERSION;
     public static final String BASE_NAME =          "modbus_";
     public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
     /* ************* SQL Stuff ************* */
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-
-    }
+    public void onCreate(SQLiteDatabase db) {}
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -566,8 +563,8 @@ public class Modbus extends SQLiteOpenHelper {
         insertValues(db);
         readValues(db);
 
-        String str1 = "SELECT * FROM " + OLD_TABLE_NAME;
-        Cursor c = db.rawQuery(str1, null);
+        String str = "SELECT * FROM " + (new Home()).getOldTableName();
+        Cursor c = db.rawQuery(str, null);
         c.moveToFirst();
         int OldSize = c.getColumnCount() - 1;
         for(int i = 0; i < OldSize; i++) {
@@ -576,15 +573,14 @@ public class Modbus extends SQLiteOpenHelper {
                 int add = Integer.parseInt("" + colName.charAt(7) + colName.charAt(8) + colName.charAt(9) + colName.charAt(10));
                 if (this.address[j] == add) {
                     short temp = ((short) c.getInt(1 + i));
-                    if(this.values[j] != temp) {
-                        db.execSQL("UPDATE " + TABLE_NAME + " SET " + BASE_NAME + address[j] + " = " + temp + ";");
-                    }
+                    if(this.values[j] != temp)
+                        db.execSQL("UPDATE " + TABLE_NAME + " SET " + BASE_NAME + add + " = " + temp + ";");
                 }
             }
         }
         c.close();
-
-        db.execSQL("DROP TABLE IF EXISTS " + OLD_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + (new Home()).getOldTableName());
+        (new Home()).setOldTableName(TABLE_NAME);
 
         onCreate(db);
     }

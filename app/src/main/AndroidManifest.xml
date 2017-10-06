@@ -2,14 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.proactivesensing.bobbydouglass.proactiveone">
 
-    <uses-permission android:name="android.permission.NFC"/>
-    <uses-feature android:name="android.hardware.nfc" android:required="false"/>
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
 
     <application
-        android:screenOrientation="portrait"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".Home">
@@ -19,17 +21,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Read_Status"> </activity>
-        <activity android:name=".Configure_Sensors"> </activity>
-        <activity android:name=".Sensors_External"> </activity>
-        <activity android:name=".Sensors_Internal"> </activity>
-        <activity android:name=".Sensors_I2C"> </activity>
-        <activity android:name=".Sensors_Virtual"> </activity>
-        <activity android:name=".System_Parameters"> </activity>
-        <activity android:name=".Advanced"> </activity>
-        <activity android:name=".Advanced_Data"> </activity>
-        <activity android:name=".Advanced_Command"> </activity>
-        <activity android:name=".Nfc"> </activity>
+        <activity android:name=".Read_Status"></activity>
+        <activity android:name=".Configure_Sensors"></activity>
+        <activity android:name=".Sensors_External"></activity>
+        <activity android:name=".Sensors_Internal"></activity>
+        <activity android:name=".Sensors_I2C"></activity>
+        <activity android:name=".Sensors_Virtual"></activity>
+        <activity android:name=".System_Parameters"></activity>
+        <activity android:name=".Advanced"></activity>
+        <activity android:name=".Advanced_Data"></activity>
+        <activity android:name=".Advanced_Command"></activity>
+        <activity android:name=".Nfc"></activity>
     </application>
 
 </manifest>

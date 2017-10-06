@@ -24,6 +24,7 @@
         android:layout_height="match_parent"
         android:id="@+id/textView"
         android:textColor="#474747"
+        android:scrollbars="vertical"
         android:text="Tap ProactiveOne To Read Programming"
         android:layout_below="@+id/imageView"
         android:layout_above="@+id/toggleButton" />
