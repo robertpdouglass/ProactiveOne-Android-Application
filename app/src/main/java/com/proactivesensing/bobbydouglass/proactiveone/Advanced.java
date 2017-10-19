@@ -23,6 +23,14 @@ public class Advanced extends AppCompatActivity{
         startActivity(new Intent(this, Advanced_Command.class));
     }
 
+    public void sync(View view) {
+        startActivity(new Intent(this, Advanced_Sync.class));
+    }
+
+    public void restore(View view) {
+
+    }
+
     @Override
     public void onBackPressed() {
         Intent Home = new Intent(this, Home.class);

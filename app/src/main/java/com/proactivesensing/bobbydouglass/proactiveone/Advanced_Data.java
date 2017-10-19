@@ -33,7 +33,7 @@ public class Advanced_Data extends AppCompatActivity {
                                                 false,  false,  false,  false,  false,  false};
     public static boolean[] clicked =          {false,  false,  false,  false,  false,  false,
                                                 false,  false,  false,  false,  false,  false};
-    public static short[][] changes =         {{-1,     -1,     -1,     -1,     -1,     -1,
+    public static int[][] changes =           {{-1,     -1,     -1,     -1,     -1,     -1,
                                                 -1,     -1,     -1,     -1,     -1,     -1,
                                                 -1,     -1,     -1,     -1,     -1,     -1,
                                                 -1,     -1,     -1,     -1,     -1,     -1},
@@ -395,7 +395,7 @@ public class Advanced_Data extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(loadedSpinner[i]) {
-                    changes[0][i * 2] = (short) position;
+                    changes[0][i * 2] = position;
                     changes[1][i * 2] = 1;
                     changes_made = true;
                 }
@@ -417,7 +417,7 @@ public class Advanced_Data extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() != 0) {
-                    changes[0][(i * 2) + 1] = Short.parseShort(s.toString());
+                    changes[0][(i * 2) + 1] = Integer.parseInt(s.toString());
                     changes[1][(i * 2) + 1] = 1;
                     changes_made = true;
                 }

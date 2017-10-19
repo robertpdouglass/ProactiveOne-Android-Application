@@ -36,7 +36,7 @@ public class Sensors_Internal extends AppCompatActivity {
     public static LinearLayout[] layoutToAdd =          new LinearLayout[ViewSizeTotal];
     public static View[][] viewToInflate =            {{null,   null,   null,   null,   null},
                                                        {null,   null,   null}};
-    public static short[][][] changes =              {{{-1,     -1,     -1,     -1,     -1,     -1},
+    public static int[][][] changes =                {{{-1,     -1,     -1,     -1,     -1,     -1},
                                                        {-1,     -1,     -1,     -1,     -1,     -1}},
 
                                                       {{0,      0,      0,      0,      0,      0},
@@ -278,7 +278,7 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[0]) {
-                        changes[0][0][j] = (short) position;
+                        changes[0][0][j] = position;
                         changes[1][0][j] = 1;
                         changes_made = true;
                     }
@@ -314,7 +314,7 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][0][j] = Short.parseShort(s.toString());
+                        changes[0][0][j] = Integer.parseInt(s.toString());
                         changes[1][0][j] = 1;
                         changes_made = true;
                     }
@@ -380,7 +380,7 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][0][j] = Short.parseShort(s.toString());
+                        changes[0][0][j] = Integer.parseInt(s.toString());
                         changes[1][0][j] = 1;
                         changes_made = true;
                     }
@@ -515,7 +515,7 @@ public class Sensors_Internal extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.length() != 0) {
-                            changes[0][0][j + k] = Short.parseShort(s.toString());
+                            changes[0][0][j + k] = Integer.parseInt(s.toString());
                             changes[1][0][j + k] = 1;
                             changes_made = true;
                         }
@@ -601,7 +601,7 @@ public class Sensors_Internal extends AppCompatActivity {
                             tgl.setBackground(getResources().getDrawable(R.drawable.material_button));
                     }
 
-                    changes[0][1][j] = (short) ((isChecked) ? 1 : 0);
+                    changes[0][1][j] = ((isChecked) ? 1 : 0);
                     changes[1][1][j] = 1;
                     changes_made = true;
                 }
@@ -635,7 +635,7 @@ public class Sensors_Internal extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.length() != 0) {
-                            changes[0][1][j + k] = ((short) ((Float.parseFloat(s.toString())) * 100));
+                            changes[0][1][j + k] = ((int) ((Float.parseFloat(s.toString())) * 100));
                             changes[1][1][j + k] = 1;
                             changes_made = true;
                         }
@@ -667,7 +667,7 @@ public class Sensors_Internal extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][1][j] = ((short) ((Float.parseFloat(s.toString())) * 100));
+                        changes[0][1][j] = ((int) ((Float.parseFloat(s.toString())) * 100));
                         changes[1][1][j] = 1;
                         changes_made = true;
                     }

@@ -14,19 +14,51 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp">
 
-            <Spinner
-                android:id="@+id/sys_time_a_type_spinner"
-                android:layout_width="175dp"
+            <Button
+                android:id="@+id/sys_time_a_between_days_neg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="-"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/material_button"
+                android:layout_alignParentTop="true"
+                android:textColor="#ffffff"
+                android:layout_toLeftOf="@+id/sys_time_a_between_days_pos"
+                android:layout_toStartOf="@+id/sys_time_a_between_days_pos" />
+
+            <Button
+                android:id="@+id/sys_time_a_between_days_pos"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:elevation="2dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/sys_time_a_between_days_edittext"
+                android:layout_toStartOf="@+id/sys_time_a_between_days_edittext"
+                android:background="@drawable/material_button"
+                android:text="+"
+                android:textColor="#ffffff"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/sys_time_a_between_days_edittext"
+                android:layout_width="85dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_alignParentTop="true"
-                android:textSize="15dp"
-                android:elevation="2dp"
                 android:layout_gravity="right"
                 android:background="@drawable/material_button_blue"
-                android:popupBackground="@drawable/material_button_blue"
-                android:textColor="#ffffff"/>
+                android:foregroundGravity="right"
+                android:gravity="right|center_vertical"
+                android:inputType="number"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:paddingRight="25dp"
+                android:textColor="#ffffff" />
 
             <TextView
                 android:id="@+id/textView1"
@@ -37,21 +69,22 @@
                 android:layout_marginRight="10dp"
                 android:foregroundGravity="center_vertical"
                 android:gravity="center_vertical"
-                android:text="Time Type"
+                android:text="Days"
                 android:textSize="12dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/sys_time_a_type_spinner"
-                android:layout_toStartOf="@+id/sys_time_a_type_spinner" />
+                android:layout_toLeftOf="@+id/sys_time_a_between_days_neg"
+                android:layout_toStartOf="@+id/sys_time_a_between_days_neg" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
 
             <Button
-                android:id="@+id/sys_time_a_between_neg"
+                android:id="@+id/sys_time_a_between_hours_neg"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:text="-"
@@ -61,25 +94,25 @@
                 android:background="@drawable/material_button"
                 android:layout_alignParentTop="true"
                 android:textColor="#ffffff"
-                android:layout_toLeftOf="@+id/sys_time_a_between_pos"
-                android:layout_toStartOf="@+id/sys_time_a_between_pos" />
+                android:layout_toLeftOf="@+id/sys_time_a_between_hours_pos"
+                android:layout_toStartOf="@+id/sys_time_a_between_hours_pos" />
 
             <Button
-                android:id="@+id/sys_time_a_between_pos"
+                android:id="@+id/sys_time_a_between_hours_pos"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:elevation="2dp"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@+id/sys_time_a_between_edittext"
-                android:layout_toStartOf="@+id/sys_time_a_between_edittext"
+                android:layout_toLeftOf="@+id/sys_time_a_between_hours_edittext"
+                android:layout_toStartOf="@+id/sys_time_a_between_hours_edittext"
                 android:background="@drawable/material_button"
                 android:text="+"
                 android:textColor="#ffffff"
                 android:textSize="15dp" />
 
             <EditText
-                android:id="@+id/sys_time_a_between_edittext"
+                android:id="@+id/sys_time_a_between_hours_edittext"
                 android:layout_width="85dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
@@ -105,13 +138,81 @@
                 android:layout_marginRight="10dp"
                 android:foregroundGravity="center_vertical"
                 android:gravity="center_vertical"
+                android:text="Hours"
+                android:textSize="12dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@+id/sys_time_a_between_hours_neg"
+                android:layout_toStartOf="@+id/sys_time_a_between_hours_neg" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/sys_time_a_between_mins_neg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="-"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/material_button"
+                android:layout_alignParentTop="true"
+                android:textColor="#ffffff"
+                android:layout_toLeftOf="@+id/sys_time_a_between_mins_pos"
+                android:layout_toStartOf="@+id/sys_time_a_between_mins_pos" />
+
+            <Button
+                android:id="@+id/sys_time_a_between_mins_pos"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:elevation="2dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/sys_time_a_between_mins_edittext"
+                android:layout_toStartOf="@+id/sys_time_a_between_mins_edittext"
+                android:background="@drawable/material_button"
+                android:text="+"
+                android:textColor="#ffffff"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/sys_time_a_between_mins_edittext"
+                android:layout_width="85dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="right"
+                android:background="@drawable/material_button_blue"
+                android:foregroundGravity="right"
+                android:gravity="right|center_vertical"
+                android:inputType="number"
+                android:elevation="2dp"
+                android:textSize="15dp"
+                android:paddingRight="25dp"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:textColor="#474747"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="10dp"
+                android:foregroundGravity="center_vertical"
+                android:gravity="center_vertical"
                 android:text="Minutes"
                 android:textSize="12dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/sys_time_a_between_neg"
-                android:layout_toStartOf="@+id/sys_time_a_between_neg" />
+                android:layout_toLeftOf="@+id/sys_time_a_between_mins_neg"
+                android:layout_toStartOf="@+id/sys_time_a_between_mins_neg" />
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

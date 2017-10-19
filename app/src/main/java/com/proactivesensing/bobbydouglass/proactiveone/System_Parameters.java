@@ -20,6 +20,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -35,7 +36,7 @@ public class System_Parameters extends AppCompatActivity{
     boolean[] clicked =                            {false,  false,  false,  false,  false,
                                                     false,  false,  false,  false,  false,
                                                     false,  false,  false,  false,  false};
-    public static short[][] changes =             {{-1,     -1,     -1,     -1,     -1,
+    public static int[][] changes =               {{-1,     -1,     -1,     -1,     -1,
                                                     -1,     -1,     -1,     -1,     -1,
                                                     -1,     -1,     -1,     -1,     -1},
 
@@ -48,6 +49,7 @@ public class System_Parameters extends AppCompatActivity{
                                                     1009,   1012,   1013,   1014,   1020}};
     boolean changes_made =                          false;
     int[] timeBetweenType =                        {0,      0,      0};
+    boolean[] loadedSpinner =                      {false,  false,  false,  false};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -151,16 +153,12 @@ public class System_Parameters extends AppCompatActivity{
         Toast.makeText(this, "Input Cannot Be Negative", Toast.LENGTH_SHORT).show();
     }
 
-    public void timeBetweenMinutesHighToast() {
-        Toast.makeText(this, "Input Too High, Must Be Between 0, and 65535", Toast.LENGTH_SHORT).show();
+    public void inputTooLow() {
+        Toast.makeText(this, "Input Too Low", Toast.LENGTH_SHORT).show();
     }
 
-    public void timeBetweenHoursHighToast() {
-        Toast.makeText(this, "Input Too High, Must Be Between 0, and 1092", Toast.LENGTH_SHORT).show();
-    }
-
-    public void timeBetweenDaysHighToast() {
-        Toast.makeText(this, "Input Too High, Must Be Between 0, and 45", Toast.LENGTH_SHORT).show();
+    public void inputTooHigh() {
+        Toast.makeText(this, "Input Too High", Toast.LENGTH_SHORT).show();
     }
 
     /* ***** 01 ***** */
@@ -204,7 +202,7 @@ public class System_Parameters extends AppCompatActivity{
 
                     byte lowByte = (byte) (changes[0][i] * 0xff);
                     byte highByte = (byte) ((isChecked) ? 1 : 0);
-                    changes[0][i] = (short) ((lowByte << 8) | (highByte & 0xff));
+                    changes[0][i] = ((lowByte << 8) | (highByte & 0xff));
                     changes[1][i] = 1;
                     changes_made = true;
                 }
@@ -217,20 +215,25 @@ public class System_Parameters extends AppCompatActivity{
                                                 "GMT +4:00",    "GMT +5:00",    "GMT +6:00",    "GMT +7:00",    "GMT +8:00",
                                                 "GMT +9:00",    "GMT +10:00",   "GMT +11:00",   "GMT +12:00"};
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
+            loadedSpinner[0] = false;
             dropdown.setAdapter(adapter);
-            dropdown.setSelection((changes[0][i] + 11) & 0xff);
             dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    byte lowByte = (byte) ((position - 11) & 0xff);
-                    byte highByte = (byte) ((changes[0][i] >> 8) & 0xff);
-                    changes[0][i] = (short) (((highByte & 0xff) << 8) | (lowByte & 0xff));
-                    changes_made = true;
-                    changes[1][i] = 1;
+                    if(loadedSpinner[0]) {
+                        byte lowByte = (byte) ((position - 11) & 0xff);
+                        byte highByte = (byte) ((changes[0][i] >> 8) & 0xff);
+                        changes[0][i] = (((highByte & 0xff) << 8) | (lowByte & 0xff));
+                        changes_made = true;
+                        changes[1][i] = 1;
+                    }
+                    else
+                        loadedSpinner[0] = true;
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {}
             });
+            dropdown.setSelection((changes[0][i] + 11) & 0xff);
         }
 
         else {
@@ -262,7 +265,7 @@ public class System_Parameters extends AppCompatActivity{
             t.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                    changes[0][i] = (short) (((((byte) hourOfDay) & 0xff) << 8) | (((byte) minute) & 0xff));
+                    changes[0][i] = (((((byte) hourOfDay) & 0xff) << 8) | (((byte) minute) & 0xff));
                     changes[1][i] = 1;
                     changes_made = true;
                 }
@@ -284,135 +287,134 @@ public class System_Parameters extends AppCompatActivity{
             viewToInflate[i] = inflater.inflate(R.layout.z_sys_03_time_between_gps_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
-            final EditText e = (EditText) findViewById(R.id.sys_time_between_gps_edittext);
-            e.setText("" + changes[0][i]);
-            e.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
-                        if(value > -1) {
-                            switch(timeBetweenType[0]) {
+            final TextView t = (TextView) findViewById(R.id.textView4);
+
+            final int[] mult = {1440, 60, 1};
+            final int[] curr = new int[3];
+            final EditText[] e = {(EditText) findViewById(R.id.sys_time_between_gps_days_edittext),
+                    (EditText) findViewById(R.id.sys_time_between_gps_hours_edittext),
+                    (EditText) findViewById(R.id.sys_time_between_gps_mins_edittext)};
+
+            curr[0] = (changes[0][i] / mult[0]);
+            curr[1] = ((changes[0][i] % mult[0]) / mult[1]);
+            curr[2] = ((changes[0][i] % mult[0]) % mult[1]);
+
+            for (int j = 0; j < 3; j++) {
+                final int h = j;
+                e[h].setText("" + curr[h]);
+                e[h].addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() != 0) {
+                            int total;
+                            switch (h) {
                                 case 0:
-                                    if(value < 65536) {
-                                        changes[0][i] = value;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                    }
-                                    else
-                                        timeBetweenMinutesHighToast();
+                                    total = ((Integer.parseInt(s.toString()) * mult[0])
+                                            + (Integer.parseInt(e[1].getText().toString()) * mult[1])
+                                            + (Integer.parseInt(e[2].getText().toString()) * mult[2]));
                                     break;
                                 case 1:
-                                    if(value < 1092) {
-                                        value *= 60;
-                                        changes[0][i] = value;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                    }
-                                    else
-                                        timeBetweenHoursHighToast();
+                                    total = ((Integer.parseInt(s.toString()) * mult[1])
+                                            + (Integer.parseInt(e[0].getText().toString()) * mult[0])
+                                            + (Integer.parseInt(e[2].getText().toString()) * mult[2]));
                                     break;
-                                case 2:
-                                    if(value < 45) {
-                                        value *= (60 * 24);
-                                        changes[0][i] = value;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                    }
-                                    else
-                                        timeBetweenDaysHighToast();
+                                default:
+                                    total = ((Integer.parseInt(s.toString()) * mult[2])
+                                            + (Integer.parseInt(e[0].getText().toString()) * mult[0])
+                                            + (Integer.parseInt(e[1].getText().toString()) * mult[1]));
                                     break;
                             }
+                            if (total > 17 && total < 65536) {
+                                changes[0][i] = total;
+                                changes[1][i] = 1;
+                                changes_made = true;
+                            }
+                            else if (total < 18) {
+                                inputTooLow();
+                            }
+                            else {
+                                inputTooHigh();
+                            }
                         }
-                        else
-                            negativeToast();
-                    }
-                }
-            });
-
-            final Button[] button =    {(Button) findViewById(R.id.sys_time_between_gps_neg),
-                                        (Button) findViewById(R.id.sys_time_between_gps_pos)};
-            for(int l = 0; l < 2; l++) {
-                final int k = l;
-                button[k].setOnTouchListener(new Button.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                if (Build.VERSION.SDK_INT >= 22)
-                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
-                                else
-                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-
-                                if(k == 0) {
-                                    if(changes[0][i] > 0) {
-                                        changes[0][i]--;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                        e.setText("" + changes[0][i]);
-                                    }
-                                    else
-                                        negativeToast();
-                                }
-                                else {
-                                    changes[0][i]++;
-                                    changes[1][i] = 1;
-                                    changes_made = true;
-                                    e.setText("" + changes[0][i]);
-                                }
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                if (Build.VERSION.SDK_INT >= 22)
-                                    button[k].setBackground(getDrawable(R.drawable.material_button));
-                                else
-                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
-                                break;
-                        }
-                        return false;
                     }
                 });
             }
 
-            Spinner dropdown = (Spinner) findViewById(R.id.sys_time_type_spinner);
-            String[] items =    new String[]   {"Minutes",   "Hours",   "Days"};
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
-            dropdown.setAdapter(adapter);
-            dropdown.setSelection(timeBetweenType[0]);
-            dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(timeBetweenType[0] == 0 && position == 1) {
-                        timeBetweenType[0] = position;
-                        e.setText("" + (changes[0][i] / 60));
-                    }
-                    else if(timeBetweenType[0] == 0 && position == 2) {
-                        timeBetweenType[0] = position;
-                        e.setText("" + ((changes[0][i] / 60) / 24));
-                    }
-                    else if(timeBetweenType[0] == 1 && position == 0) {
-                        timeBetweenType[0] = position;
-                        e.setText("" + (changes[0][i] * 60));
-                    }
-                    else if(timeBetweenType[0] == 1 && position == 2) {
-                        timeBetweenType[0] = position;
-                        e.setText("" + (changes[0][i] / 24));
-                    }
-                    else if(timeBetweenType[0] == 2 && position == 0) {
-                        timeBetweenType[0] = position;
-                        e.setText("" + (changes[0][i] * 60 * 24));
-                    }
-                    else if(timeBetweenType[0] == 2 && position == 1) {
-                        timeBetweenType[0] = position;
-                        e.setText("" + (changes[0][i] * 24));
-                    }
+            final Button[][] button = {{(Button) findViewById(R.id.sys_time_between_gps_days_neg),
+                                        (Button) findViewById(R.id.sys_time_between_gps_days_pos)},
+                                       {(Button) findViewById(R.id.sys_time_between_gps_hours_neg),
+                                        (Button) findViewById(R.id.sys_time_between_gps_hours_pos)},
+                                       {(Button) findViewById(R.id.sys_time_between_gps_mins_neg),
+                                        (Button) findViewById(R.id.sys_time_between_gps_mins_pos)}};
+
+            for(int j = 0; j < 3; j++) {
+                for (int k = 0; k < 2; k++) {
+                    final int l = j, m = k;
+                    button[l][m].setOnTouchListener(new Button.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            switch (event.getAction()) {
+                                case MotionEvent.ACTION_DOWN:
+                                    if (Build.VERSION.SDK_INT >= 22)
+                                        button[l][m].setBackground(getDrawable(R.drawable.material_button_blue));
+                                    else
+                                        button[l][m].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+
+                                    if(m == 0) {
+                                        int temp = (changes[0][i] - mult[l]);
+                                        if (temp > 17) {
+                                            changes[0][i] -= mult[l];
+                                            changes[1][i] = 1;
+                                            changes_made = true;
+
+                                            curr[0] = (changes[0][i] / mult[0]);
+                                            curr[1] = ((changes[0][i] % mult[0]) / mult[1]);
+                                            curr[2] = ((changes[0][i] % mult[0]) % mult[1]);
+
+                                            e[0].setText("" + curr[0]);
+                                            e[1].setText("" + curr[1]);
+                                            e[2].setText("" + curr[2]);
+                                            t.setText("" + changes[0][i]);
+                                        } else {
+                                            inputTooLow();
+                                        }
+                                    }
+                                    else {
+                                        int temp = (changes[0][i] + mult[l]);
+                                        if (temp < 65536) {
+                                            changes[0][i] += mult[l];
+                                            changes[1][i] = 1;
+                                            changes_made = true;
+
+                                            curr[0] = (changes[0][i] / mult[0]);
+                                            curr[1] = ((changes[0][i] % mult[0]) / mult[1]);
+                                            curr[2] = ((changes[0][i] % mult[0]) % mult[1]);
+
+                                            e[0].setText("" + curr[0]);
+                                            e[1].setText("" + curr[1]);
+                                            e[2].setText("" + curr[2]);
+                                            t.setText("" + changes[0][i]);
+                                        } else {
+                                            inputTooHigh();
+                                        }
+                                    }
+                                    break;
+                                case MotionEvent.ACTION_UP:
+                                    if (Build.VERSION.SDK_INT >= 22)
+                                        button[l][m].setBackground(getDrawable(R.drawable.material_button));
+                                    else
+                                        button[l][m].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
                 }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            });
+            }
         }
         else {
             clicked[i] = false;
@@ -439,14 +441,14 @@ public class System_Parameters extends AppCompatActivity{
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
-                        if(value > -1) {
+                        int value = Integer.parseInt(s.toString());
+                        if(value > 71) {
                             changes[0][i] = value;
                             changes[1][i] = 1;
                             changes_made = true;
                         }
                         else
-                            negativeToast();
+                            inputTooLow();
                     }
                 }
             });
@@ -466,14 +468,14 @@ public class System_Parameters extends AppCompatActivity{
                                     button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
                                 if(k == 0) {
-                                    if(changes[0][i] > 0) {
+                                    if(changes[0][i] > 72) {
                                         changes[0][i]--;
                                         changes[1][i] = 1;
                                         changes_made = true;
                                         e.setText("" + changes[0][i]);
                                     }
                                     else
-                                        negativeToast();
+                                        inputTooLow();
                                 }
                                 else {
                                     changes[0][i]++;
@@ -523,7 +525,7 @@ public class System_Parameters extends AppCompatActivity{
             t.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                    changes[0][i] = (short) (((((byte) hourOfDay) & 0xff) << 8) | (((byte) minute) & 0xff));
+                    changes[0][i] = (((((byte) hourOfDay) & 0xff) << 8) | (((byte) minute) & 0xff));
                     changes[1][i] = 1;
                     changes_made = true;
                 }
@@ -544,135 +546,119 @@ public class System_Parameters extends AppCompatActivity{
             viewToInflate[i] = inflater.inflate(R.layout.z_sys_06_time_a_between_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
-            final EditText e = (EditText) findViewById(R.id.sys_time_a_between_edittext);
-            e.setText("" + changes[0][i]);
-            e.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
-                        if(value > -1) {
-                            switch(timeBetweenType[1]) {
+            final int[] mult =   {1440, 60, 1};
+            final int[] curr =    new int[3];
+            final EditText[] e =   {(EditText) findViewById(R.id.sys_time_a_between_days_edittext),
+                                    (EditText) findViewById(R.id.sys_time_a_between_hours_edittext),
+                                    (EditText) findViewById(R.id.sys_time_a_between_mins_edittext)};
+
+            curr[0] = (changes[0][i] / mult[0]);
+            curr[1] = ((changes[0][i] - (curr[0] * mult[0])) / mult[1]);
+            curr[2] = (changes[0][i] - (curr[0] * mult[0]) - (curr[1] * mult[1]));
+
+            for(int j = 0; j < 3; j++) {
+                final int h = j;
+                e[h].setText("" + curr[h]);
+                e[h].addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() != 0) {
+                            int total;
+                            switch(h) {
                                 case 0:
-                                    if(value < 65536) {
-                                        changes[0][i] = value;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                    }
-                                    else
-                                        timeBetweenMinutesHighToast();
+                                    total = (Integer.parseInt(s.toString()) + curr[1] + curr[2]);
                                     break;
                                 case 1:
-                                    if(value < 1092) {
-                                        value *= 60;
-                                        changes[0][i] = value;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                    }
-                                    else
-                                        timeBetweenHoursHighToast();
+                                    total = (Integer.parseInt(s.toString()) + curr[0] + curr[2]);
                                     break;
-                                case 2:
-                                    if(value < 45) {
-                                        value *= (60 * 24);
-                                        changes[0][i] = value;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                    }
-                                    else
-                                        timeBetweenDaysHighToast();
+                                default:
+                                    total = (Integer.parseInt(s.toString()) + curr[0] + curr[1]);
                                     break;
                             }
+                            if(total > 17 && total < 65536) {
+                                changes[0][i] = total;
+                                changes[1][i] = 1;
+                                changes_made = true;
+                            }
+                            else if(total < 18)
+                                inputTooLow();
+                            else
+                                inputTooHigh();
                         }
-                        else
-                            negativeToast();
-                    }
-                }
-            });
-
-            final Button[] button =    {(Button) findViewById(R.id.sys_time_a_between_neg),
-                                        (Button) findViewById(R.id.sys_time_a_between_pos)};
-            for(int l = 0; l < 2; l++) {
-                final int k = l;
-                button[k].setOnTouchListener(new Button.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                if (Build.VERSION.SDK_INT >= 22)
-                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
-                                else
-                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-
-                                if(k == 0) {
-                                    if(changes[0][i] > 0) {
-                                        changes[0][i]--;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                        e.setText("" + changes[0][i]);
-                                    }
-                                    else
-                                        negativeToast();
-                                }
-                                else {
-                                    changes[0][i]++;
-                                    changes[1][i] = 1;
-                                    changes_made = true;
-                                    e.setText("" + changes[0][i]);
-                                }
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                if (Build.VERSION.SDK_INT >= 22)
-                                    button[k].setBackground(getDrawable(R.drawable.material_button));
-                                else
-                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
-                                break;
-                        }
-                        return false;
                     }
                 });
             }
 
-            Spinner dropdown = (Spinner) findViewById(R.id.sys_time_a_type_spinner);
-            String[] items =    new String[]   {"Minutes",   "Hours",   "Days"};
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
-            dropdown.setAdapter(adapter);
-            dropdown.setSelection(timeBetweenType[1]);
-            dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(timeBetweenType[1] == 0 && position == 1) {
-                        timeBetweenType[1] = position;
-                        e.setText("" + (changes[0][i] / 60));
-                    }
-                    else if(timeBetweenType[1] == 0 && position == 2) {
-                        timeBetweenType[1] = position;
-                        e.setText("" + ((changes[0][i] / 60) / 24));
-                    }
-                    else if(timeBetweenType[1] == 1 && position == 0) {
-                        timeBetweenType[1] = position;
-                        e.setText("" + (changes[0][i] * 60));
-                    }
-                    else if(timeBetweenType[1] == 1 && position == 2) {
-                        timeBetweenType[1] = position;
-                        e.setText("" + (changes[0][i] / 24));
-                    }
-                    else if(timeBetweenType[1] == 2 && position == 0) {
-                        timeBetweenType[1] = position;
-                        e.setText("" + (changes[0][i] * 60 * 24));
-                    }
-                    else if(timeBetweenType[1] == 2 && position == 1) {
-                        timeBetweenType[1] = position;
-                        e.setText("" + (changes[0][i] * 24));
-                    }
+            final Button[][] button = {{(Button) findViewById(R.id.sys_time_a_between_days_neg),
+                                        (Button) findViewById(R.id.sys_time_a_between_days_pos)},
+                                       {(Button) findViewById(R.id.sys_time_a_between_hours_neg),
+                                        (Button) findViewById(R.id.sys_time_a_between_hours_pos)},
+                                       {(Button) findViewById(R.id.sys_time_a_between_mins_neg),
+                                        (Button) findViewById(R.id.sys_time_a_between_mins_pos)}};
+            for(int j = 0; j < 3; j++) {
+                for(int k = 0; k < 2; k++) {
+                    final int l = k, h = j;
+                    button[h][l].setOnTouchListener(new Button.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            switch(event.getAction()) {
+                                case MotionEvent.ACTION_DOWN:
+                                    if (Build.VERSION.SDK_INT >= 22)
+                                        button[h][l].setBackground(getDrawable(R.drawable.material_button_blue));
+                                    else
+                                        button[h][l].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+
+                                    if (l == 0) {
+                                        if(changes[0][i] > 18) {
+                                            changes[0][i]--;
+                                            changes[1][i] = 1;
+                                            changes_made = true;
+
+                                            curr[0] = (changes[0][i] / mult[0]);
+                                            curr[1] = ((changes[0][i] - (curr[0] * mult[0])) / mult[1]);
+                                            curr[2] = (changes[0][i] - (curr[0] * mult[0]) - (curr[1] * mult[1]));
+
+                                            e[0].setText("" + curr[0]);
+                                            e[1].setText("" + curr[1]);
+                                            e[2].setText("" + curr[2]);
+                                        }
+                                        else
+                                            inputTooLow();
+                                    }
+                                    else {
+                                        if(changes[0][i] < 65535) {
+                                            changes[0][i]++;
+                                            changes[1][i] = 1;
+                                            changes_made = true;
+
+                                            curr[0] = (changes[0][i] / mult[0]);
+                                            curr[1] = ((changes[0][i] - (curr[0] * mult[0])) / mult[1]);
+                                            curr[2] = (changes[0][i] - (curr[0] * mult[0]) - (curr[1] * mult[1]));
+
+                                            e[0].setText("" + curr[0]);
+                                            e[1].setText("" + curr[1]);
+                                            e[2].setText("" + curr[2]);
+                                        }
+                                        else
+                                            inputTooHigh();
+                                    }
+                                    break;
+                                case MotionEvent.ACTION_UP:
+                                    if (Build.VERSION.SDK_INT >= 22)
+                                        button[h][l].setBackground(getDrawable(R.drawable.material_button));
+                                    else
+                                        button[h][l].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
                 }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            });
+            }
         }
         else {
             clicked[i] = false;
@@ -699,14 +685,14 @@ public class System_Parameters extends AppCompatActivity{
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
-                        if(value > -1) {
+                        int value = Integer.parseInt(s.toString());
+                        if(value > 71) {
                             changes[0][i] = value;
                             changes[1][i] = 1;
                             changes_made = true;
                         }
                         else
-                            negativeToast();
+                            inputTooLow();
                     }
                 }
             });
@@ -726,14 +712,14 @@ public class System_Parameters extends AppCompatActivity{
                                     button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
                                 if(k == 0) {
-                                    if(changes[0][i] > 0) {
+                                    if(changes[0][i] > 72) {
                                         changes[0][i]--;
                                         changes[1][i] = 1;
                                         changes_made = true;
                                         e.setText("" + changes[0][i]);
                                     }
                                     else
-                                        negativeToast();
+                                        inputTooLow();
                                 }
                                 else {
                                     changes[0][i]++;
@@ -783,7 +769,7 @@ public class System_Parameters extends AppCompatActivity{
             t.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                    changes[0][i] = (short) (((((byte) hourOfDay) & 0xff) << 8) | (((byte) minute) & 0xff));
+                    changes[0][i] = (((((byte) hourOfDay) & 0xff) << 8) | (((byte) minute) & 0xff));
                     changes[1][i] = 1;
                     changes_made = true;
                 }
@@ -804,135 +790,119 @@ public class System_Parameters extends AppCompatActivity{
             viewToInflate[i] = inflater.inflate(R.layout.z_sys_09_time_b_between_child, null);
             layoutToAdd[i].addView(viewToInflate[i]);
 
-            final EditText e = (EditText) findViewById(R.id.sys_time_b_between_edittext);
-            e.setText("" + changes[0][i]);
-            e.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {}
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
-                        if(value > -1) {
-                            switch(timeBetweenType[2]) {
+            final int[] mult =   {1440, 60, 1};
+            final int[] curr =    new int[3];
+            final EditText[] e =   {(EditText) findViewById(R.id.sys_time_b_between_days_edittext),
+                                    (EditText) findViewById(R.id.sys_time_b_between_hours_edittext),
+                                    (EditText) findViewById(R.id.sys_time_b_between_mins_edittext)};
+
+            curr[0] = (changes[0][i] / mult[0]);
+            curr[1] = ((changes[0][i] - (curr[0] * mult[0])) / mult[1]);
+            curr[2] = (changes[0][i] - (curr[0] * mult[0]) - (curr[1] * mult[1]));
+
+            for(int j = 0; j < 3; j++) {
+                final int h = j;
+                e[h].setText("" + curr[h]);
+                e[h].addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() != 0) {
+                            int total;
+                            switch(h) {
                                 case 0:
-                                    if(value < 65536) {
-                                        changes[0][i] = value;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                    }
-                                    else
-                                        timeBetweenMinutesHighToast();
+                                    total = (Integer.parseInt(s.toString()) + curr[1] + curr[2]);
                                     break;
                                 case 1:
-                                    if(value < 1092) {
-                                        value *= 60;
-                                        changes[0][i] = value;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                    }
-                                    else
-                                        timeBetweenHoursHighToast();
+                                    total = (Integer.parseInt(s.toString()) + curr[0] + curr[2]);
                                     break;
-                                case 2:
-                                    if(value < 45) {
-                                        value *= (60 * 24);
-                                        changes[0][i] = value;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                    }
-                                    else
-                                        timeBetweenDaysHighToast();
+                                default:
+                                    total = (Integer.parseInt(s.toString()) + curr[0] + curr[1]);
                                     break;
                             }
+                            if(total > 17 && total < 65536) {
+                                changes[0][i] = total;
+                                changes[1][i] = 1;
+                                changes_made = true;
+                            }
+                            else if(total < 18)
+                                inputTooLow();
+                            else
+                                inputTooHigh();
                         }
-                        else
-                            negativeToast();
-                    }
-                }
-            });
-
-            final Button[] button =    {(Button) findViewById(R.id.sys_time_b_between_neg),
-                                        (Button) findViewById(R.id.sys_time_b_between_pos)};
-            for(int l = 0; l < 2; l++) {
-                final int k = l;
-                button[k].setOnTouchListener(new Button.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                if (Build.VERSION.SDK_INT >= 22)
-                                    button[k].setBackground(getDrawable(R.drawable.material_button_blue));
-                                else
-                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
-
-                                if(k == 0) {
-                                    if(changes[0][i] > 0) {
-                                        changes[0][i]--;
-                                        changes[1][i] = 1;
-                                        changes_made = true;
-                                        e.setText("" + changes[0][i]);
-                                    }
-                                    else
-                                        negativeToast();
-                                }
-                                else {
-                                    changes[0][i]++;
-                                    changes[1][i] = 1;
-                                    changes_made = true;
-                                    e.setText("" + changes[0][i]);
-                                }
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                if (Build.VERSION.SDK_INT >= 22)
-                                    button[k].setBackground(getDrawable(R.drawable.material_button));
-                                else
-                                    button[k].setBackground(getResources().getDrawable(R.drawable.material_button));
-                                break;
-                        }
-                        return false;
                     }
                 });
             }
 
-            Spinner dropdown = (Spinner) findViewById(R.id.sys_time_b_type_spinner);
-            String[] items =    new String[]   {"Minutes",   "Hours",   "Days"};
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
-            dropdown.setAdapter(adapter);
-            dropdown.setSelection(timeBetweenType[2]);
-            dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(timeBetweenType[2] == 0 && position == 1) {
-                        timeBetweenType[2] = position;
-                        e.setText("" + (changes[0][i] / 60));
-                    }
-                    else if(timeBetweenType[2] == 0 && position == 2) {
-                        timeBetweenType[2] = position;
-                        e.setText("" + ((changes[0][i] / 60) / 24));
-                    }
-                    else if(timeBetweenType[2] == 1 && position == 0) {
-                        timeBetweenType[2] = position;
-                        e.setText("" + (changes[0][i] * 60));
-                    }
-                    else if(timeBetweenType[2] == 1 && position == 2) {
-                        timeBetweenType[2] = position;
-                        e.setText("" + (changes[0][i] / 24));
-                    }
-                    else if(timeBetweenType[2] == 2 && position == 0) {
-                        timeBetweenType[2] = position;
-                        e.setText("" + (changes[0][i] * 60 * 24));
-                    }
-                    else if(timeBetweenType[2] == 2 && position == 1) {
-                        timeBetweenType[2] = position;
-                        e.setText("" + (changes[0][i] * 24));
-                    }
+            final Button[][] button = {{(Button) findViewById(R.id.sys_time_b_between_days_neg),
+                                        (Button) findViewById(R.id.sys_time_b_between_days_pos)},
+                                       {(Button) findViewById(R.id.sys_time_b_between_hours_neg),
+                                        (Button) findViewById(R.id.sys_time_b_between_hours_pos)},
+                                       {(Button) findViewById(R.id.sys_time_b_between_mins_neg),
+                                        (Button) findViewById(R.id.sys_time_b_between_mins_pos)}};
+            for(int j = 0; j < 3; j++) {
+                for(int k = 0; k < 2; k++) {
+                    final int l = k, h = j;
+                    button[h][l].setOnTouchListener(new Button.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            switch(event.getAction()) {
+                                case MotionEvent.ACTION_DOWN:
+                                    if (Build.VERSION.SDK_INT >= 22)
+                                        button[h][l].setBackground(getDrawable(R.drawable.material_button_blue));
+                                    else
+                                        button[h][l].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
+
+                                    if (l == 0) {
+                                        if(changes[0][i] > 18) {
+                                            changes[0][i]--;
+                                            changes[1][i] = 1;
+                                            changes_made = true;
+
+                                            curr[0] = (changes[0][i] / mult[0]);
+                                            curr[1] = ((changes[0][i] - (curr[0] * mult[0])) / mult[1]);
+                                            curr[2] = (changes[0][i] - (curr[0] * mult[0]) - (curr[1] * mult[1]));
+
+                                            e[0].setText("" + curr[0]);
+                                            e[1].setText("" + curr[1]);
+                                            e[2].setText("" + curr[2]);
+                                        }
+                                        else
+                                            inputTooLow();
+                                    }
+                                    else {
+                                        if(changes[0][i] < 65535) {
+                                            changes[0][i]++;
+                                            changes[1][i] = 1;
+                                            changes_made = true;
+
+                                            curr[0] = (changes[0][i] / mult[0]);
+                                            curr[1] = ((changes[0][i] - (curr[0] * mult[0])) / mult[1]);
+                                            curr[2] = (changes[0][i] - (curr[0] * mult[0]) - (curr[1] * mult[1]));
+
+                                            e[0].setText("" + curr[0]);
+                                            e[1].setText("" + curr[1]);
+                                            e[2].setText("" + curr[2]);
+                                        }
+                                        else
+                                            inputTooHigh();
+                                    }
+                                    break;
+                                case MotionEvent.ACTION_UP:
+                                    if (Build.VERSION.SDK_INT >= 22)
+                                        button[h][l].setBackground(getDrawable(R.drawable.material_button));
+                                    else
+                                        button[h][l].setBackground(getResources().getDrawable(R.drawable.material_button));
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
                 }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            });
+            }
         }
         else {
             clicked[i] = false;
@@ -959,14 +929,14 @@ public class System_Parameters extends AppCompatActivity{
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
-                        if(value > -1) {
+                        int value = Integer.parseInt(s.toString());
+                        if(value > 71) {
                             changes[0][i] = value;
                             changes[1][i] = 1;
                             changes_made = true;
                         }
                         else
-                            negativeToast();
+                            inputTooLow();
                     }
                 }
             });
@@ -986,14 +956,14 @@ public class System_Parameters extends AppCompatActivity{
                                     button[k].setBackground(getResources().getDrawable(R.drawable.material_button_blue));
 
                                 if(k == 0) {
-                                    if(changes[0][i] > 0) {
+                                    if(changes[0][i] > 72) {
                                         changes[0][i]--;
                                         changes[1][i] = 1;
                                         changes_made = true;
                                         e.setText("" + changes[0][i]);
                                     }
                                     else
-                                        negativeToast();
+                                        inputTooLow();
                                 }
                                 else {
                                     changes[0][i]++;
@@ -1039,7 +1009,7 @@ public class System_Parameters extends AppCompatActivity{
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
+                        int value = Integer.parseInt(s.toString());
                         if(value > -1) {
                             changes[0][i] = value;
                             changes[1][i] = 1;
@@ -1113,17 +1083,22 @@ public class System_Parameters extends AppCompatActivity{
             String[] items = new String[]{"Always Off", "Always On", "Switched For Sensor"};
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
             dropdown.setAdapter(adapter);
-            dropdown.setSelection(changes[0][i]);
+            loadedSpinner[1] = false;
             dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    changes[0][i] = (short) position;
-                    changes_made = true;
-                    changes[1][i] = 1;
+                    if(loadedSpinner[1]) {
+                        changes[0][i] = position;
+                        changes_made = true;
+                        changes[1][i] = 1;
+                    }
+                    else
+                        loadedSpinner[1] = true;
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {}
             });
+            dropdown.setSelection(changes[0][i]);
         }
         else {
             clicked[i] = false;
@@ -1144,17 +1119,22 @@ public class System_Parameters extends AppCompatActivity{
             String[] items = new String[]{"Always Off", "Always On", "Switched For Sensor"};
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
             dropdown.setAdapter(adapter);
-            dropdown.setSelection(changes[0][i]);
+            loadedSpinner[2] = false;
             dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    changes[0][i] = (short) position;
-                    changes_made = true;
-                    changes[1][i] = 1;
+                    if(loadedSpinner[2]) {
+                        changes[0][i] = position;
+                        changes_made = true;
+                        changes[1][i] = 1;
+                    }
+                    else
+                        loadedSpinner[2] = true;
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {}
             });
+            dropdown.setSelection(changes[0][i]);
         }
         else {
             clicked[i] = false;
@@ -1175,17 +1155,22 @@ public class System_Parameters extends AppCompatActivity{
             String[] items = new String[]{"Always Off", "Always On", "Switched For Sensor"};
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.style_spinner_items, items);
             dropdown.setAdapter(adapter);
-            dropdown.setSelection(changes[0][i]);
+            loadedSpinner[3] = false;
             dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    changes[0][i] = (short) position;
-                    changes_made = true;
-                    changes[1][i] = 1;
+                    if(loadedSpinner[3]) {
+                        changes[0][i] = position;
+                        changes_made = true;
+                        changes[1][i] = 1;
+                    }
+                    else
+                        loadedSpinner[3] = true;
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {}
             });
+            dropdown.setSelection(changes[0][i]);
         }
         else {
             clicked[i] = false;
@@ -1212,7 +1197,7 @@ public class System_Parameters extends AppCompatActivity{
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
+                        int value = Integer.parseInt(s.toString());
                         if(value > -1) {
                             changes[0][i] = value;
                             changes[1][i] = 1;

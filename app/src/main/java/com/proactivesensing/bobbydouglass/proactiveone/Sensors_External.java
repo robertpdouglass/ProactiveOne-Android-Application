@@ -34,7 +34,7 @@ public class Sensors_External extends AppCompatActivity {
     public static final int ViewSize =              8;
 
                                                     /* ***** VALUES ***** */
-    public static short[][][] changes =          {{{-1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,
+    public static int[][][] changes =            {{{-1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,
                                                     -1,     -1,     -1},
                                                    {-1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,
                                                     -1,     -1,     -1},
@@ -287,7 +287,7 @@ public class Sensors_External extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][0]) {
-                        changes[0][sensorNum][j] = (short) position;
+                        changes[0][sensorNum][j] = position;
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -321,7 +321,7 @@ public class Sensors_External extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][0]) {
-                        changes[0][sensorNum][j] = (short) position;
+                        changes[0][sensorNum][j] = position;
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -343,7 +343,7 @@ public class Sensors_External extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][sensorNum][j + 1] = Short.parseShort(s.toString());
+                        changes[0][sensorNum][j + 1] = Integer.parseInt(s.toString());
                         changes[1][sensorNum][j + 1] = 1;
                         changes_made = true;
                     }
@@ -409,7 +409,7 @@ public class Sensors_External extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
+                        int value = Integer.parseInt(s.toString());
                         if(value > -1) {
                             changes[0][sensorNum][j] = value;
                             changes[1][sensorNum][j] = 1;
@@ -488,7 +488,7 @@ public class Sensors_External extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
+                        int value = Integer.parseInt(s.toString());
                         if(value > -1) {
                             changes[0][sensorNum][j] = value;
                             changes[1][sensorNum][j] = 1;
@@ -570,7 +570,7 @@ public class Sensors_External extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.length() != 0) {
-                            changes[0][sensorNum][j + k] = Short.parseShort(s.toString());
+                            changes[0][sensorNum][j + k] = Integer.parseInt(s.toString());
                             changes[1][sensorNum][j + k] = 1;
                             changes_made = true;
                         }
@@ -639,7 +639,7 @@ public class Sensors_External extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][sensorNum][j] = Short.parseShort(s.toString());
+                        changes[0][sensorNum][j] = Integer.parseInt(s.toString());
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -772,7 +772,7 @@ public class Sensors_External extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.length() != 0) {
-                            changes[0][sensorNum][j + k] = Short.parseShort(s.toString());
+                            changes[0][sensorNum][j + k] = Integer.parseInt(s.toString());
                             changes[1][sensorNum][j + k] = 1;
                             changes_made = true;
                         }

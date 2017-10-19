@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_frame"
+    android:layout_width="match_parent"
+    android:padding="15dp"
+    android:background="#ffffff"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:elevation="1dp"
+        android:layout_marginBottom="15dp"
+        app:srcCompat="@drawable/proactiveone" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/textView"
+        android:textColor="#474747"
+        android:scrollbars="vertical"
+        android:text="SET TEXT"
+        android:layout_below="@+id/imageView"
+        android:layout_above="@+id/toggleButton" />
+
+    <Button
+        android:layout_width="250dp"
+        android:id="@+id/button"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="15dp"
+        android:elevation="2dp"
+        android:textSize="15dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/material_button"
+        android:foregroundGravity="center_horizontal"
+        android:onClick="cancel"
+        android:text="Cancel"/>
+
+</RelativeLayout>

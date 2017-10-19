@@ -37,30 +37,7 @@ public class Nfc extends AppCompatActivity {
         info = (TextView) findViewById(R.id.nfc_info);
         info.setText("Tap ProactiveOne To Make Changes");
         cancelButton = (Button) findViewById(R.id.cancel);
-
-        if(!nfcAdapter.isEnabled()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("NFC Disabled, Please Enable NFC In Settings");
-            builder.setPositiveButton("Settings", dialogClickListener);
-            builder.setNegativeButton("Cancel", dialogClickListener);
-            builder.show();
-        }
     }
-
-    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which){
-                case DialogInterface.BUTTON_POSITIVE:
-                    openSettings();
-                    break;
-
-                case DialogInterface.BUTTON_NEGATIVE:
-                    startHome();
-                    break;
-            }
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -94,11 +71,6 @@ public class Nfc extends AppCompatActivity {
         Intent Home = new Intent(this, Home.class);
         Home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(Home);
-    }
-
-    public void openSettings() {
-        Intent setnfc = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-        startActivity(setnfc);
     }
 
     public void startHome() {
@@ -229,7 +201,7 @@ public class Nfc extends AppCompatActivity {
         }
     }
 
-    private NdefRecord createRecord(int address, short value) {
+    private NdefRecord createRecord(int address, int value) {
         ByteArrayOutputStream payload = new ByteArrayOutputStream(11);
 
         payload.write('M');

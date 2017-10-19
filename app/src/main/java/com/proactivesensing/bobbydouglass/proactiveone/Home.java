@@ -1,8 +1,12 @@
 package com.proactivesensing.bobbydouglass.proactiveone;
 
 import android.animation.LayoutTransition;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,13 +22,13 @@ public class Home extends AppCompatActivity {
 
     public static int Screen =      0;
     public static SharedPreferences settings;
+    NfcAdapter nfcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Screen = 0;
-        setContentView(R.layout.splash_screen);
 
         final String PREFS_NAME = "Preferences";
         settings = getSharedPreferences(PREFS_NAME, 0);
@@ -39,7 +43,36 @@ public class Home extends AppCompatActivity {
         }
         new Modbus(getApplicationContext(), ((firstTime) ? 0 : 2));
 
+        nfcAdapter = nfcAdapter.getDefaultAdapter(this);
+        if(!nfcAdapter.isEnabled()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("NFC Disabled, Please Enable NFC In Settings");
+            builder.setPositiveButton("Settings", dialogClickListener);
+            builder.setNegativeButton("Cancel", dialogClickListener);
+            builder.show();
+        }
+
         setContentView(R.layout.home);
+    }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    openSettings();
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    onBackPressed();
+                    break;
+            }
+        }
+    };
+
+    public void openSettings() {
+        Intent setnfc = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+        startActivity(setnfc);
     }
 
     public void readStatus(View view) {

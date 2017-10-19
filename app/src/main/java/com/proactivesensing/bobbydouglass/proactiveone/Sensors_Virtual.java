@@ -27,7 +27,7 @@ public class Sensors_Virtual extends AppCompatActivity {
     public static int ChangesSizeZ =    12;
     public static int ViewSize =        7;
 
-    public static short[][][] changes =  {{{-1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,
+    public static int[][][] changes =    {{{-1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,
                                             -1,     -1,     -1,     -1,},
                                            {-1,     -1,     -1,     -1,     -1,     -1,     -1,     -1,
                                             -1,     -1,     -1,     -1,},
@@ -346,7 +346,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
+                        int value = Integer.parseInt(s.toString());
                         if(value > -1) {
                             if(value == 0)
                                 disabledToast();
@@ -433,7 +433,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
+                        int value = Integer.parseInt(s.toString());
                         if(value > -1) {
                             changes[0][sensorNum][j] = value;
                             changes[1][sensorNum][j] = 1;
@@ -510,7 +510,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][h]) {
-                        changes[0][sensorNum][j] = (short) position;
+                        changes[0][sensorNum][j] = position;
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -532,7 +532,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
+                        int value = Integer.parseInt(s.toString());
                         if(value > -1) {
                             changes[0][sensorNum][j + 1] = value;
                             changes[1][sensorNum][j + 1] = 1;
@@ -609,7 +609,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][h]) {
-                        changes[0][sensorNum][j] = (short) position;
+                        changes[0][sensorNum][j] = position;
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -631,7 +631,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
+                        int value = Integer.parseInt(s.toString());
                         if(value > -1) {
                             changes[0][sensorNum][j + 1] = value;
                             changes[1][sensorNum][j + 1] = 1;
@@ -708,7 +708,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][h]) {
-                        changes[0][sensorNum][j] = (short) position;
+                        changes[0][sensorNum][j] = position;
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -730,7 +730,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
+                        int value = Integer.parseInt(s.toString());
                         if(value > -1) {
                             changes[0][sensorNum][j + 1] = value;
                             changes[1][sensorNum][j + 1] = 1;
@@ -807,7 +807,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][h]) {
-                        changes[0][sensorNum][j] = (short) position;
+                        changes[0][sensorNum][j] = position;
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -829,7 +829,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        short value = Short.parseShort(s.toString());
+                        int value = Integer.parseInt(s.toString());
                         if(value > -1) {
                             changes[0][sensorNum][j + 1] = value;
                             changes[1][sensorNum][j + 1] = 1;
@@ -908,7 +908,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][sensorNum][j] = Short.parseShort(s.toString());
+                        changes[0][sensorNum][j] = Integer.parseInt(s.toString());
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -925,7 +925,7 @@ public class Sensors_Virtual extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][sensorNum][j + 1] = Short.parseShort(s.toString());
+                        changes[0][sensorNum][j + 1] = Integer.parseInt(s.toString());
                         changes[1][sensorNum][j + 1] = 1;
                         changes_made = true;
                     }

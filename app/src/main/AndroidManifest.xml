@@ -31,6 +31,7 @@
         <activity android:name=".Advanced"></activity>
         <activity android:name=".Advanced_Data"></activity>
         <activity android:name=".Advanced_Command"></activity>
+        <activity android:name=".Advanced_Sync"></activity>
         <activity android:name=".Nfc"></activity>
     </application>
 

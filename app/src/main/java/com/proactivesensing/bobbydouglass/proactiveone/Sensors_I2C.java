@@ -29,7 +29,7 @@ public class Sensors_I2C extends AppCompatActivity {
     public static final int ChangesSizeZ =          12;
     public static final int ViewSize =              8;
 
-    public static short[][][] changes =          {{{-1,     -1,     -1,     -1,     -1,     -1,
+    public static int[][][] changes =            {{{-1,     -1,     -1,     -1,     -1,     -1,
                                                     -1,     -1,     -1,     -1,     -1,     -1},
                                                    {-1,     -1,     -1,     -1,     -1,     -1,
                                                     -1,     -1,     -1,     -1,     -1,     -1},
@@ -281,7 +281,7 @@ public class Sensors_I2C extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][0]) {
-                        changes[0][sensorNum][j] = (short) position;
+                        changes[0][sensorNum][j] = position;
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -316,7 +316,7 @@ public class Sensors_I2C extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][1]) {
-                        changes[0][sensorNum][j] = (short) position;
+                        changes[0][sensorNum][j] = position;
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -337,7 +337,7 @@ public class Sensors_I2C extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][2]) {
-                        changes[0][sensorNum][j + 1] = (short) position;
+                        changes[0][sensorNum][j + 1] = position;
                         changes[1][sensorNum][j + 1] = 1;
                         changes_made = true;
                     }
@@ -360,7 +360,7 @@ public class Sensors_I2C extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][sensorNum][j + 2] = Short.parseShort(s.toString());
+                        changes[0][sensorNum][j + 2] = Integer.parseInt(s.toString());
                         changes[1][sensorNum][j + 2] = 1;
                         changes_made = true;
                     }
@@ -424,7 +424,7 @@ public class Sensors_I2C extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][3]) {
-                        changes[0][sensorNum][j] = (short) position;
+                        changes[0][sensorNum][j] = position;
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -445,7 +445,7 @@ public class Sensors_I2C extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if(loadedSpinner[sensorNum][4]) {
-                        changes[0][sensorNum][j + 1] = (short) position;
+                        changes[0][sensorNum][j + 1] = position;
                         changes[1][sensorNum][j + 1] = 1;
                         changes_made = true;
                     }
@@ -482,7 +482,7 @@ public class Sensors_I2C extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][sensorNum][j] = Short.parseShort(s.toString());
+                        changes[0][sensorNum][j] = Integer.parseInt(s.toString());
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -548,7 +548,7 @@ public class Sensors_I2C extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][sensorNum][j] = Short.parseShort(s.toString());
+                        changes[0][sensorNum][j] = Integer.parseInt(s.toString());
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -579,7 +579,7 @@ public class Sensors_I2C extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length() != 0) {
-                        changes[0][sensorNum][j] = Short.parseShort(s.toString());
+                        changes[0][sensorNum][j] = Integer.parseInt(s.toString());
                         changes[1][sensorNum][j] = 1;
                         changes_made = true;
                     }
@@ -712,7 +712,7 @@ public class Sensors_I2C extends AppCompatActivity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s.length() != 0) {
-                            changes[0][sensorNum][j + k] = Short.parseShort(s.toString());
+                            changes[0][sensorNum][j + k] = Integer.parseInt(s.toString());
                             changes[1][sensorNum][j + k] = 1;
                             changes_made = true;
                         }

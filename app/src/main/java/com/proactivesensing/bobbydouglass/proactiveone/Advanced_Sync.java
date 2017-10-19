@@ -13,47 +13,35 @@ import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Advanced_Command extends AppCompatActivity {
+public class Advanced_Sync extends AppCompatActivity {
 
     NfcAdapter nfcAdapter;
-    TextView sendText, receiveText;
-    char command;
-    String tempCommand;
-    int phase = 0;
+    TextView text;
+    boolean phase = false;
+    Button button;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.advanced_command);
+        setContentView(R.layout.advanced_sync);
 
         nfcAdapter = nfcAdapter.getDefaultAdapter(this);
-
-        EditText e = (EditText) findViewById(R.id.advanced_command_edittext);
-        e.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {}
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length() != 0)
-                    tempCommand = s.toString();
-            }
-        });
+        button = (Button) findViewById(R.id.button);
+        text = (TextView) findViewById(R.id.textView);
+        text.setMovementMethod(new ScrollingMovementMethod());
+        text.setTextScaleX(1.0f);
+        text.setTypeface(Typeface.MONOSPACE);
+        text.setTextSize(30.0f);
+        text.setText("Tap ProactiveOne to Initiate Programming Sync");
     }
 
     @Override
@@ -67,31 +55,6 @@ public class Advanced_Command extends AppCompatActivity {
         Intent Adv = new Intent(this, Advanced.class);
         Adv.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(Adv);
-    }
-
-    public void command(View view) {
-        if(tempCommand.length() == 1) {
-            command = tempCommand.charAt(0);
-
-            sendScreen();
-        }
-        else if(tempCommand.length() == 0)
-            Toast.makeText(this, "Input Cannot Be Empty", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(this, "Input Must Be A Single Character", Toast.LENGTH_SHORT).show();
-    }
-
-    public void sendScreen() {
-        phase = 1;
-        setContentView(R.layout.advanced_command_send);
-        sendText = (TextView) findViewById(R.id.advanced_command_send_textview);
-        sendText.setText("Tap ProactiveOne To Send Command");
-    }
-
-    public void receiveScreen() {
-        setContentView(R.layout.advanced_command_receive);
-        receiveText = (TextView) findViewById(R.id.advanced_command_receive_textview);
-        receiveText.setText("Tap ProactiveOne To Read Command Status");
     }
 
     @Override
@@ -110,15 +73,14 @@ public class Advanced_Command extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if(phase == 1) {
+        if(phase) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             NdefMessage ndefMessage = createNdefMessage();
             writeNdefMessage(tag, ndefMessage);
         }
-        else if(phase == 2) {
-            receiveScreen();
+        else {
             Parcelable[] parcelables = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            readTextFromMessage((NdefMessage) parcelables[0]);
+            readInfoFromSync((NdefMessage) parcelables[0]);
         }
     }
 
@@ -141,22 +103,22 @@ public class Advanced_Command extends AppCompatActivity {
             ndefFormatable.format(ndefMessage);
             ndefFormatable.close();
 
-            phase = 2;
-            sendText.setText("Tap ProactiveOne To Read Command Status");
-        } catch (Exception e) {
+            phase = true;
+            text.setText("Tap ProactiveOne To Sync Programming");
         }
+        catch (Exception e) {}
     }
 
     private void writeNdefMessage(Tag tag, NdefMessage ndefMessage) {
         if (tag == null) {
-            sendText.setText("Error(1) communicating with ProactiveOne, please try again...");
+            text.setText("Error(1) communicating with ProactiveOne, please try again...");
             return;
         }
 
         Ndef ndef = Ndef.get(tag);
 
         if (ndef == null) {
-            sendText.setText("Error(2) communicating with ProactiveOne, please try again...");
+            text.setText("Error(2) communicating with ProactiveOne, please try again...");
             formatTag(tag, ndefMessage);
         } else {
             try {
@@ -164,34 +126,34 @@ public class Advanced_Command extends AppCompatActivity {
                 ndef.writeNdefMessage(ndefMessage);
                 ndef.close();
             } catch (Exception e) {
-                sendText.setText("Error(3) communicating with ProactiveOne, please try again...");
+                text.setText("Error(3) communicating with ProactiveOne, please try again...");
             }
 
-            phase = 2;
-            sendText.setText("Tap ProactiveOne To Read Command Status");
+            phase = true;
+            text.setText("Tap ProactiveOne To Sync Programming");
         }
     }
 
-    private NdefRecord createRecord(char value) {
+    private NdefRecord createRecord() {
         ByteArrayOutputStream payload = new ByteArrayOutputStream(11);
 
         payload.write('M');
         payload.write('1');
         payload.write(16);
-        payload.write((byte) ((1010 >> 8) & 0xff));
-        payload.write((byte) (1010 & 0xff));
+        payload.write((byte) ((1010 >> 8) & 0x00ff));
+        payload.write((byte) (1010 & 0x00ff));
         payload.write(0);
         payload.write(1);
         payload.write(2);
-        payload.write((byte) ((value >> 8) & 0xff));
-        payload.write((byte) (value & 0xff));
+        payload.write((byte) (('!' >> 8) & 0x00ff));
+        payload.write((byte) ('!' & 0x00ff));
 
         return new NdefRecord(NdefRecord.TNF_MIME_MEDIA, NdefRecord.RTD_TEXT, null, payload.toByteArray());
     }
 
     private NdefMessage createNdefMessage() {
         ArrayList<NdefRecord> ndef = new ArrayList<NdefRecord>();
-        ndef.add(createRecord(command));
+        ndef.add(createRecord());
         NdefRecord[] ndefr = new NdefRecord[ndef.size()];
         for (int i = 0; i < ndef.size(); i++)
             ndefr[i] = ndef.get(i);
@@ -200,30 +162,30 @@ public class Advanced_Command extends AppCompatActivity {
         return ndefMessage;
     }
 
-    private void readTextFromMessage(NdefMessage ndefMessage) {
+    private void readInfoFromSync(NdefMessage ndefMessage) {
         NdefRecord[] ndefRecords = ndefMessage.getRecords();
-        String[] outputs = new String[ndefRecords.length];
-        for(int i = 0; i < ndefRecords.length; i++) {
-            outputs[i] = getTextFromNdefRecordStatus(ndefRecords[i]);
+        for(int i = 0; i < 6; i++)
+            getInfoFromNdefRecord(ndefRecords[i], i);
+
+        text.setText("Sync Complete!");
+        button.setText("Back");
+    }
+
+    public void getInfoFromNdefRecord(NdefRecord ndefRecord, int off) {
+        byte[] payload = ndefRecord.getPayload();
+        int offset = 0;
+        if(off == 0)
+            offset = 2;
+        int startAdd = ((payload[3 + offset] & 0xff) << 8) | ((payload[4 + offset] & 0xff));
+        int quanRegs = ((payload[5 + offset] & 0xff) << 8) | ((payload[6 + offset] & 0xff));
+        List<int[]> changes = new ArrayList<int[]>();
+        int[] input = new int[2];
+        for(int i = 0, j = 7 + offset, add = startAdd; i < quanRegs; i++, startAdd++, j += 2, add++) {
+            input[0] = add;
+            input[1] = ((payload[j] & 0xff) << 8) | ((payload[j+1] & 0xff));
+            changes.add(input);
         }
-        String temp = "";
-        for(int i = 0; i < ndefRecords.length; i++)
-            temp = temp + "\n" + "\n" + outputs[i];
-        receiveText.setText(temp);
-        receiveText.setMovementMethod(new ScrollingMovementMethod());
-        receiveText.setTextScaleX(1.0f);
-        receiveText.setTypeface(Typeface.MONOSPACE);
-    }
 
-    public String getTextFromNdefRecordStatus(NdefRecord ndefRecord) {
-        String tagContent = "";
-        try {
-            byte[] payload = ndefRecord.getPayload();
-            String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
-            int languageSize = payload[0] & 0063;
-            tagContent = new String(payload, languageSize + 1, payload.length - languageSize - 1, textEncoding);
-        } catch (UnsupportedEncodingException e) {}
-        return tagContent;
+        Modbus mod = new Modbus(getApplicationContext(), changes);
     }
-
 }
